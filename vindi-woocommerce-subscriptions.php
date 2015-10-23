@@ -36,6 +36,12 @@ if ( ! class_exists( 'WCS_Vindi' ) )
         protected static $instance = null;
 
         /**
+         * Domain Identifier
+         * @var string
+         */
+        const IDENTIFIER = 'vindi-woocommerce-subscriptions';
+
+        /**
          * Initialize the plugin public actions.
          */
         private function __construct()
@@ -55,6 +61,8 @@ if ( ! class_exists( 'WCS_Vindi' ) )
             }
 
             define( 'WCS_VINDI_VERSION', $this->version );
+            
+            $GLOBALS[self::IDENTIFIER] = self::get_instance();
         }
 
         /**

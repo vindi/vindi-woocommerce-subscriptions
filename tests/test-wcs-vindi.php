@@ -1,6 +1,6 @@
 <?php
 
-class Vindi_WooCommerce_Subscriptions extends WP_UnitTestCase
+class WCS_Vindi_Test extends WP_UnitTestCase
 {
 
     private $plugin;
@@ -8,7 +8,8 @@ class Vindi_WooCommerce_Subscriptions extends WP_UnitTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->plugin = $GLOBALS['vindi-woocommerce-subscriptions'];
+        if(array_key_exists(WSC_Vindi::IDENTIFIER, $GLOBALS))
+            $this->plugin = $GLOBALS[WSC_Vindi::IDENTIFIER];
     }
 
     public function testPluginInitialization()
