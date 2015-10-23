@@ -1,10 +1,18 @@
 <?php
 
-class SampleTest extends WP_UnitTestCase {
+class Vindi_WooCommerce_Subscriptions extends WP_UnitTestCase
+{
 
-	function test_sample() {
-		// replace this with some actual testing code
-		$this->assertTrue( true );
-	}
+    private $plugin;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->plugin = $GLOBALS['vindi-woocommerce-subscriptions'];
+    }
+
+    public function testPluginInitialization()
+    {
+        $this->assertFalse(null == $this->plugin);
+    }
 }
-

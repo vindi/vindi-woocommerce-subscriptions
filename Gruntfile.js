@@ -9,7 +9,7 @@ module.exports = function( grunt ) {
 
 		addtextdomain: {
 			options: {
-				textdomain: 'demo',
+				textdomain: 'vindi-woocommerce-subscriptions',
 			},
 			target: {
 				files: {
@@ -30,8 +30,8 @@ module.exports = function( grunt ) {
 			target: {
 				options: {
 					domainPath: '/languages',
-					mainFile: 'demo.php',
-					potFilename: 'demo.pot',
+					mainFile: 'vindi-woocommerce-subscriptions.php',
+					potFilename: 'vindi-woocommerce-subscriptions.pot',
 					potHeaders: {
 						poedit: true,
 						'x-poedit-keywordslist': true
