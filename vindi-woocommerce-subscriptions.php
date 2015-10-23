@@ -76,7 +76,7 @@ if ( ! class_exists( 'WCS_Vindi' ) )
          */
         private function includes()
         {
-            
+
         }
     }
 }
