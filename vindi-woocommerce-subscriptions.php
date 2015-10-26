@@ -96,4 +96,4 @@ if ( ! class_exists( 'WCS_Vindi' ) )
     }
 }
 
-WCS_Vindi::init();
+$GLOBALS[WCS_Vindi::IDENTIFIER] = WCS_Vindi::get_instance();
