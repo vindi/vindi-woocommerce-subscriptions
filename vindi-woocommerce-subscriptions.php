@@ -42,6 +42,14 @@ if ( ! class_exists( 'WCS_Vindi' ) )
         const IDENTIFIER = 'vindi-woocommerce-subscriptions';
 
         /**
+         * Set up the class, including it's hooks & filters, when the file is loaded.
+         **/
+        public static function init()
+        {
+            $GLOBALS[self::IDENTIFIER] = self::get_instance();
+        }
+
+        /**
          * Initialize the plugin public actions.
          */
         private function __construct()
@@ -61,8 +69,7 @@ if ( ! class_exists( 'WCS_Vindi' ) )
             }
 
             define( 'WCS_VINDI_VERSION', $this->version );
-            
-            $GLOBALS[self::IDENTIFIER] = self::get_instance();
+
         }
 
         /**
@@ -88,3 +95,5 @@ if ( ! class_exists( 'WCS_Vindi' ) )
         }
     }
 }
+
+WCS_Vindi::init();
