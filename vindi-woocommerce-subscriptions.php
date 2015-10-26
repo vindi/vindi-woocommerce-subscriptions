@@ -46,7 +46,7 @@ if ( ! class_exists( 'WCS_Vindi' ) )
          **/
         public static function init()
         {
-            $GLOBALS[self::IDENTIFIER] = self::get_instance();
+
         }
 
         /**

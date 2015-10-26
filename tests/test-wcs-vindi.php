@@ -8,8 +8,8 @@ class WCS_Vindi_Test extends WP_UnitTestCase
     public function setUp()
     {
         parent::setUp();
-        if(array_key_exists(WSC_Vindi::IDENTIFIER, $GLOBALS))
-            $this->plugin = $GLOBALS[WSC_Vindi::IDENTIFIER];
+        if(array_key_exists(WCS_Vindi::IDENTIFIER, $GLOBALS))
+            $this->plugin = $GLOBALS[WCS_Vindi::IDENTIFIER];
     }
 
     public function testPluginInitialization()
