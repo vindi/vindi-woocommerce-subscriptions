@@ -46,7 +46,7 @@ if ( ! class_exists( 'WCS_Vindi' ) )
          **/
         public static function init()
         {
-
+            $GLOBALS[self::IDENTIFIER] = self::get_instance();
         }
 
         /**
@@ -96,4 +96,4 @@ if ( ! class_exists( 'WCS_Vindi' ) )
     }
 }
 
-$GLOBALS[WCS_Vindi::IDENTIFIER] = WCS_Vindi::get_instance();
+WCS_Vindi::init();
