@@ -19,9 +19,18 @@
 
 if ( ! defined( 'ABSPATH' ) ) die( 'No script kiddies please!' );
 
-if ( ! class_exists( 'WCS_Vindi' ) )
+define('VINDI_IDENTIFIER', 'vindi-woocommerce-subscriptions');
+
+require_once __DIR__."/src/class-vindi-dependencies.php";
+
+if ( ! Vindi_Dependencies::check('woocommerce')) {
+	add_action( 'admin_notices', 'Vindi_Dependencies::woocommerceMissingNotice' );
+	return;
+}
+
+if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 {
-    class WCS_Vindi
+    class Vindi_WooCommerce_Subscriptions
     {
 
         /**
@@ -36,17 +45,11 @@ if ( ! class_exists( 'WCS_Vindi' ) )
         protected static $instance = null;
 
         /**
-         * Domain Identifier
-         * @var string
-         */
-        const IDENTIFIER = 'vindi-woocommerce-subscriptions';
-
-        /**
          * Set up the class, including it's hooks & filters, when the file is loaded.
          **/
         public static function init()
         {
-            $GLOBALS[self::IDENTIFIER] = self::get_instance();
+            $GLOBALS[VINDI_IDENTIFIER] = self::get_instance();
         }
 
         /**
@@ -54,19 +57,7 @@ if ( ! class_exists( 'WCS_Vindi' ) )
          */
         private function __construct()
         {
-            // Checks if WooCommerce is installed.
-            if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
-                add_action( 'admin_notices', [ &$this, 'woocommerceMissingNotice' ] );
-                return ;
-            }
 
-            // Checks if WooCommerce Extra Checkout Fields for Brazil is installed.
-            if ( ! class_exists( 'Extra_Checkout_Fields_For_Brazil' ) ) {
-                add_action( 'admin_notices', [ &$this, 'extraCheckoutMissingNotice' ] );
-                return;
-            }
-
-            define( 'WCS_VINDI_VERSION', $this->version );
         }
 
         /**
@@ -81,33 +72,7 @@ if ( ! class_exists( 'WCS_Vindi' ) )
 
             return self::$instance;
         }
-
-        /**
-         * Included files.
-         * @return void
-         */
-        private function includes()
-        {
-
-        }
-
-        /**
-         * WooCommerce fallback notice.
-         * @return  string
-         */
-        public function woocommerceMissingNotice()
-        {
-            echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', self::IDENTIFIER ), '<a href="https://wordpress.org/extend/plugins/woocommerce/">' . __( 'WooCommerce', self::IDENTIFIER ) . '</a>' ) . '</p></div>';
-        }
-
-        /**
-		 * WooCommerce Extra Checkout Fields for Brazil fallback notice.
-		 * @return  string
-		 */
-		public function extraCheckoutMissingNotice() {
-			echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', self::IDENTIFIER ), '<a href="https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/">' . __( 'WooCommerce Extra Checkout Fields for Brazil', self::IDENTIFIER ) . '</a>' ) . '</p></div>';
-		}
     }
 }
 
-WCS_Vindi::init();
+Vindi_WooCommerce_Subscriptions::init();
