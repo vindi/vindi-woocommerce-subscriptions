@@ -57,19 +57,16 @@ if ( ! class_exists( 'WCS_Vindi' ) )
             // Checks if WooCommerce is installed.
             if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
                 add_action( 'admin_notices', [ &$this, 'woocommerceMissingNotice' ] );
-
-                return;
+                return ;
             }
 
             // Checks if WooCommerce Extra Checkout Fields for Brazil is installed.
             if ( ! class_exists( 'Extra_Checkout_Fields_For_Brazil' ) ) {
                 add_action( 'admin_notices', [ &$this, 'extraCheckoutMissingNotice' ] );
-
                 return;
             }
 
             define( 'WCS_VINDI_VERSION', $this->version );
-
         }
 
         /**
@@ -93,6 +90,23 @@ if ( ! class_exists( 'WCS_Vindi' ) )
         {
 
         }
+
+        /**
+         * WooCommerce fallback notice.
+         * @return  string
+         */
+        public function woocommerceMissingNotice()
+        {
+            echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', self::IDENTIFIER ), '<a href="https://wordpress.org/extend/plugins/woocommerce/">' . __( 'WooCommerce', self::IDENTIFIER ) . '</a>' ) . '</p></div>';
+        }
+
+        /**
+		 * WooCommerce Extra Checkout Fields for Brazil fallback notice.
+		 * @return  string
+		 */
+		public function extraCheckoutMissingNotice() {
+			echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', self::IDENTIFIER ), '<a href="https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/">' . __( 'WooCommerce Extra Checkout Fields for Brazil', self::IDENTIFIER ) . '</a>' ) . '</p></div>';
+		}
     }
 }
 
