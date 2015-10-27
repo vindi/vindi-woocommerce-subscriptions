@@ -19,24 +19,30 @@
 
 if ( ! defined( 'ABSPATH' ) ) die( 'No script kiddies please!' );
 
-define('VINDI_IDENTIFIER', 'vindi-woocommerce-subscriptions');
+define('VINDI_IDENTIFIER', 'vindi_subscriptions');
 
-require_once __DIR__."/src/class-vindi-dependencies.php";
+require_once dirname(__FILE__)."/src/class-vindi-dependencies.php";
 
-if ( ! Vindi_Dependencies::check('woocommerce')) {
-	add_action( 'admin_notices', 'Vindi_Dependencies::woocommerceMissingNotice' );
-	return;
+/**
+ * Check all Vindi Dependencies
+ */
+if( false === Vindi_Dependencies::check()) {
+	return ;
 }
 
 if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 {
     class Vindi_WooCommerce_Subscriptions
     {
-
         /**
          * @var string
          */
-        public $version = '1.0.0';
+        CONST VERSION = '1.0.0';
+
+				/**
+         * @var string
+         */
+        CONST VIEWS_DIR = 'views';
 
         /**
          * Instance of this class.
@@ -50,14 +56,9 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
         public static function init()
         {
             $GLOBALS[VINDI_IDENTIFIER] = self::get_instance();
-        }
 
-        /**
-         * Initialize the plugin public actions.
-         */
-        private function __construct()
-        {
-
+						add_filter( 'woocommerce_settings_tabs_array', __CLASS__ . '::add_settings_tab', 100 );
+						add_action( 'woocommerce_settings_tabs_'.VINDI_IDENTIFIER, __CLASS__ . '::load_settings_tab' );
         }
 
         /**
@@ -72,6 +73,24 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 
             return self::$instance;
         }
+
+				/**
+				 * Create a tab settings at woocommerce tabs
+				 */
+				public function add_settings_tab( $settings_tabs )
+				{
+					$settings_tabs[VINDI_IDENTIFIER] = __( 'Vindi', 'vindi-settings' );
+
+	        return $settings_tabs;
+				}
+
+				/**
+				 * Create settings fields in Vind settings tab
+				 **/
+				public function load_settings_tab()
+				{
+					include_once(self::VIEWS_DIR.'/admin-settings.html.php');
+				}
     }
 }
 
