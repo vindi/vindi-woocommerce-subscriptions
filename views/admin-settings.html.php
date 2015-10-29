@@ -19,7 +19,7 @@ endif;
 	<h3><?php _e( 'Vindi', 'woocommerce-vindi' ); ?></h3>
 	<p><?php _e( 'Utiliza a rede Vindi como meio de pagamento recorrente para cobranças.', 'woocommerce-vindi' ); ?></p>
 	<table class="form-table">
-
+		<?php $this->generate_settings_html(); ?>
 	</table>
 <?php
 
@@ -42,7 +42,7 @@ if ( ! empty ( $this->api_key ) ) : ?>
 
 		<div>
 			<?php
-			if ( $merchant = $this->api->getMerchant() ) {
+			if ( $merchant = $this->api->get_merchant() ) {
 				echo '<p>' . __( 'Conectado com sucesso!', 'woocommerce-vindi' ) . '</p>';
 				echo '<p>' . sprintf( __( 'Conta: <strong>%s</strong>.', 'woocommerce-vindi' ), $merchant['name'] ) . '</p>';
 				echo '<p>' . sprintf( __( 'Status: <strong>%s</strong>.', 'woocommerce-vindi' ), ucwords( $merchant['status'] ) ) . '</p>';
