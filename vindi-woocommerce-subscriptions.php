@@ -86,7 +86,7 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 		 * Check if SSL is enabled when merchant is not trial.
 		 * @return boolean
 		 */
-		public function checkSsl()
+		public function check_ssl()
 		{
 			return false;
 		}
