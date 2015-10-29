@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 /** @var WC_Vindi_Base_Gateway $this */
 
-if ( ! $this->checkSsl() ):
+if ( ! $this->plugin->checkSsl() ):
 	?>
 	<div class="error">
 		<p>
@@ -19,11 +19,11 @@ endif;
 	<h3><?php _e( 'Vindi', 'woocommerce-vindi' ); ?></h3>
 	<p><?php _e( 'Utiliza a rede Vindi como meio de pagamento recorrente para cobranças.', 'woocommerce-vindi' ); ?></p>
 	<table class="form-table">
-		<?php $this->generate_settings_html(); ?>
+
 	</table>
 <?php
 
-if ( ! empty ( $this->apiKey ) ) : ?>
+if ( ! empty ( $this->api_key ) ) : ?>
 	<div class="updated">
 		<h3 class="wc-settings-sub-title">
 			<?php _e( 'Link de configuração dos Eventos da Vindi', 'woocommerce-vindi' ); ?>

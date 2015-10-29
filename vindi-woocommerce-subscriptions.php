@@ -37,12 +37,12 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 	    /**
 		 * @var string
 		 */
-		CONST VERSION = '1.0.0';
+		const VERSION = '1.0.0';
 
 		/**
 		 * @var string
 		 */
-		CONST VIEWS_DIR = 'views';
+		const VIEWS_DIR = __DIR__.'/views';
 
 		/**
 		 * Instance of this class.
@@ -55,8 +55,10 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 		 **/
 		public function __construct()
 		{
-			add_filter('woocommerce_settings_tabs_array', [&$this, 'add_settings_tab'], 100);
-			add_action('woocommerce_settings_tabs_'.VINDI_IDENTIFIER, [&$this, 'settings_tab']);
+			$this->includes();
+
+			$this->settings = new Vindi_Settings($this);
+			$this->settings->init();
 		}
 
 		/**
@@ -73,56 +75,20 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 		}
 
 		/**
-		 * Create a tab settings at woocommerce tabs
-		 */
-		public function add_settings_tab( $settings_tabs )
+		 * Include the dependents classes
+		 **/
+		public function includes()
 		{
-			$settings_tabs[VINDI_IDENTIFIER] = __('Vindi', 'vindi-settings');
-
-			return $settings_tabs;
+			include_once(__DIR__.'/src/class-vindi-settings.php');
 		}
 
 		/**
 		 * Check if SSL is enabled when merchant is not trial.
 		 * @return boolean
 		 */
-		protected function checkSsl()
+		public function checkSsl()
 		{
 			return false;
-		}
-
-		public function settings_tab()
-		{
-		    require_once(self::VIEWS_DIR.'/admin-settings.html.php');
-		}
-
-		function generate_settings_html()
-		{
-		    $settings = array(
-		        'section_title' => array(
-		            'name'     => __( 'Section Title', 'woocommerce-settings-tab-demo' ),
-		            'type'     => 'title',
-		            'desc'     => '',
-		            'id'       => 'wc_settings_tab_demo_section_title'
-		        ),
-		        'title' => array(
-		            'name' => __( 'Title', 'woocommerce-settings-tab-demo' ),
-		            'type' => 'text',
-		            'desc' => __( 'This is some helper text', 'woocommerce-settings-tab-demo' ),
-		            'id'   => 'wc_settings_tab_demo_title'
-		        ),
-		        'description' => array(
-		            'name' => __( 'Description', 'woocommerce-settings-tab-demo' ),
-		            'type' => 'textarea',
-		            'desc' => __( 'This is a paragraph describing the setting. Lorem ipsum yadda yadda yadda. Lorem ipsum yadda yadda yadda. Lorem ipsum yadda yadda yadda. Lorem ipsum yadda yadda yadda.', 'woocommerce-settings-tab-demo' ),
-		            'id'   => 'wc_settings_tab_demo_description'
-		        ),
-		        'section_end' => array(
-		             'type' => 'sectionend',
-		             'id' => 'wc_settings_tab_demo_section_end'
-		        )
-		    );
-		    return woocommerce_admin_fields(apply_filters( 'wc_settings_tab_vindi_settings', $settings ));
 		}
 	}
 }
