@@ -44,11 +44,17 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 		 */
 		const VIEWS_DIR = __DIR__.'/views';
 
-		/**
+        /**
 		 * Instance of this class.
 		 * @var WCS_Vindi
 		 */
 		protected static $instance = null;
+
+        /**
+		 * Instance of Vindi_Settings.
+		 * @var Vindi_Settings
+		 */
+		protected $settings = null;
 
 		/**
 		 * Set up the class, including it's hooks & filters, when the file is loaded.
@@ -57,8 +63,7 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 		{
 			$this->includes();
 
-			$this->settings = new Vindi_Settings($this);
-			$this->settings->init();
+			$this->settings = new Vindi_Settings();
 		}
 
 		/**
@@ -79,16 +84,8 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 		 **/
 		public function includes()
 		{
+			include_once(__DIR__.'/src/class-vindi-api.php');
 			include_once(__DIR__.'/src/class-vindi-settings.php');
-		}
-
-		/**
-		 * Check if SSL is enabled when merchant is not trial.
-		 * @return boolean
-		 */
-		public function check_ssl()
-		{
-			return false;
 		}
 	}
 }

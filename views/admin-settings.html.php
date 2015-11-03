@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 /** @var WC_Vindi_Base_Gateway $this */
 
-if ( ! $this->plugin->check_ssl() ):
+if ( ! $this->check_ssl() ):
 	?>
 	<div class="error">
 		<p>
@@ -23,7 +23,7 @@ endif;
 	</table>
 <?php
 
-if ( ! empty ( $this->api_key ) ) : ?>
+if ( ! empty ( $this->get_api_key() ) ) : ?>
 	<div class="updated">
 		<h3 class="wc-settings-sub-title">
 			<?php _e( 'Link de configuração dos Eventos da Vindi', VINDI_IDENTIFIER ); ?>
