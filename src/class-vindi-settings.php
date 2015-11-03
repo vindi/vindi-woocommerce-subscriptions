@@ -10,33 +10,39 @@ class Vindi_Settings extends WC_Settings_API
     /**
      * @var string
      **/
-    private $api_key;
-
-    /**
-     * @var string
-     **/
     private $token;
 
-    public function __construct(Vindi_WooCommerce_Subscriptions $plugin)
-    {
-        $this->plugin = $plugin;
-        $this->token = sanitize_file_name(wp_hash( 'vindi-wc' ));
-    }
+    /**
+     * @var Vindi_API
+     **/
+    private $api;
 
-    public function init()
+    public function __construct()
     {
+        $this->token = sanitize_file_name(wp_hash( 'vindi-wc' ));
+
         $this->init_form_fields();
+        $this->init_settings();
+
+        $this->api = new Vindi_API($this->get_api_key());
+
         add_filter( 'woocommerce_settings_tabs_array', [&$this, 'add_settings_tab'], 50);
         add_action( 'woocommerce_settings_tabs_settings_vindi', [&$this, 'settings_tab']);
+        add_action( 'woocommerce_update_options_settings_vindi', [&$this, 'process_admin_options']);
     }
 
+    /**
+     * Create settings tab
+     */
     public static function add_settings_tab( $settings_tabs )
     {
         $settings_tabs['settings_vindi'] = __( 'Vindi', VINDI_IDENTIFIER);
         return $settings_tabs;
     }
 
-
+    /**
+     * Include Settings View
+     */
     public function settings_tab()
     {
         include_once(sprintf('%s/%s', Vindi_WooCommerce_Subscriptions::VIEWS_DIR, 'admin-settings.html.php'));
@@ -61,14 +67,14 @@ class Vindi_Settings extends WC_Settings_API
 				'description' => __( 'A Chave da API de sua conta na Vindi. ' . $prospects_url, 'woocommerce-vindi' ),
 				'default'     => '',
 			],
-			'sendNfeInformation' => [
+			'send_nfe_information' => [
 				'title'       => __( 'Emissão de NFe\'s', 'woocommerce-vindi' ),
 				'label'       => __( 'Enviar informações para emissão de NFe\'s', 'woocommerce-vindi' ),
 				'type'        => 'checkbox',
 				'description' => sprintf( __( 'Envia informações de RG e Inscrição Estadual para Emissão de NFe\'s com nossos parceiros. %s', 'woocommerce-vindi' ), $nfe_know_more ),
 				'default'     => 'no',
 			],
-			'returnStatus'       => [
+			'return_status'       => [
 				'title'       => __( 'Status de conclusão do pedido', 'woocommerce-vindi' ),
 				'type'        => 'select',
 				'description' => __( 'Status que o pedido deverá ter após receber a confirmação de pagamento da Vindi.', 'woocommerce-vindi' ),
@@ -93,8 +99,39 @@ class Vindi_Settings extends WC_Settings_API
 		];
 	}
 
+    /**
+     * Get Uniq Token Access
+     *
+     * @return string
+     **/
     public function get_token()
     {
         return $this->token;
+    }
+
+    /**
+     * Get Vindi API Key
+     * @return string
+     **/
+    public function get_api_key()
+    {
+        return $this->settings['api_key'];
+    }
+
+    /**
+	 * Return the URL that will receive the webhooks.
+	 * @return string
+	 */
+	public function get_events_url() {
+		return get_site_url() . "/wc-api/?action=vindi&token=" . $this->get_token();
+	}
+
+    /**
+     * Check if SSL is enabled when merchant is not trial.
+     * @return boolean
+     */
+    public function check_ssl()
+    {
+        return false;
     }
 }
