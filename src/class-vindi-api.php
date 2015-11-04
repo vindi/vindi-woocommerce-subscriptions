@@ -106,7 +106,6 @@ class Vindi_API
     */
     private function request($endpoint, $method = 'POST', $data = [], $data_to_log = null)
     {
-
         $url  = sprintf('%s%s', self::BASE_PATH, $endpoint);
         $body = $this->build_body($data);
 
@@ -513,10 +512,5 @@ class Vindi_API
             return 'trial' === $merchant['status'];
 
         return false;
-    }
-
-    public function log($text)
-    {
-
     }
 }

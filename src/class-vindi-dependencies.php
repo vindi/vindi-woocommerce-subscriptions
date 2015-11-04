@@ -29,7 +29,7 @@ class Vindi_Dependencies
         if ( ! self::$active_plugins ) self::init();
 
         if ( ! self::is_woocommerce_activated() ) {
-            add_action( 'admin_notices', 'Vindi_Dependencies::woocommerceMissingNotice' );
+            add_action( 'admin_notices', 'Vindi_Dependencies::woocommerce_missing_notice' );
             return false;
         }
     }
@@ -38,7 +38,7 @@ class Vindi_Dependencies
     * WooCommerce fallback notice.
     * @return  string
     */
-    public static function woocommerceMissingNotice()
+    public static function woocommerce_missing_notice()
     {
         echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER ), '<a href="https://wordpress.org/extend/plugins/woocommerce/">' . __( 'WooCommerce', VINDI_IDENTIFIER ) . '</a>' ) . '</p></div>';
     }
@@ -47,7 +47,7 @@ class Vindi_Dependencies
     * WooCommerce Extra Checkout Fields for Brazil fallback notice.
     * @return  string
     */
-    public static function extraCheckoutMissingNotice()
+    public static function extra_checkout_missing_notice()
     {
         echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER ), '<a href="https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/">' . __( 'WooCommerce Extra Checkout Fields for Brazil', VINDI_IDENTIFIER ) . '</a>' ) . '</p></div>';
     }

@@ -130,7 +130,7 @@ class Vindi_Settings extends WC_Settings_API
 	 * @return string
 	 */
 	public function get_events_url() {
-		return get_site_url() . "/wc-api/?action=vindi&token=" . $this->get_token();
+		return sprintf('%s/wc-api/?action=vindi&token=%s', get_site_url(), $this->get_token());
 	}
 
     /**
@@ -139,6 +139,14 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function check_ssl()
     {
-        return false;
+        return $this->api->isMerchantStatusTrial() || $this->check_woocommerce_force_ssl();
+    }
+
+    /**
+     * @return boolean
+     **/
+    public function check_woocommerce_force_ssl_checkout()
+    {
+        return 'yes' === get_option( 'woocommerce_force_ssl_checkout' ) && is_ssl();
     }
 }

@@ -20,8 +20,8 @@ class Vindi_Logger
 
     public function __construct($identifier, $is_active)
     {
-        $this->identifier  = $identifier;
         $this->main_logger = new WC_Logger();
+        $this->identifier  = $identifier;
         $this->is_active   = $is_active;
     }
 
