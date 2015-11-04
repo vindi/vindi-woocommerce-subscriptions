@@ -18,6 +18,11 @@ class Vindi_API
     private $accept_bank_slip;
 
     /**
+    * @var Vindi_Logger
+    */
+    private $logger;
+
+    /**
     * @const string API base path.
     */
     const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
@@ -25,9 +30,10 @@ class Vindi_API
     /**
     * @param string $key
     */
-    public function __construct($key)
+    public function __construct($key, Vindi_Logger $logger)
     {
-        $this->key = $key;
+        $this->key    = $key;
+        $this->logger = $logger;
     }
 
     /**
@@ -104,11 +110,11 @@ class Vindi_API
         $url  = sprintf('%s%s', self::BASE_PATH, $endpoint);
         $body = $this->build_body($data);
 
-        $requestId = rand();
+        $request_id = rand();
 
         $data_to_log = null !== $data_to_log ? $this->build_body($data_to_log) : $body;
 
-        $this->log(sprintf("[Request #%s]: Novo Request para a API.\n%s %s\n%s", $requestId, $method, $url, $data_to_log));
+        $this->logger->log(sprintf("[Request #%s]: Novo Request para a API.\n%s %s\n%s", $request_id, $method, $url, $data_to_log));
 
         $response = wp_remote_post($url, [
             'headers' => [
@@ -123,18 +129,18 @@ class Vindi_API
         ] );
 
         if (is_wp_error($response)) {
-            $this->log(sprintf("[Request #%s]: Erro ao fazer request! %s", $requestId, print_r($response, true)));
+            $this->logger->log(sprintf("[Request #%s]: Erro ao fazer request! %s", $request_id, print_r($response, true)));
 
             return false;
         }
 
         $status = sprintf('%s %s', $response['response']['code'], $response['response']['message']);
-        $this->log(sprintf("[Request #%s]: Nova Resposta da API.\n%s\n%s", $requestId, $status, print_r($response['body'], true)));
+        $this->logger->log(sprintf("[Request #%s]: Nova Resposta da API.\n%s\n%s", $request_id, $status, print_r($response['body'], true)));
 
         $response_body = wp_remote_retrieve_body($response);
 
         if (! $response_body) {
-            $this->log(sprintf('[Request #%s]: Erro ao recuperar corpo do request! %s', $requestId, print_r($response, true)));
+            $this->logger->log(sprintf('[Request #%s]: Erro ao recuperar corpo do request! %s', $request_id, print_r($response, true)));
 
             return false;
         }
@@ -509,8 +515,8 @@ class Vindi_API
         return false;
     }
 
-    public function log()
+    public function log($text)
     {
-        //@TODO create a logger - this functions is a dummy solution
+
     }
 }
