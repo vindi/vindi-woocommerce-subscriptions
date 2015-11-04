@@ -18,6 +18,11 @@ class Vindi_Settings extends WC_Settings_API
     private $api;
 
     /**
+     * @var Vindi_Logger
+     **/
+    private $logger;
+
+    /**
      * @var boolean
      **/
     private $debug;
@@ -29,9 +34,10 @@ class Vindi_Settings extends WC_Settings_API
         $this->init_form_fields();
         $this->init_settings();
 
-        $this->debug = $this->get_option('debug') == 'yes' ? true : false;
+        $this->debug  = $this->get_option('debug') == 'yes' ? true : false;
 
-        $this->api = new Vindi_API($this->get_api_key(), new Vindi_Logger(VINDI_IDENTIFIER, $this->debug));
+        $this->logger = new Vindi_Logger(VINDI_IDENTIFIER, $this->debug);
+        $this->api    = new Vindi_API($this->get_api_key(), $this->logger);
 
         add_filter('woocommerce_settings_tabs_array', [&$this, 'add_settings_tab'], 50);
         add_action('woocommerce_settings_tabs_settings_vindi', [&$this, 'settings_tab']);
