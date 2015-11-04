@@ -24,7 +24,7 @@ class Vindi_Settings extends WC_Settings_API
 
     public function __construct()
     {
-        $this->token = sanitize_file_name(wp_hash( 'vindi-wc' ));
+        $this->token = sanitize_file_name(wp_hash(VINDI_IDENTIFIER));
 
         $this->init_form_fields();
         $this->init_settings();
@@ -61,7 +61,7 @@ class Vindi_Settings extends WC_Settings_API
 	 */
 	public function init_form_fields()
     {
-		$url           = admin_url( 'admin.php?page=wc-status&tab=logs&log_file=vindi-wc-' . $this->get_token() . '-log' );
+		$url           = admin_url(sprintf('admin.php?page=wc-status&tab=logs&log_file=%s-%s-log', VINDI_IDENTIFIER, $this->get_token()));
 		$logs_url      = '<a href="' . $url . '" target="_blank">' . __( 'Ver Logs', 'woocommerce-vindi' ) . '</a>';
 		$nfe_know_more = '<a href="http://atendimento.vindi.com.br/hc/pt-br/articles/204450944-Notas-fiscais" target="_blank">' . __( 'Saiba mais', 'woocommerce-vindi' ) . '</a>';
 

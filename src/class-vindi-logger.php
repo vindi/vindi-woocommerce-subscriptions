@@ -22,6 +22,7 @@ class Vindi_Logger
     {
         $this->identifier  = $identifier;
         $this->main_logger = new WC_Logger();
+        $this->is_active   = $is_active;
     }
 
     /**
