@@ -84,6 +84,7 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 		 **/
 		public function includes()
 		{
+			include_once(__DIR__.'/src/class-vindi-logger.php');
 			include_once(__DIR__.'/src/class-vindi-api.php');
 			include_once(__DIR__.'/src/class-vindi-settings.php');
 		}
