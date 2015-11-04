@@ -33,17 +33,17 @@ class Vindi_Settings extends WC_Settings_API
 
         $this->api = new Vindi_API($this->get_api_key(), new Vindi_Logger(VINDI_IDENTIFIER, $this->debug));
 
-        add_filter( 'woocommerce_settings_tabs_array', [&$this, 'add_settings_tab'], 50);
-        add_action( 'woocommerce_settings_tabs_settings_vindi', [&$this, 'settings_tab']);
-        add_action( 'woocommerce_update_options_settings_vindi', [&$this, 'process_admin_options']);
+        add_filter('woocommerce_settings_tabs_array', [&$this, 'add_settings_tab'], 50);
+        add_action('woocommerce_settings_tabs_settings_vindi', [&$this, 'settings_tab']);
+        add_action('woocommerce_update_options_settings_vindi', [&$this, 'process_admin_options']);
     }
 
     /**
      * Create settings tab
      */
-    public static function add_settings_tab( $settings_tabs )
+    public static function add_settings_tab($settings_tabs)
     {
-        $settings_tabs['settings_vindi'] = __( 'Vindi', VINDI_IDENTIFIER);
+        $settings_tabs['settings_vindi'] = __('Vindi', VINDI_IDENTIFIER);
         return $settings_tabs;
     }
 
@@ -62,29 +62,29 @@ class Vindi_Settings extends WC_Settings_API
 	public function init_form_fields()
     {
 		$url           = admin_url(sprintf('admin.php?page=wc-status&tab=logs&log_file=%s-%s-log', VINDI_IDENTIFIER, $this->get_token()));
-		$logs_url      = '<a href="' . $url . '" target="_blank">' . __( 'Ver Logs', 'woocommerce-vindi' ) . '</a>';
-		$nfe_know_more = '<a href="http://atendimento.vindi.com.br/hc/pt-br/articles/204450944-Notas-fiscais" target="_blank">' . __( 'Saiba mais', 'woocommerce-vindi' ) . '</a>';
+		$logs_url      = '<a href="' . $url . '" target="_blank">' . __('Ver Logs', 'woocommerce-vindi') . '</a>';
+		$nfe_know_more = '<a href="http://atendimento.vindi.com.br/hc/pt-br/articles/204450944-Notas-fiscais" target="_blank">' . __('Saiba mais', 'woocommerce-vindi') . '</a>';
 
-		$prospects_url = '<a href="https://app.vindi.com.br/prospects/new" target="_blank">' . __( 'Não possui uma conta?', 'woocommerce-vindi' ) . '</a>';
+		$prospects_url = '<a href="https://app.vindi.com.br/prospects/new" target="_blank">' . __('Não possui uma conta?', 'woocommerce-vindi') . '</a>';
 
 		$this->form_fields = [
 			'api_key'         => [
-				'title'       => __( 'Chave da API Vindi', 'woocommerce-vindi' ),
+				'title'       => __('Chave da API Vindi', 'woocommerce-vindi'),
 				'type'        => 'text',
-				'description' => __( 'A Chave da API de sua conta na Vindi. ' . $prospects_url, 'woocommerce-vindi' ),
+				'description' => __('A Chave da API de sua conta na Vindi. ' . $prospects_url, 'woocommerce-vindi'),
 				'default'     => '',
 			],
 			'send_nfe_information' => [
-				'title'       => __( 'Emissão de NFe\'s', 'woocommerce-vindi' ),
-				'label'       => __( 'Enviar informações para emissão de NFe\'s', 'woocommerce-vindi' ),
+				'title'       => __('Emissão de NFe\'s', 'woocommerce-vindi'),
+				'label'       => __('Enviar informações para emissão de NFe\'s', 'woocommerce-vindi'),
 				'type'        => 'checkbox',
-				'description' => sprintf( __( 'Envia informações de RG e Inscrição Estadual para Emissão de NFe\'s com nossos parceiros. %s', 'woocommerce-vindi' ), $nfe_know_more ),
+				'description' => sprintf(__('Envia informações de RG e Inscrição Estadual para Emissão de NFe\'s com nossos parceiros. %s', 'woocommerce-vindi'), $nfe_know_more),
 				'default'     => 'no',
 			],
 			'return_status'       => [
-				'title'       => __( 'Status de conclusão do pedido', 'woocommerce-vindi' ),
+				'title'       => __('Status de conclusão do pedido', 'woocommerce-vindi'),
 				'type'        => 'select',
-				'description' => __( 'Status que o pedido deverá ter após receber a confirmação de pagamento da Vindi.', 'woocommerce-vindi' ),
+				'description' => __('Status que o pedido deverá ter após receber a confirmação de pagamento da Vindi.', 'woocommerce-vindi'),
 				'default'     => 'processing',
 				'options'     => [
 					'processing' => 'Processando',
@@ -93,14 +93,14 @@ class Vindi_Settings extends WC_Settings_API
 				],
 			],
 			'testing'            => [
-				'title' => __( 'Testes', 'vindi-woocommerce' ),
+				'title' => __('Testes', 'vindi-woocommerce'),
 				'type'  => 'title',
 			],
 			'debug'              => [
-				'title'       => __( 'Log de Depuração', 'woocommerce-vindi' ),
-				'label'       => __( 'Ativar Logs', 'woocommerce-vindi' ),
+				'title'       => __('Log de Depuração', 'woocommerce-vindi'),
+				'label'       => __('Ativar Logs', 'woocommerce-vindi'),
 				'type'        => 'checkbox',
-				'description' => sprintf( __( 'Ative esta opção para habilitar logs de depuração do servidor. %s', 'woocommerce-vindi' ), $logs_url ),
+				'description' => sprintf(__('Ative esta opção para habilitar logs de depuração do servidor. %s', 'woocommerce-vindi'), $logs_url),
 				'default'     => 'no',
 			],
 		];
@@ -139,7 +139,7 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function check_ssl()
     {
-        return $this->api->isMerchantStatusTrial() || $this->check_woocommerce_force_ssl();
+        return $this->api->is_merchant_status_trial() || $this->check_woocommerce_force_ssl();
     }
 
     /**
@@ -147,6 +147,6 @@ class Vindi_Settings extends WC_Settings_API
      **/
     public function check_woocommerce_force_ssl_checkout()
     {
-        return 'yes' === get_option( 'woocommerce_force_ssl_checkout' ) && is_ssl();
+        return 'yes' === get_option('woocommerce_force_ssl_checkout') && is_ssl();
     }
 }

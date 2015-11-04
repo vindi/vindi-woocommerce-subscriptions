@@ -12,10 +12,10 @@ class Vindi_Dependencies
     */
     public static function init()
     {
-        self::$active_plugins = (array) get_option( 'active_plugins', array() );
+        self::$active_plugins = (array) get_option('active_plugins', array());
 
-        if ( is_multisite() )
-        self::$active_plugins = array_merge( self::$active_plugins, get_site_option( 'active_sitewide_plugins', array() ) );
+        if (is_multisite())
+            self::$active_plugins = array_merge(self::$active_plugins, get_site_option('active_sitewide_plugins', array()));
     }
 
     /**
@@ -26,10 +26,10 @@ class Vindi_Dependencies
     {
         $plugin = strtolower($plugin);
 
-        if ( ! self::$active_plugins ) self::init();
+        if (! self::$active_plugins) self::init();
 
-        if ( ! self::is_woocommerce_activated() ) {
-            add_action( 'admin_notices', 'Vindi_Dependencies::woocommerce_missing_notice' );
+        if (! self::is_woocommerce_activated()) {
+            add_action('admin_notices', 'Vindi_Dependencies::woocommerce_missing_notice');
             return false;
         }
     }
@@ -40,7 +40,7 @@ class Vindi_Dependencies
     */
     public static function woocommerce_missing_notice()
     {
-        echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER ), '<a href="https://wordpress.org/extend/plugins/woocommerce/">' . __( 'WooCommerce', VINDI_IDENTIFIER ) . '</a>' ) . '</p></div>';
+        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER), '<a href="https://wordpress.org/extend/plugins/woocommerce/">' . __('WooCommerce', VINDI_IDENTIFIER) . '</a>') . '</p></div>';
     }
 
     /**
@@ -49,7 +49,7 @@ class Vindi_Dependencies
     */
     public static function extra_checkout_missing_notice()
     {
-        echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER ), '<a href="https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/">' . __( 'WooCommerce Extra Checkout Fields for Brazil', VINDI_IDENTIFIER ) . '</a>' ) . '</p></div>';
+        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER), '<a href="https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/">' . __('WooCommerce Extra Checkout Fields for Brazil', VINDI_IDENTIFIER) . '</a>') . '</p></div>';
     }
 
     /**
@@ -57,6 +57,6 @@ class Vindi_Dependencies
     **/
     public function is_woocommerce_activated()
     {
-        return in_array( 'woocommerce/woocommerce.php', self::$active_plugins ) || array_key_exists( 'woocommerce/woocommerce.php', self::$active_plugins );
+        return in_array('woocommerce/woocommerce.php', self::$active_plugins ) || array_key_exists('woocommerce/woocommerce.php', self::$active_plugins);
     }
 }

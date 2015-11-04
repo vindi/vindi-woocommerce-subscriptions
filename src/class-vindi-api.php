@@ -3,33 +3,33 @@
 class Vindi_API
 {
     /**
-    * @var string
-    */
+     * @var string
+     */
     private $key;
 
     /**
-    * @var string
-    */
+     * @var string
+     */
     public $last_error = '';
 
     /**
-    * @var bool
-    */
+     * @var bool
+     */
     private $accept_bank_slip;
 
     /**
-    * @var Vindi_Logger
-    */
+     * @var Vindi_Logger
+     */
     private $logger;
 
     /**
-    * @const string API base path.
-    */
+     * @const string API base path.
+     */
     const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
 
     /**
-    * @param string $key
-    */
+     * @param string $key
+     */
     public function __construct($key, Vindi_Logger $logger)
     {
         $this->key    = $key;
@@ -37,43 +37,43 @@ class Vindi_API
     }
 
     /**
-    * Build HTTP Query.
-    *
-    * @param array $data
-    *
-    * @return string
-    */
+     * Build HTTP Query.
+     *
+     * @param array $data
+     *
+     * @return string
+     */
     private function build_body($data)
     {
         return json_encode($data);
     }
 
     /**
-    * Generate Authentication Header.
-    * @return string
-    */
+     * Generate Authentication Header.
+     * @return string
+     */
     private function get_auth_header()
     {
         return sprintf('Basic %s:', base64_encode($this->key));
     }
 
     /**
-    * @param array $error
-    * @param       $endpoint
-    *
-    * @return string
-    */
+     * @param array $error
+     * @param       $endpoint
+     *
+     * @return string
+     */
     private function get_error_message( $error, $endpoint )
     {
         return sprintf("%s Error: %s: %s - %s", $endpoint, $error['id'], $error['parameter'], $error['message']);
     }
 
     /**
-    * @param array $response
-    * @param       $endpoint
-    *
-    * @return bool
-    */
+     * @param array $response
+     * @param       $endpoint
+     *
+     * @return bool
+     */
     private function check_response($response, $endpoint)
     {
         if (isset($response['errors']) && ! empty($response['errors'])) {
@@ -95,15 +95,15 @@ class Vindi_API
     }
 
     /**
-    * Perform request to API.
-    *
-    * @param string $endpoint
-    * @param string $method
-    * @param array  $data
-    * @param null   $data_to_log
-    *
-    * @return array|bool|mixed
-    */
+     * Perform request to API.
+     *
+     * @param string $endpoint
+     * @param string $method
+     * @param array  $data
+     * @param null   $data_to_log
+     *
+     * @return array|bool|mixed
+     */
     private function request($endpoint, $method = 'POST', $data = [], $data_to_log = null)
     {
         $url  = sprintf('%s%s', self::BASE_PATH, $endpoint);
@@ -154,12 +154,12 @@ class Vindi_API
     }
 
     /**
-    * Make an API request to create a Customer.
-    *
-    * @param array $body (name, email, code)
-    *
-    * @return array|bool|mixed
-    */
+     * Make an API request to create a Customer.
+     *
+     * @param array $body (name, email, code)
+     *
+     * @return array|bool|mixed
+     */
     public function create_customer($body)
     {
         if ($response = $this->request('customers', 'POST', $body)) {
@@ -170,12 +170,12 @@ class Vindi_API
     }
 
     /**
-    * Make an API request to retrieve an existing Customer.
-    *
-    * @param string $code
-    *
-    * @return array|bool|mixed
-    */
+     * Make an API request to retrieve an existing Customer.
+     *
+     * @param string $code
+     *
+     * @return array|bool|mixed
+     */
     public function find_customer_by_code($code)
     {
         $response = $this->request(sprintf('customers/search?code=%s', $code),'GET');
@@ -188,12 +188,12 @@ class Vindi_API
     }
 
     /**
-    * Make an API request to retrieve an existing Customer or to create one if not found.
-    *
-    * @param array $body (name, email, code)
-    *
-    * @return array|bool|mixed
-    */
+     * Make an API request to retrieve an existing Customer or to create one if not found.
+     *
+     * @param array $body (name, email, code)
+     *
+     * @return array|bool|mixed
+     */
     public function find_or_create_customer($body)
     {
         $customer_id = $this->find_customer_by_code($body['code']);
@@ -206,12 +206,12 @@ class Vindi_API
     }
 
     /**
-    * Make an API request to create a Payment Profile to a Customer.
-    *
-    * @param $body (holder_name, card_expiration, card_number, card_cvv, customer_id)
-    *
-    * @return array|bool|mixed
-    */
+     * Make an API request to create a Payment Profile to a Customer.
+     *
+     * @param $body (holder_name, card_expiration, card_number, card_cvv, customer_id)
+     *
+     * @return array|bool|mixed
+     */
     public function create_customer_payment_profile($body)
     {
         // Protect credit card number.
@@ -223,12 +223,12 @@ class Vindi_API
     }
 
     /**
-    * Make an API request to create a Subscription.
-    *
-    * @param $body (plan_id, customer_id, payment_method_code, product_items[{product_id}])
-    *
-    * @return array
-    */
+     * Make an API request to create a Subscription.
+     *
+     * @param $body (plan_id, customer_id, payment_method_code, product_items[{product_id}])
+     *
+     * @return array
+     */
     public function create_subscription($body)
     {
         if (($response = $this->request('subscriptions', 'POST', $body)) && isset($response['subscription']['id'])) {
@@ -243,9 +243,9 @@ class Vindi_API
     }
 
     /**
-    * Make an API request to retrive Payment Methods.
-    * @return array|bool
-    */
+     * Make an API request to retrive Payment Methods.
+     * @return array|bool
+     */
     public function get_payment_methods()
     {
         if (false === ($payment_methods = get_transient('vindi_payment_methods'))) {
@@ -282,8 +282,8 @@ class Vindi_API
     }
 
     /**
-    * @return bool|null
-    */
+     * @return bool|null
+     */
     public function accept_bank_slip()
     {
         if ( null === $this->accept_bank_slip ) {
@@ -294,10 +294,10 @@ class Vindi_API
     }
 
     /**
-    * @param array $body
-    *
-    * @return int|bool
-    */
+     * @param array $body
+     *
+     * @return int|bool
+     */
     public function create_bill($body)
     {
         if ($response = $this->request('bills', 'POST', $body)) {
@@ -308,10 +308,10 @@ class Vindi_API
     }
 
     /**
-    * @param $bill_id
-    *
-    * @return array|bool|mixed
-    */
+     * @param $bill_id
+     *
+     * @return array|bool|mixed
+     */
     public function approve_bill($bill_id)
     {
         $response = $this->request(sprintf('bills/%s', $bill_id), 'GET');
@@ -330,10 +330,10 @@ class Vindi_API
     }
 
     /**
-    * @param $bill_id
-    *
-    * @return string
-    */
+     * @param $bill_id
+     *
+     * @return string
+     */
     public function get_bank_slip_download( $billId )
     {
         $response = $this->request(sprintf('bills/%s', $bill_id), 'GET');
@@ -346,8 +346,8 @@ class Vindi_API
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function get_products()
     {
         $list     = [];
@@ -363,10 +363,10 @@ class Vindi_API
     }
 
     /**
-    * @param int $id
-    *
-    * @return array
-    */
+     * @param int $id
+     *
+     * @return array
+     */
     public function get_plan_items($id)
     {
         $list     = [];
@@ -384,11 +384,11 @@ class Vindi_API
     }
 
     /**
-    * @param int   $plan_id
-    * @param float $order_total
-    *
-    * @return array
-    */
+     * @param int   $plan_id
+     * @param float $order_total
+     *
+     * @return array
+     */
     public function build_plan_items_for_subscription($plan_id, $order_total)
     {
         $list = [ ];
@@ -405,8 +405,8 @@ class Vindi_API
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function get_plans()
     {
         if (false === ($list = get_transient('vindi_plans'))) {
@@ -426,12 +426,12 @@ class Vindi_API
     }
 
     /**
-    * Make an API request to create a Product.
-    *
-    * @param array $body (name, code, status, pricing_schema (price))
-    *
-    * @return array|bool|mixed
-    */
+     * Make an API request to create a Product.
+     *
+     * @param array $body (name, code, status, pricing_schema (price))
+     *
+     * @return array|bool|mixed
+     */
     public function create_product($body)
     {
         if ($response = $this->request('products', 'POST', $body)) {
@@ -442,17 +442,17 @@ class Vindi_API
     }
 
     /**
-    * Make an API request to retrieve an existing Product.
-    *
-    * @param string $code
-    *
-    * @return array|bool|mixed
-    */
+     * Make an API request to retrieve an existing Product.
+     *
+     * @param string $code
+     *
+     * @return array|bool|mixed
+     */
     public function find_product_by_code($code)
     {
         $response = $this->request(sprintf('products?query=code%3D%s', $code), 'GET');
 
-        if ( $response && (1 === count($response['products'])) && isset($response['products'][0]['id'])) {
+        if ($response && (1 === count($response['products'])) && isset($response['products'][0]['id'])) {
             return $response['products'][0]['id'];
         }
 
@@ -460,32 +460,32 @@ class Vindi_API
     }
 
     /**
-    * Make an API request to retrieve the Unique Payment Product or to create it if not found.
-    * @return array|bool|mixed
-    */
+     * Make an API request to retrieve the Unique Payment Product or to create it if not found.
+     * @return array|bool|mixed
+     */
     public function find_or_create_unique_payment_product()
     {
         $product_id = $this->find_product_by_code('wc-pagtounico');
 
         if (false === $product_id)
         {
-            return $this->create_product( [
+            return $this->create_product([
                 'name'           => 'Pagamento Único (não remover)',
                 'code'           => 'wc-pagtounico',
                 'status'         => 'active',
                 'pricing_schema' => [
                     'price' => 0,
                 ],
-            ] );
+            ]);
         }
 
         return $product_id;
     }
 
     /**
-    * Make an API request to retrieve informations about the Merchant.
-    * @return array|bool|mixed
-    */
+     * Make an API request to retrieve informations about the Merchant.
+     * @return array|bool|mixed
+     */
     public function get_merchant()
     {
         if (false === ($merchant = get_transient('vindi_merchant'))) {
@@ -503,9 +503,9 @@ class Vindi_API
     }
 
     /**
-    * Check to see if Merchant Status is Trial.
-    * @return boolean
-    */
+     * Check to see if Merchant Status is Trial.
+     * @return boolean
+     */
     public function is_merchant_status_trial()
     {
         if ($merchant = $this->get_merchant())
