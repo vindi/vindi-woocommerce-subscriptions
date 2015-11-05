@@ -391,7 +391,7 @@ class Vindi_API
      */
     public function build_plan_items_for_subscription($plan_id, $order_total)
     {
-        $list = [ ];
+        $list = [];
 
         foreach ($this->get_plan_items($plan_id) as $item) {
             $list[] = [

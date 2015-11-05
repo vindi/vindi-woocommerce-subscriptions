@@ -13,31 +13,39 @@ class Vindi_Settings extends WC_Settings_API
     private $token;
 
     /**
-     * @var Vindi_API
-     **/
-    private $api;
-
-    /**
-     * @var Vindi_Logger
-     **/
-    private $logger;
-
-    /**
      * @var boolean
      **/
     private $debug;
 
+    /**
+     * @var Vindi_API
+     **/
+    public $api;
+
+    /**
+     * @var Vindi_Logger
+     **/
+    public $logger;
+
+    /**
+     * @var WooCommerce
+     **/
+    public $woocommerce;
+
+
     public function __construct()
     {
+        global $woocommerce;
+
         $this->token = sanitize_file_name(wp_hash(VINDI_IDENTIFIER));
 
         $this->init_form_fields();
         $this->init_settings();
 
-        $this->debug  = $this->get_option('debug') == 'yes' ? true : false;
-        
-        $this->logger = new Vindi_Logger(VINDI_IDENTIFIER, $this->debug);
-        $this->api    = new Vindi_API($this->get_api_key(), $this->logger);
+        $this->debug       = $this->get_option('debug') == 'yes' ? true : false;
+        $this->logger      = new Vindi_Logger(VINDI_IDENTIFIER, $this->debug);
+        $this->api         = new Vindi_API($this->get_api_key(), $this->logger);
+        $this->woocommerce = $woocommerce;
 
         add_filter('woocommerce_settings_tabs_array', [&$this, 'add_settings_tab'], 50);
         add_action('woocommerce_settings_tabs_settings_vindi', [&$this, 'settings_tab']);
