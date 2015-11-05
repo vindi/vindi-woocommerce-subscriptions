@@ -35,7 +35,7 @@ class Vindi_Settings extends WC_Settings_API
         $this->init_settings();
 
         $this->debug  = $this->get_option('debug') == 'yes' ? true : false;
-
+        
         $this->logger = new Vindi_Logger(VINDI_IDENTIFIER, $this->debug);
         $this->api    = new Vindi_API($this->get_api_key(), $this->logger);
 

@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) die( 'No script kiddies please!' );
 
 define('VINDI_IDENTIFIER', 'vindi_subscriptions');
 
-require_once dirname(__FILE__)."/src/class-vindi-dependencies.php";
+require_once dirname(__FILE__)."/includes/class-vindi-dependencies.php";
 
 /**
 * Check all Vindi Dependencies
@@ -39,10 +39,15 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 		 */
 		const VERSION = '1.0.0';
 
-		/**
+        /**
 		 * @var string
 		 */
-		const VIEWS_DIR = __DIR__.'/views';
+		const VIEWS_DIR = __DIR__.'/templates';
+
+        /**
+         * @var string
+         */
+        const INCLUDES_DIR = __DIR__.'/includes';
 
         /**
 		 * Instance of this class.
@@ -75,7 +80,7 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 			// If the single instance hasn't been set, set it now.
 			if (null === self::$instance)
                 self::$instance = new self;
-            
+
 			return self::$instance;
 		}
 
@@ -84,9 +89,9 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 		 **/
 		public function includes()
 		{
-			include_once(__DIR__.'/src/class-vindi-logger.php');
-			include_once(__DIR__.'/src/class-vindi-api.php');
-			include_once(__DIR__.'/src/class-vindi-settings.php');
+			include_once(self::INCLUDES_DIR . '/class-vindi-logger.php');
+			include_once(self::INCLUDES_DIR . '/class-vindi-api.php');
+			include_once(self::INCLUDES_DIR . '/class-vindi-settings.php');
 		}
 	}
 }
