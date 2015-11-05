@@ -47,9 +47,10 @@ class Vindi_Settings extends WC_Settings_API
         $this->api         = new Vindi_API($this->get_api_key(), $this->logger);
         $this->woocommerce = $woocommerce;
 
-        add_filter('woocommerce_settings_tabs_array', [&$this, 'add_settings_tab'], 50);
-        add_action('woocommerce_settings_tabs_settings_vindi', [&$this, 'settings_tab']);
-        add_action('woocommerce_update_options_settings_vindi', [&$this, 'process_admin_options']);
+        add_filter('woocommerce_settings_tabs_array', array(&$this, 'add_settings_tab'), 50);
+        add_action('woocommerce_settings_tabs_settings_vindi', array(&$this, 'settings_tab'));
+        add_action('woocommerce_update_options_settings_vindi', array(&$this, 'process_admin_options'));
+        add_filter('woocommerce_payment_gateways', array(&$this, 'add_gateway'));
     }
 
     /**
@@ -162,5 +163,19 @@ class Vindi_Settings extends WC_Settings_API
     public function check_woocommerce_force_ssl_checkout()
     {
         return 'yes' === get_option('woocommerce_force_ssl_checkout') && is_ssl();
+    }
+
+    /**
+     * Add the gateway to WooCommerce.
+     *
+     * @param   array $methods WooCommerce payment methods.
+     *
+     * @return  array Payment methods with Vindi.
+     */
+    public function add_gateway($methods)
+    {
+    	$methods[] = new Vindi_BankSlip_Gateway($this);
+
+    	return $methods;
     }
 }

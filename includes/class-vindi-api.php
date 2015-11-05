@@ -104,7 +104,7 @@ class Vindi_API
      *
      * @return array|bool|mixed
      */
-    private function request($endpoint, $method = 'POST', $data = [], $data_to_log = null)
+    private function request($endpoint, $method = 'POST', $data = array(), $data_to_log = null)
     {
         $url  = sprintf('%s%s', self::BASE_PATH, $endpoint);
         $body = $this->build_body($data);
@@ -115,17 +115,17 @@ class Vindi_API
 
         $this->logger->log(sprintf("[Request #%s]: Novo Request para a API.\n%s %s\n%s", $request_id, $method, $url, $data_to_log));
 
-        $response = wp_remote_post($url, [
-            'headers' => [
+        $response = wp_remote_post($url, array(
+            'headers' => array(
                 'Authorization' => $this->get_auth_header(),
                 'Content-Type'  => 'application/json',
                 'User-Agent'    => sprintf('Vindi-WooCommerce-Subscriptions/%s; %s', Vindi_WooCommerce_Subscriptions::VERSION, get_bloginfo( 'url' )),
-            ],
+            ),
             'method'    => $method,
             'timeout'   => 60,
             'sslverify' => true,
             'body'      => $body,
-        ] );
+        ));
 
         if (is_wp_error($response)) {
             $this->logger->log(sprintf("[Request #%s]: Erro ao fazer request! %s", $request_id, print_r($response, true)));
@@ -198,8 +198,8 @@ class Vindi_API
     {
         $customer_id = $this->find_customer_by_code($body['code']);
 
-        if ( false === $customer_id ) {
-            return $this->create_customer( $body );
+        if (false === $customer_id) {
+            return $this->create_customer($body);
         }
 
         return $customer_id;
@@ -250,10 +250,10 @@ class Vindi_API
     {
         if (false === ($payment_methods = get_transient('vindi_payment_methods'))) {
 
-            $payment_methods = [
-                'credit_card' => [],
+            $payment_methods = array(
+                'credit_card' => array(),
                 'bank_slip'   => false,
-            ];
+            );
 
             $response = $this->request('payment_methods', 'GET');
 
@@ -286,7 +286,7 @@ class Vindi_API
      */
     public function accept_bank_slip()
     {
-        if ( null === $this->accept_bank_slip ) {
+        if (null === $this->accept_bank_slip) {
             $this->get_payment_methods();
         }
 
@@ -350,7 +350,7 @@ class Vindi_API
      */
     public function get_products()
     {
-        $list     = [];
+        $list     = array();
         $response = $this->request('products?query=status:active', 'GET');
 
         if ($products = $response['products']) {
@@ -369,7 +369,7 @@ class Vindi_API
      */
     public function get_plan_items($id)
     {
-        $list     = [];
+        $list     = array();
         $response = $this->request(sprintf('plans/%s', $id), 'GET');
 
         if ($plan = $response['plan']) {
@@ -391,13 +391,13 @@ class Vindi_API
      */
     public function build_plan_items_for_subscription($plan_id, $order_total)
     {
-        $list = [];
+        $list = array();
 
         foreach ($this->get_plan_items($plan_id) as $item) {
-            $list[] = [
+            $list[] = array(
                 'product_id'     => $item,
                 'pricing_schema' => ['price' => $order_total],
-            ];
+            );
             $order_total = 0;
         }
 
@@ -410,7 +410,7 @@ class Vindi_API
     public function get_plans()
     {
         if (false === ($list = get_transient('vindi_plans'))) {
-            $list     = [];
+            $list     = array();
             $response = $this->request('plans?query=status:active', 'GET');
 
             if ($plans = $response['plans']) {
@@ -469,14 +469,14 @@ class Vindi_API
 
         if (false === $product_id)
         {
-            return $this->create_product([
+            return $this->create_product(array(
                 'name'           => 'Pagamento Único (não remover)',
                 'code'           => 'wc-pagtounico',
                 'status'         => 'active',
-                'pricing_schema' => [
+                'pricing_schema' => array(
                     'price' => 0,
-                ],
-            ]);
+                ),
+            ));
         }
 
         return $product_id;

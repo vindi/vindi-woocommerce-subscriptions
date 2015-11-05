@@ -20,16 +20,15 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
 
     public function __construct(Vindi_Settings $container)
     {
-        $this->container          = $container;
-        $this->title              = $this->get_option('title');
-        $this->enabled            = $this->get_option('enabled');
-        $this->return_status      = $this->get_option('return_status');
+        $this->container = $container;
+        $this->title     = $this->get_option('title');
+        $this->enabled   = $this->get_option('enabled');
 
         if (is_admin()) {
-            add_action('woocommerce_update_options_payment_gateways_' . $this->id, [&$this, 'process_admin_options']);
-            add_action('add_meta_boxes_shop_order', [&$this, 'vindi_order_metabox']);
-            add_filter('product_type_selector', [&$this, 'vindi_subscription_product_type']);
-            add_action('save_post', [&$this, 'vindi_save_subscription_meta']);
+            add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(&$this, 'process_admin_options'));
+            add_action('add_meta_boxes_shop_order', array(&$this, 'vindi_order_metabox'));
+            add_filter('product_type_selector', array(&$this, 'vindi_subscription_product_type'));
+            add_action('save_post', array(&$this, 'vindi_save_subscription_meta'));
         }
     }
 
@@ -39,7 +38,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      */
     public function admin_options()
     {
-        include_once('templates/html-admin-options.php');
+        include_once(sprintf('%s/%s', Vindi_WooCommerce_Subscriptions::VIEWS_DIR, 'admin-gateway-settings.html.php'));
     }
 
     /**
@@ -107,11 +106,11 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
     {
         add_meta_box('vindi-wc-subscription-meta-box',
             __('Assinatura Vindi','woocommerce-vindi'),
-            [&$this, 'vindi_order_metabox_content'],
-            'shop_order',
-            'normal',
-            'default'
-        );
+                array(&$this, 'vindi_order_metabox_content'),
+                'shop_order',
+                'normal',
+                'default'
+            );
     }
 
     /**
@@ -153,10 +152,10 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
             $response = $payment->process();
             $order->reduce_order_stock();
         } catch (Exception $e) {
-            $response = [
+            $response = array(
                 'result'   => 'fail',
                 'redirect' => '',
-            ];
+            );
         }
 
         return $response;

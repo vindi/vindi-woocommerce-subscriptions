@@ -26,11 +26,11 @@ require_once dirname(__FILE__)."/includes/class-vindi-dependencies.php";
 /**
 * Check all Vindi Dependencies
 */
-if( false === Vindi_Dependencies::check()) {
+if(false === Vindi_Dependencies::check()) {
 	return ;
 }
 
-if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
+if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 {
 	class Vindi_WooCommerce_Subscriptions
 	{
@@ -92,6 +92,8 @@ if ( ! class_exists( 'Vindi_WooCommerce_Subscriptions' ) )
 			include_once(self::INCLUDES_DIR . '/class-vindi-logger.php');
 			include_once(self::INCLUDES_DIR . '/class-vindi-api.php');
 			include_once(self::INCLUDES_DIR . '/class-vindi-settings.php');
+			include_once(self::INCLUDES_DIR . '/class-vindi-base-gateway.php');
+			include_once(self::INCLUDES_DIR . '/class-vindi-bank-slip-gateway.php');
 		}
 	}
 }
