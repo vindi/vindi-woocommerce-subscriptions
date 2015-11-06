@@ -27,8 +27,8 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
         if (is_admin()) {
             add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(&$this, 'process_admin_options'));
             add_action('add_meta_boxes_shop_order', array(&$this, 'vindi_order_metabox'));
-            add_filter('product_type_selector', array(&$this, 'vindi_subscription_product_type'));
             add_action('save_post', array(&$this, 'vindi_save_subscription_meta'));
+            add_filter('product_type_selector', array(&$this, 'vindi_subscription_product_type'));
         }
     }
 
@@ -128,7 +128,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
     {
         $this->log(sprintf('Processando pedido %s.', $order_id));
         $order   = new WC_Order($order_id);
-        $payment = new WC_Vindi_Payment($order, $this);
+        $payment = new Vindi_Payment($order, $this);
 
         // exit if validation by validate_fields() fails
         if (! $this->validated) {

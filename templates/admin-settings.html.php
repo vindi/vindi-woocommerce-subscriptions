@@ -13,7 +13,7 @@
         <?php $this->generate_settings_html(); ?>
     </table>
 
-<?php if ($this->get_api_key())): ?>
+<?php if ($this->get_api_key()): ?>
     <div class="updated">
         <h3 class="wc-settings-sub-title">
             <?php _e('Link de configuração dos Eventos da Vindi', VINDI_IDENTIFIER); ?>
