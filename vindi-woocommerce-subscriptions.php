@@ -98,4 +98,4 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 	}
 }
 
-add_action( 'admin_init', [ 'Vindi_WooCommerce_Subscriptions', 'get_instance' ], 100 );
+add_action( 'admin_init', array('Vindi_WooCommerce_Subscriptions', 'get_instance'), 100 );

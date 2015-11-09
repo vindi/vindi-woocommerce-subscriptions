@@ -159,7 +159,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      * @param       $name
      * @param array $args
      */
-    protected function get_template($name, $args = [])
+    protected function get_template($name, $args = array())
     {
         wc_get_template($name, $args, '', Vindi_WooCommerce_Subscriptions::VIEWS_DIR . 'templates/');
     }

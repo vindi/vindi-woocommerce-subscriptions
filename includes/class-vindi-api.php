@@ -396,7 +396,9 @@ class Vindi_API
         foreach ($this->get_plan_items($plan_id) as $item) {
             $list[] = array(
                 'product_id'     => $item,
-                'pricing_schema' => ['price' => $order_total],
+                'pricing_schema' => array(
+                    'price' => $order_total
+                ),
             );
             $order_total = 0;
         }
