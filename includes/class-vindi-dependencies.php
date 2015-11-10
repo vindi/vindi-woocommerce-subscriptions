@@ -24,8 +24,6 @@ class Vindi_Dependencies
     */
     public static function check()
     {
-        $plugin = strtolower($plugin);
-
         if (! self::$active_plugins) self::init();
 
         if (! self::is_woocommerce_activated()) {
@@ -55,7 +53,7 @@ class Vindi_Dependencies
     /**
     * @return boolean
     **/
-    public function is_woocommerce_activated()
+    public static function is_woocommerce_activated()
     {
         return in_array('woocommerce/woocommerce.php', self::$active_plugins ) || array_key_exists('woocommerce/woocommerce.php', self::$active_plugins);
     }
