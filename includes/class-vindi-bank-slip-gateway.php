@@ -5,7 +5,7 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
     public function __construct(Vindi_Settings $container)
     {
         $this->id           = 'vindi-bank-slip';
-        $this->method_title = __('Vindi - Boleto Bancário', 'woocommerce-vindi');
+        $this->method_title = __('Vindi - Boleto Bancário', VINDI_IDENTIFIER);
         $this->has_fields   = true;
 
         $this->init_form_fields();
@@ -46,22 +46,22 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
         $user_country = $this->get_country_code();
 
         if (empty($user_country)) {
-            _e('Selecione o País para visualizar as formas de pagamento.', 'woocommerce-vindi');
+            _e('Selecione o País para visualizar as formas de pagamento.', VINDI_IDENTIFIER);
             return;
         }
 
         if ($user_country != 'BR') {
-            _e('Vindi não está disponível no seu País.', 'woocommerce-vindi');
+            _e('Vindi não está disponível no seu País.', VINDI_IDENTIFIER);
             return;
         }
 
-        if (! $this->api->accept_bank_slip()) {
-            _e('Este método de pagamento não é aceito.', 'woocommerce-vindi');
+        if (! $this->container->api->accept_bank_slip()) {
+            _e('Este método de pagamento não é aceito.', VINDI_IDENTIFIER);
             return;
         }
 
-        $$is_trial = $this->container->api->is_merchant_status_trial();
-        $this->get_template('html-bankslip-checkout.php', $is_trial);
+        $is_trial = $this->container->api->is_merchant_status_trial();
+        $this->container->get_template('bankslip-checkout.html.php', compact('is_trial'));
     }
 
     /**
@@ -72,7 +72,7 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
     public function thank_you_page($order_id)
     {
         if ($download_url = get_post_meta($order_id, 'vindi_wc_invoice_download_url', true)) {
-            $this->get_template('html-bankslip-download.php', $download_url);
+            $this->container->get_template('bankslip-download.html.php', compact('download_url'));
         }
     }
 
@@ -84,16 +84,16 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
     {
         $this->form_fields = array(
             'enabled'         => array(
-                'title'       => __('Habilitar/Desabilitar', 'woocommerce-vindi'),
-                'label'       => __('Habilitar pagamento por Boleto Bancário com Vindi', 'woocommerce-vindi'),
+                'title'       => __('Habilitar/Desabilitar', VINDI_IDENTIFIER),
+                'label'       => __('Habilitar pagamento por Boleto Bancário com Vindi', VINDI_IDENTIFIER),
                 'type'        => 'checkbox',
                 'default'     => 'no',
             ),
             'title'           => array(
-                'title'       => __('Título', 'woocommerce-vindi'),
+                'title'       => __('Título', VINDI_IDENTIFIER),
                 'type'        => 'text',
-                'description' => __('Título que o cliente verá durante o processo de pagamento.', 'woocommerce-vindi'),
-                'default'     => __('Boleto Bancário', 'woocommerce-vindi'),
+                'description' => __('Título que o cliente verá durante o processo de pagamento.', VINDI_IDENTIFIER),
+                'default'     => __('Boleto Bancário', VINDI_IDENTIFIER),
             )
         );
     }

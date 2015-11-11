@@ -42,12 +42,12 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         /**
 		 * @var string
 		 */
-		const VIEWS_DIR = __DIR__.'/templates';
+		const VIEWS_DIR = __DIR__.'/templates/';
 
         /**
          * @var string
          */
-        const INCLUDES_DIR = __DIR__.'/includes';
+        const INCLUDES_DIR = __DIR__.'/includes/';
 
         /**
 		 * Instance of this class.
@@ -89,13 +89,14 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 		 **/
 		public function includes()
 		{
-			include_once(self::INCLUDES_DIR . '/class-vindi-logger.php');
-			include_once(self::INCLUDES_DIR . '/class-vindi-api.php');
-			include_once(self::INCLUDES_DIR . '/class-vindi-settings.php');
-			include_once(self::INCLUDES_DIR . '/class-vindi-base-gateway.php');
-			include_once(self::INCLUDES_DIR . '/class-vindi-bank-slip-gateway.php');
+			include_once(self::INCLUDES_DIR . 'class-vindi-logger.php');
+			include_once(self::INCLUDES_DIR . 'class-vindi-api.php');
+			include_once(self::INCLUDES_DIR . 'class-vindi-settings.php');
+			include_once(self::INCLUDES_DIR . 'class-vindi-base-gateway.php');
+			include_once(self::INCLUDES_DIR . 'class-vindi-bank-slip-gateway.php');
+			include_once(self::INCLUDES_DIR . 'class-vindi-payment.php');
 		}
 	}
 }
 
-add_action( 'admin_init', array('Vindi_WooCommerce_Subscriptions', 'get_instance'), 100 );
+add_action( 'wp_loaded', array('Vindi_WooCommerce_Subscriptions', 'get_instance'), 0 );

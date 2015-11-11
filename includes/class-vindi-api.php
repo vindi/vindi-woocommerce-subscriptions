@@ -334,7 +334,7 @@ class Vindi_API
      *
      * @return string
      */
-    public function get_bank_slip_download( $billId )
+    public function get_bank_slip_download( $bill_id )
     {
         $response = $this->request(sprintf('bills/%s', $bill_id), 'GET');
 
@@ -452,7 +452,7 @@ class Vindi_API
      */
     public function find_product_by_code($code)
     {
-        $response = $this->request(sprintf('products?query=code%3D%s', $code), 'GET');
+        $response = $this->request(sprintf('products?query=code:%s', $code), 'GET');
 
         if ($response && (1 === count($response['products'])) && isset($response['products'][0]['id'])) {
             return $response['products'][0]['id'];

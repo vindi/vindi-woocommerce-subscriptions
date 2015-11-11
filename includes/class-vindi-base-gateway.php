@@ -71,7 +71,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
             $order = new WC_Order($_GET['order_id']);
             return $order->billing_country;
         } elseif ($this->container->woocommerce->customer->get_country()) {
-            return $woocommerce->customer->get_country();
+            return $this->container->woocommerce->customer->get_country();
         }
 
         return null;
@@ -85,7 +85,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
 
     public function vindi_subscription_product_type($types)
     {
-        $types['vindi-subscription'] = __('Assinatura Vindi', 'woocommerce-vindi');
+        $types['vindi-subscription'] = __('Assinatura Vindi', VINDI_IDENTIFIER);
         return $types;
     }
 
@@ -97,7 +97,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
     public function vindi_order_metabox()
     {
         add_meta_box('vindi-wc-subscription-meta-box',
-            __('Assinatura Vindi','woocommerce-vindi'),
+            __('Assinatura Vindi',VINDI_IDENTIFIER),
                 array(&$this, 'vindi_order_metabox_content'),
                 'shop_order',
                 'normal',
@@ -113,7 +113,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
     public function validate_settings()
     {
         $currency = get_option('woocommerce_currency');
-        return in_array($currency, ['BRL']) && ! empty($this->apiKey);
+        return in_array($currency, ['BRL']) && ! empty($this->container->get_api_key());
     }
 
     /**
@@ -126,9 +126,9 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
 
     public function process_payment($order_id)
     {
-        $this->log(sprintf('Processando pedido %s.', $order_id));
+        $this->container->logger->log(sprintf('Processando pedido %s.', $order_id));
         $order   = new WC_Order($order_id);
-        $payment = new Vindi_Payment($order, $this);
+        $payment = new Vindi_Payment($order, $this, $this->container);
 
         // exit if validation by validate_fields() fails
         if (! $this->validated) {
@@ -137,7 +137,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
 
         // Validate plugin settings
         if (! $this->validate_settings()) {
-            return $payment->abort(__('O Pagamento foi cancelado devido a erro de configuração do meio de pagamento.', 'woocommerce-vindi'));
+            return $payment->abort(__('O Pagamento foi cancelado devido a erro de configuração do meio de pagamento.', VINDI_IDENTIFIER));
         }
 
         try {
@@ -151,17 +151,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
         }
 
         return $response;
-    }
-
-    /**
-     * WC Get Template helper.
-     *
-     * @param       $name
-     * @param array $args
-     */
-    protected function get_template($name, $args = array())
-    {
-        wc_get_template($name, $args, '', Vindi_WooCommerce_Subscriptions::VIEWS_DIR . 'templates/');
     }
 
     /**

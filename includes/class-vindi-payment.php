@@ -1,6 +1,6 @@
 <?php
 
-class WC_Vindi_Payment
+class Vindi_Payment
 {
     /**
      * Order type is invalid.
@@ -36,8 +36,9 @@ class WC_Vindi_Payment
      */
     function __construct(WC_Order $order, Vindi_Base_Gateway $gateway, Vindi_Settings $container)
     {
-        $this->order   = $order;
-        $this->gateway = $gateway;
+        $this->order     = $order;
+        $this->gateway   = $gateway;
+        $this->container = $container;
     }
 
     /**
@@ -75,7 +76,7 @@ class WC_Vindi_Payment
         $vindi_plan = get_post_meta($product->id, 'vindi_subscription_plan', true);
 
         if (! $product->is_type('vindi-subscription') || empty($vindi_plan))
-            $this->abort( __( 'O produto selecionado não é uma assinatura.', VINDI_IDENTIFIER ), true );
+            $this->abort(__('O produto selecionado não é uma assinatura.', VINDI_IDENTIFIER), true);
 
         return $vindi_plan;
     }
@@ -84,7 +85,7 @@ class WC_Vindi_Payment
      * Find or Create a Customer at Vindi for the given credentials.
      * @return array|bool
      */
-    public function getCustomer()
+    public function get_customer()
     {
         $currentUser = wp_get_current_user();
         $email       = $this->order->billing_email;
@@ -114,7 +115,7 @@ class WC_Vindi_Payment
             $name        = $this->order->billing_company;
             $cpf_or_cnpj = $this->order->billing_cnpj;
             $notes       = sprintf('Nome: %s %s', $this->order->billing_first_name, $this->order->billing_last_name);
-            if ( $this->gateway->sendNfeInformation )
+            if ($this->container->send_nfe_information())
                 $metadata['inscricao_estadual'] = $this->order->billing_ie;
 
         } else {
@@ -122,7 +123,7 @@ class WC_Vindi_Payment
             $name      = $this->order->billing_first_name . ' ' . $this->order->billing_last_name;
             $cpfOrCnpj = $this->order->billing_cpf;
             $notes     = '';
-            if ( $this->gateway->sendNfeInformation ) {
+            if ($this->container->send_nfe_information()) {
                 $metadata['carteira_de_identidade'] = $this->order->billing_rg;
             }
         }
@@ -142,7 +143,7 @@ class WC_Vindi_Payment
         if (false === $customer_id)
             $this->abort(__('Falha ao registrar o usuário. Verifique os dados e tente novamente.', VINDI_IDENTIFIER ), true);
 
-        $this->container->log(sprintf('Cliente Vindi: %s', $customer_id));
+        $this->container->logger->log(sprintf('Cliente Vindi: %s', $customer_id));
 
         if ($this->is_cc())
             $this->create_payment_profile($customer_id);
@@ -192,7 +193,7 @@ class WC_Vindi_Payment
     public function payment_method_code()
     {
         // TODO fix it to proper method code
-        return $this->isCc() ? 'credit_card' : 'bank_slip';
+        return $this->is_cc() ? 'credit_card' : 'bank_slip';
     }
 
     /**
@@ -204,7 +205,7 @@ class WC_Vindi_Payment
      */
     public function abort($message, $throwException = false)
     {
-        $this->container->log($message);
+        $this->container->logger->log($message);
         $this->order->add_order_note($message);
         wc_add_notice($message, 'error');
         if ($throwException)
@@ -221,9 +222,9 @@ class WC_Vindi_Payment
     {
         switch ($orderType = $this->validate_order()) {
             case static::ORDER_TYPE_SINGLE:
-                return $this->processSinglePayment();
+                return $this->process_single_payment();
             case static::ORDER_TYPE_SUBSCRIPTION:
-                return $this->processSubscription();
+                return $this->process_subscription();
             case static::ORDER_TYPE_INVALID:
             default:
                 return $this->abort(__('Falha ao processar carrinho de compras. Verifique os itens escolhidos e tente novamente.', VINDI_IDENTIFIER), true);
@@ -241,7 +242,7 @@ class WC_Vindi_Payment
         add_post_meta($this->order->id, 'vindi_wc_subscription_id', $subscription['id']);
         add_post_meta($this->order->id, 'vindi_wc_bill_id', $subscription['bill']['id']);
         $this->add_download_url_meta_for_subscription($subscription);
-        
+
         return $this->finish_payment();
     }
 
@@ -252,7 +253,7 @@ class WC_Vindi_Payment
     public function process_single_payment()
     {
         $customer_id = $this->get_customer();
-        $billId = $this->create_bill($customer_id);
+        $bill_id = $this->create_bill($customer_id);
         add_post_meta($this->order->id, 'vindi_wc_bill_id', $bill_id);
         $this->add_download_url_meta_for_single_payment($bill_id);
 
@@ -309,7 +310,7 @@ class WC_Vindi_Payment
         $subscription = $this->container->api->create_subscription($body);
 
         if (! isset($subscription['id']) || empty($subscription['id'])) {
-            $this->container->log(sprintf( 'Erro no pagamento do pedido %s.', $this->order->id));
+            $this->container->logger->log(sprintf( 'Erro no pagamento do pedido %s.', $this->order->id));
 
             $message = sprintf(__('Pagamento Falhou. (%s)', VINDI_IDENTIFIER), $this->container->api->last_error);
             $this->order->update_status('failed', $message);
@@ -326,10 +327,10 @@ class WC_Vindi_Payment
      * @return int
      * @throws Exception
      */
-    protected function createBill( $customer_id )
+    protected function create_bill($customer_id)
     {
-        $unique_payment_product = $this->gateway->api->find_or_create_unique_payment_product();
-        $this->container->log('Produto para pagamento único: ' . $unique_payment_product);
+        $unique_payment_product = $this->container->api->find_or_create_unique_payment_product();
+        $this->container->logger->log('Produto para pagamento único: ' . $unique_payment_product);
         $body = array(
             'customer_id'         => $customer_id,
             'payment_method_code' => $this->payment_method_code(),
@@ -347,7 +348,7 @@ class WC_Vindi_Payment
         $bill_id = $this->container->api->create_bill($body);
 
         if (! $bill_id) {
-            $this->container->log(sprintf('Erro no pagamento do pedido %s.', $this->order->id));
+            $this->container->logger->log(sprintf('Erro no pagamento do pedido %s.', $this->order->id));
             $message = sprintf(__('Pagamento Falhou. (%s)', VINDI_IDENTIFIER), $this->gateway->api->last_error);
             $this->order->update_status('failed', $message);
 
@@ -360,7 +361,7 @@ class WC_Vindi_Payment
     /**
      * @param $subscription
      */
-    protected function add_download_url_meta_for_subscription $subscriptio )
+    protected function add_download_url_meta_for_subscription($subscription)
     {
         if (isset($subscription['bill'])) {
             $bill        = $subscription['bill'];
@@ -379,7 +380,7 @@ class WC_Vindi_Payment
     }
 
     /**
-     * @param int $billId
+     * @param int $bill_id
      */
     protected function add_download_url_meta_for_single_payment($bill_id)
     {
@@ -402,11 +403,11 @@ class WC_Vindi_Payment
         $status         = 'pending';
 
         if (! $this->is_cc()) {
-            $data_to_log    = sprintf('Aguardando pagamento do boleto do pedido %s.', $this->order->id));
+            $data_to_log    = sprintf('Aguardando pagamento do boleto do pedido %s.', $this->order->id);
             $status_message = __( 'Aguardando pagamento do boleto do pedido', VINDI_IDENTIFIER);
         }
 
-        $this->container->log($data_to_log);
+        $this->container->logger->log($data_to_log);
         $this->order->update_status($status, $status_message);
 
         return array(
