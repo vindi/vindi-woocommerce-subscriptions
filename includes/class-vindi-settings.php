@@ -163,7 +163,7 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function check_ssl()
     {
-        return $this->api->is_merchant_status_trial() || $this->check_woocommerce_force_ssl();
+        return $this->api->is_merchant_status_trial() || $this->check_woocommerce_force_ssl_checkout();
     }
 
     /**
