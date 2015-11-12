@@ -63,7 +63,7 @@ class Vindi_API
      *
      * @return string
      */
-    private function get_error_message( $error, $endpoint )
+    private function get_error_message($error, $endpoint)
     {
         return sprintf("%s Error: %s: %s - %s", $endpoint, $error['id'], $error['parameter'], $error['message']);
     }
@@ -334,7 +334,7 @@ class Vindi_API
      *
      * @return string
      */
-    public function get_bank_slip_download( $bill_id )
+    public function get_bank_slip_download($bill_id)
     {
         $response = $this->request(sprintf('bills/%s', $bill_id), 'GET');
 

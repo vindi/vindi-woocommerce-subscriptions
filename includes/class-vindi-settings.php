@@ -72,7 +72,6 @@ class Vindi_Settings extends WC_Settings_API
 
     /**
 	 * Initialize Gateway Settings Form Fields
-	 * @return void
 	 */
 	public function init_form_fields()
     {
@@ -177,13 +176,14 @@ class Vindi_Settings extends WC_Settings_API
     /**
      * Add the gateway to WooCommerce.
      *
-     * @param   array $methods WooCommerce payment methods.
+     * @param array     $methods WooCommerce payment methods.
      *
-     * @return  array Payment methods with Vindi.
+     * @return array    Payment methods with Vindi.
      */
     public function add_gateway($methods)
     {
     	$methods[] = new Vindi_BankSlip_Gateway($this);
+    	$methods[] = new Vindi_CreditCard_Gateway($this);
 
     	return $methods;
     }
@@ -191,11 +191,22 @@ class Vindi_Settings extends WC_Settings_API
     /**
      * WC Get Template helper.
      *
-     * @param       $name
-     * @param array $args
+     * @param string    $name
+     * @param array     $args
      */
     public function get_template($name, $args = array())
     {
         wc_get_template($name, $args, '', Vindi_WooCommerce_Subscriptions::VIEWS_DIR);
+    }
+
+    /**
+     * Add a script in the wordpress script queue
+     * @param string    $handle
+     * @param string    $path
+     * @param array     $dependencies
+     **/
+    public function add_script($handle, $path, $dependencies=array())
+    {
+        wp_enqueue_script($handle, Vindi_WooCommerce_Subscriptions::ASSETS_DIR . $path, $dependencies);
     }
 }

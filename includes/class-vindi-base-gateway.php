@@ -34,7 +34,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
 
     /**
      * Admin Panel Options
-     * @return void
      */
     public function admin_options()
     {
@@ -64,7 +63,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      * Get the users country either from their order, or from their customer data
      * @return string|null
      */
-
     public function get_country_code()
     {
         if (isset($_GET['order_id'])) {
@@ -82,7 +80,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      *
      * @return mixed
      */
-
     public function vindi_subscription_product_type($types)
     {
         $types['vindi-subscription'] = __('Assinatura Vindi', VINDI_IDENTIFIER);
@@ -91,9 +88,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
 
     /**
      * Create Vindi Order Meta Box
-     * @return void
      */
-
     public function vindi_order_metabox()
     {
         add_meta_box('vindi-wc-subscription-meta-box',
@@ -109,7 +104,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      * Validate plugin settings
      * @return bool
      */
-
     public function validate_settings()
     {
         $currency = get_option('woocommerce_currency');
@@ -123,7 +117,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      *
      * @return array
      */
-
     public function process_payment($order_id)
     {
         $this->container->logger->log(sprintf('Processando pedido %s.', $order_id));
@@ -157,7 +150,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      * Check if the order is a Single Payment Order (not a Subscription).
      * @return bool
      */
-
     protected function is_single_order()
     {
         $items = $this->container->woocommerce->cart->cart_contents;

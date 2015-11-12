@@ -50,6 +50,11 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         const INCLUDES_DIR = __DIR__.'/includes/';
 
         /**
+         * @var string
+         */
+        const ASSETS_DIR = __DIR__.'/assets/';
+
+        /**
 		 * Instance of this class.
 		 * @var WCS_Vindi
 		 */
@@ -94,6 +99,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 			include_once(self::INCLUDES_DIR . 'class-vindi-settings.php');
 			include_once(self::INCLUDES_DIR . 'class-vindi-base-gateway.php');
 			include_once(self::INCLUDES_DIR . 'class-vindi-bank-slip-gateway.php');
+			include_once(self::INCLUDES_DIR . 'class-vindi-creditcard-gateway.php');
 			include_once(self::INCLUDES_DIR . 'class-vindi-payment.php');
 		}
 	}

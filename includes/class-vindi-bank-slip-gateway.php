@@ -39,7 +39,6 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
 
     /**
      * Payment fields for Vindi Direct Checkout
-     * @return void
      */
     public function payment_fields()
     {
@@ -78,7 +77,6 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
 
     /**
      * Initialize Gateway Settings Form Fields
-     * @return void
      */
     public function init_form_fields()
     {
