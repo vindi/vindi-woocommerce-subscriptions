@@ -157,7 +157,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
 
         $is_trial = $this->container->api->is_merchant_status_trial();
 
-        $this->container->get_Template('html-creditcard-checkout.php', compact('months', 'years', 'installments', 'is_trial'));
+        $this->container->get_template('html-creditcard-checkout.php', compact('months', 'years', 'installments', 'is_trial'));
     }
 
     /**
@@ -182,14 +182,14 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         $now      = time();
         $ccExpiry = mktime(0, 0, 0, (int) $_POST['vindi_cc_monthexpiry'], 1, (int) $_POST['vindi_cc_yearexpiry']);
         if ($now > $ccExpiry)
-            wc_add_notice( __( 'Este cartão de crédito já expirou. Tente novamente com outro cartão de crédito dentro do prazo de validade.', VINDI_IDENTIFIER ), 'error' );
+            wc_add_notice(__('Este cartão de crédito já expirou. Tente novamente com outro cartão de crédito dentro do prazo de validade.', VINDI_IDENTIFIER ), 'error');
 
         if ($this->is_single_order() && $this->installments > 1) {
-            if (! isset($_POST['vindi_cc_installments'] ) || empty( $_POST['vindi_cc_installments']))
-                wc_add_notice( __( 'Quantidade de Parcelas requerido.', VINDI_IDENTIFIER ), 'error' );
+            if (! isset($_POST['vindi_cc_installments']) || empty($_POST['vindi_cc_installments']))
+                wc_add_notice(__('Quantidade de Parcelas requerido.', VINDI_IDENTIFIER ), 'error');
 
             if (1 > $_POST['vindi_cc_installments'] || $this->max_installments < $_POST['vindi_cc_installments'])
-                wc_add_notice( __( 'A Quantidade de Parcelas escolhidas é inválida.', VINDI_IDENTIFIER ), 'error' );
+                wc_add_notice(__('A Quantidade de Parcelas escolhidas é inválida.', VINDI_IDENTIFIER), 'error');
         }
 
         $this->validated = ! wc_notice_count();
