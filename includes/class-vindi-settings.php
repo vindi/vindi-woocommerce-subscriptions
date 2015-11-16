@@ -196,17 +196,16 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function get_template($name, $args = array())
     {
-        wc_get_template($name, $args, '', Vindi_WooCommerce_Subscriptions::VIEWS_DIR);
+        wc_get_template($name, $args, '', sprintf('%s/../%s', dirname(__FILE__), Vindi_WooCommerce_Subscriptions::VIEWS_DIR));
     }
 
     /**
      * Add a script in the wordpress script queue
-     * @param string    $handle
      * @param string    $path
      * @param array     $dependencies
      **/
-    public function add_script($handle, $path, $dependencies=array())
+    public function add_script($path, $dependencies=array())
     {
-        wp_enqueue_script($handle, Vindi_WooCommerce_Subscriptions::ASSETS_DIR . $path, $dependencies);
+        wp_enqueue_script('vindi-checkout', Vindi_WooCommerce_Subscriptions::generate_assets_url($path), $dependencies);
     }
 }

@@ -42,21 +42,16 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         /**
 		 * @var string
 		 */
-		const VIEWS_DIR = __DIR__.'/templates/';
+		const VIEWS_DIR = '/templates/';
 
         /**
          * @var string
          */
-        const INCLUDES_DIR = __DIR__.'/includes/';
-
-        /**
-         * @var string
-         */
-        const ASSETS_DIR = __DIR__.'/assets/';
+        const INCLUDES_DIR = '/includes/';
 
         /**
 		 * Instance of this class.
-		 * @var WCS_Vindi
+		 * @var Vindi_WooCommerce_Subscriptions
 		 */
 		protected static $instance = null;
 
@@ -66,19 +61,15 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 		 */
 		protected $settings = null;
 
-		/**
-		 * Set up the class, including it's hooks & filters, when the file is loaded.
-		 **/
 		public function __construct()
 		{
 			$this->includes();
-
 			$this->settings = new Vindi_Settings();
 		}
 
 		/**
 		 * Return an instance of this class.
-		 * @return WCS_Vindi A single instance of this class.
+		 * @return Vindi_WooCommerce_Subscriptions
 		 */
 		public static function get_instance()
 		{
@@ -94,15 +85,24 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 		 **/
 		public function includes()
 		{
-			include_once(self::INCLUDES_DIR . 'class-vindi-logger.php');
-			include_once(self::INCLUDES_DIR . 'class-vindi-api.php');
-			include_once(self::INCLUDES_DIR . 'class-vindi-settings.php');
-			include_once(self::INCLUDES_DIR . 'class-vindi-base-gateway.php');
-			include_once(self::INCLUDES_DIR . 'class-vindi-bank-slip-gateway.php');
-			include_once(self::INCLUDES_DIR . 'class-vindi-creditcard-gateway.php');
-			include_once(self::INCLUDES_DIR . 'class-vindi-payment.php');
+			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-logger.php');
+			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-api.php');
+			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-settings.php');
+			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-base-gateway.php');
+			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-bank-slip-gateway.php');
+			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-creditcard-gateway.php');
+			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-payment.php');
 		}
+
+        /**
+         * Generate assets URL
+         * @param string $path
+         **/
+        public static function generate_assets_url($path)
+        {
+            return plugin_dir_url(__FILE__) . 'assets/' . $path;
+        }
 	}
 }
 
-add_action( 'wp_loaded', array('Vindi_WooCommerce_Subscriptions', 'get_instance'), 0 );
+add_action( 'wp_loaded', array('Vindi_WooCommerce_Subscriptions', 'get_instance'), 0);

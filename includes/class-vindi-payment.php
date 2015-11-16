@@ -267,8 +267,8 @@ class Vindi_Payment
      */
     protected function create_payment_profile($customer_id)
     {
-        $ccInfo = $this->get_cc_payment_type($customer_id);
-        $paymentProfileId = $this->container->api->create_customer_payment_profile($cc_info);
+        $cc_info = $this->get_cc_payment_type($customer_id);
+        $payment_profile_id = $this->container->api->create_customer_payment_profile($cc_info);
         if (false === $payment_profile_id)
             $this->abort(__('Falha ao registrar o método de pagamento. Verifique os dados e tente novamente.', VINDI_IDENTIFIER), true);
     }

@@ -90,13 +90,13 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     */
     public function is_available()
     {
-        $methods   = $this->container->api->get_payment_methods();
-        $ccMethods = $methods['credit_card'];
+        $methods    = $this->container->api->get_payment_methods();
+        $cc_methods = $methods['credit_card'];
 
         return 'yes' === $this->enabled
-            && 'BR' === $this->getCountryCode()
-            && count( $ccMethods )
-            && $this->checkSsl();
+            && 'BR' === $this->get_country_code()
+            && count($cc_methods)
+            && $this->container->check_ssl();
     }
 
     /**
@@ -133,7 +133,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
             return;
         }
 
-        $payment_methods = $this->api->get_payment_methods();
+        $payment_methods = $this->container->api->get_payment_methods();
 
         if ($payment_methods === false || empty($payment_methods) || ! count($payment_methods['credit_card'])) {
             _e( 'Estamos enfrentando problemas técnicos no momento. Tente novamente mais tarde ou entre em contato.', VINDI_IDENTIFIER);
@@ -157,7 +157,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
 
         $is_trial = $this->container->api->is_merchant_status_trial();
 
-        $this->container->get_template('html-creditcard-checkout.php', compact('months', 'years', 'installments', 'is_trial'));
+        $this->container->get_template('creditcard-checkout.html.php', compact('months', 'years', 'installments', 'is_trial'));
     }
 
     /**
