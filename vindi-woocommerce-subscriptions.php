@@ -50,6 +50,11 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         const INCLUDES_DIR = '/includes/';
 
         /**
+         * @var string
+         */
+        const WC_API_CALLBACK = 'vindi_webhook';
+
+        /**
 		 * Instance of this class.
 		 * @var Vindi_WooCommerce_Subscriptions
 		 */
@@ -61,10 +66,20 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 		 */
 		protected $settings = null;
 
+        /**
+		 * Instance of Vindi_Settings.
+		 * @var Vindi_Webhook_Handler
+		 */
+		private $webhook_handler = null;
+
 		public function __construct()
 		{
 			$this->includes();
+
 			$this->settings = new Vindi_Settings();
+            $this->webhook  = new Vindi_Webhook_Handler($this->settings);
+
+            add_action('woocommerce_api_' . self::WC_API_CALLBACK, array($this->$webhook_handler, 'handle'));
 		}
 
 		/**
@@ -92,6 +107,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-bank-slip-gateway.php');
 			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-creditcard-gateway.php');
 			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-payment.php');
+			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-webhook-handler.php');
 		}
 
         /**

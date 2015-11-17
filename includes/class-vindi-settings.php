@@ -153,7 +153,11 @@ class Vindi_Settings extends WC_Settings_API
 	 * @return string
 	 */
 	public function get_events_url() {
-		return sprintf('%s/wc-api/?action=vindi&token=%s', get_site_url(), $this->get_token());
+		return sprintf('%s/wc-api/%s?token=%s',
+            get_site_url(),
+            Vindi_WooCommerce_Subscriptions::WEBHOOK_EVENT_IDENTIFIER,
+            $this->get_token()
+        );
 	}
 
     /**
@@ -162,7 +166,8 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function check_ssl()
     {
-        return $this->api->is_merchant_status_trial() || $this->check_woocommerce_force_ssl_checkout();
+        return $this->api->is_merchant_status_trial()
+            || $this->check_woocommerce_force_ssl_checkout();
     }
 
     /**
@@ -170,7 +175,8 @@ class Vindi_Settings extends WC_Settings_API
      **/
     public function check_woocommerce_force_ssl_checkout()
     {
-        return 'yes' === get_option('woocommerce_force_ssl_checkout') && is_ssl();
+        return 'yes' === get_option('woocommerce_force_ssl_checkout')
+            && is_ssl();
     }
 
     /**
@@ -196,7 +202,15 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function get_template($name, $args = array())
     {
-        wc_get_template($name, $args, '', sprintf('%s/../%s', dirname(__FILE__), Vindi_WooCommerce_Subscriptions::VIEWS_DIR));
+        wc_get_template(
+            $name,
+            $args,
+            '',
+            sprintf('%s/../%s',
+                dirname(__FILE__),
+                Vindi_WooCommerce_Subscriptions::VIEWS_DIR
+            )
+        );
     }
 
     /**
@@ -206,6 +220,10 @@ class Vindi_Settings extends WC_Settings_API
      **/
     public function add_script($path, $dependencies=array())
     {
-        wp_enqueue_script('vindi-checkout', Vindi_WooCommerce_Subscriptions::generate_assets_url($path), $dependencies);
+        wp_enqueue_script(
+            'vindi-checkout',
+            Vindi_WooCommerce_Subscriptions::generate_assets_url($path),
+            $dependencies
+        );
     }
 }
