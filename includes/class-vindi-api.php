@@ -178,9 +178,13 @@ class Vindi_API
      */
     public function find_customer_by_code($code)
     {
-        $response = $this->request(sprintf('customers/search?code=%s', $code),'GET');
+        $response = $this->request(sprintf(
+            'customers/search?code=%s',
+            $code
+        ),'GET');
 
-        if ($response && (1 === count($response['customers'])) && isset($response['customers'][0]['id'])) {
+        if ($response && (1 === count($response['customers'])) &&
+            isset($response['customers'][0]['id'])) {
             return $response['customers'][0]['id'];
         }
 
@@ -215,11 +219,11 @@ class Vindi_API
     public function create_customer_payment_profile($body)
     {
         // Protect credit card number.
-        $data_to_log                = $body;
-        $data_to_log['card_number'] = '**** *' . substr($data_to_log['card_number'], -3);
-        $data_to_log['card_cvv']    = '***';
+        $log                = $body;
+        $log['card_number'] = '**** *' . substr($log['card_number'], -3);
+        $log['card_cvv']    = '***';
 
-        return $this->request('payment_profiles', 'POST', $body, $data_to_log);
+        return $this->request('payment_profiles', 'POST', $body, $log);
     }
 
     /**
@@ -231,7 +235,8 @@ class Vindi_API
      */
     public function create_subscription($body)
     {
-        if (($response = $this->request('subscriptions', 'POST', $body)) && isset($response['subscription']['id'])) {
+        if (($response = $this->request('subscriptions', 'POST', $body)) &&
+            isset($response['subscription']['id'])) {
 
             $subscription         = $response['subscription'];
             $subscription['bill'] = $response['bill'];
@@ -257,9 +262,8 @@ class Vindi_API
 
             $response = $this->request('payment_methods', 'GET');
 
-            if (false === $response) {
+            if (false === $response)
                 return false;
-            }
 
             foreach ($response['payment_methods'] as $method) {
                 if ('active' !== $method['status']) {
@@ -267,7 +271,10 @@ class Vindi_API
                 }
 
                 if ('PaymentMethod::CreditCard' === $method['type']) {
-                    $payment_methods['credit_card'] = array_merge($payment_methods['credit_card'], $method['payment_companies']);
+                    $payment_methods['credit_card'] = array_merge(
+                        $payment_methods['credit_card'],
+                        $method['payment_companies']
+                    );
                 } else if ('PaymentMethod::BankSlip' === $method['type']) {
                     $payment_methods['bank_slip'] = true;
                 }

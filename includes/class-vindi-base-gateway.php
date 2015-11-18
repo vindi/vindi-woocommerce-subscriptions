@@ -26,9 +26,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
 
         if (is_admin()) {
             add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(&$this, 'process_admin_options'));
-            add_action('add_meta_boxes_shop_order', array(&$this, 'vindi_order_metabox'));
-            add_action('save_post', array(&$this, 'vindi_save_subscription_meta'));
-            add_filter('product_type_selector', array(&$this, 'vindi_subscription_product_type'));
         }
     }
 
@@ -38,25 +35,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
     public function admin_options()
     {
         include_once(sprintf('%s/%s', Vindi_WooCommerce_Subscriptions::VIEWS_DIR, 'admin-gateway-settings.html.php'));
-    }
-
-    /**
-     * @param int $post_id
-     */
-    public function vindi_save_subscription_meta($post_id)
-    {
-        if (! isset($_POST['product-type']) || ('vindi-subscription' !== $_POST['product-type'])) {
-            return;
-        }
-
-        $subscription_price = stripslashes($_REQUEST['vindi_subscription_price']);
-        $subscription_plan  = (int) stripslashes($_REQUEST['vindi_subscription_plan']);
-
-        update_post_meta($post_id, 'vindi_subscription_price', $subscription_price);
-        update_post_meta($post_id, '_regular_price', $subscription_price);
-        update_post_meta($post_id, '_price', $subscription_price);
-
-        update_post_meta($post_id, 'vindi_subscription_plan', $subscription_plan);
     }
 
     /**
@@ -73,31 +51,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
         }
 
         return null;
-    }
-
-    /**
-     * @param $types
-     *
-     * @return mixed
-     */
-    public function vindi_subscription_product_type($types)
-    {
-        $types['vindi-subscription'] = __('Assinatura Vindi', VINDI_IDENTIFIER);
-        return $types;
-    }
-
-    /**
-     * Create Vindi Order Meta Box
-     */
-    public function vindi_order_metabox()
-    {
-        add_meta_box('vindi-wc-subscription-meta-box',
-            __('Assinatura Vindi',VINDI_IDENTIFIER),
-                array(&$this, 'vindi_order_metabox_content'),
-                'shop_order',
-                'normal',
-                'default'
-            );
     }
 
     /**

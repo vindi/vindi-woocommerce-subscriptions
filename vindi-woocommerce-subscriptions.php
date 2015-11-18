@@ -82,8 +82,53 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             add_action('woocommerce_api_' . self::WC_API_CALLBACK, array(
                 $this->webhook_handler, 'handle'
             ));
+
+            if(is_admin()) {
+                add_action('woocommerce_product_options_general_product_data',
+                    array(&$this, 'vindi_subscription_pricing_fields')
+                );
+            }
 		}
 
+        /**
+		 * Show pricing fields at admin's product page.
+		 */
+        public function vindi_subscription_pricing_fields()
+        {
+    		global $post;
+
+    		echo '<div class="options_group vindi-subscription_pricing show_if_vindi-subscription">';
+
+    		$plans         = [ __( '-- Selecione --', VINDI_IDENTIFIER ) ] + $this->settings->api->get_plans();
+    		$selected_plan = get_post_meta( $post->ID, 'vindi_subscription_plan', true );
+
+    		woocommerce_wp_select( [
+    				'id'          => 'vindi_subscription_plan',
+    				'label'       => __( 'Plano da Vindi', VINDI_IDENTIFIER ),
+    				'options'     => $plans,
+    				'description' => __( 'Selecione o plano da Vindi que deseja relacionar a esse produto', VINDI_IDENTIFIER ),
+    				'desc_tip'    => true,
+    				'value'       => $selected_plan,
+    			]
+    		);
+
+    		woocommerce_wp_text_input( [
+    				'id'                => 'vindi_subscription_price',
+    				'label'             => sprintf( __( 'Preço da Assinatura (%s)', VINDI_IDENTIFIER ), get_woocommerce_currency_symbol() ),
+    				'placeholder'       => __( '0,00', 'woocommerce-subscriptions' ),
+    				'type'              => 'text',
+    				'custom_attributes' => [
+    					'step' => 'any',
+    					'min'  => '0',
+    				],
+    				'description'       => __( 'Você deve manter o preço do produto igual ao do plano, este processo <strong>não</strong> é automático.', VINDI_IDENTIFIER ),
+    				'desc_tip'          => true,
+    			]
+    		);
+
+    		echo '</div>';
+    		echo '<div class="show_if_vindi-subscription clear"></div>';
+    	}
 		/**
 		 * Return an instance of this class.
 		 * @return Vindi_WooCommerce_Subscriptions
@@ -110,6 +155,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-creditcard-gateway.php');
 			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-payment.php');
 			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-webhook-handler.php');
+			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-product-subscription.php');
 		}
 
         /**
@@ -123,4 +169,4 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 	}
 }
 
-add_action( 'wp_loaded', array('Vindi_WooCommerce_Subscriptions', 'get_instance'), 0);
+add_action('wp_loaded', array('Vindi_WooCommerce_Subscriptions', 'get_instance'), 0);

@@ -31,22 +31,31 @@ class Vindi_Webhook_Handler
 	}
 
     /**
-     * @param string $received_token
+     * @param string $token
      **/
-    public function validate_access_token($received_token)
+    private function validate_access_token($token)
     {
-        return $received_token === $this->container->get_token();
+        return $token === $this->container->get_token();
     }
 
     /**
      * Read json entity received and proccess the right event
      * @param string $data
      **/
-    public function handle_event($data)
+    private function handle_event($data)
     {
+        $response      = '';
+        $response_code = 200;
+
         if(null == $data || empty($data['event'])) {
             http_response_code(429);
             die('Invalid JSON');
         }
+
+        // switch() {
+        //
+        // }
+
+        // if(false == $response)
     }
 }
