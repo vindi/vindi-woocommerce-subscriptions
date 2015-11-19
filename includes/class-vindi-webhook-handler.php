@@ -51,11 +51,5 @@ class Vindi_Webhook_Handler
             http_response_code(429);
             die('Invalid JSON');
         }
-
-        // switch() {
-        //
-        // }
-
-        // if(false == $response)
     }
 }

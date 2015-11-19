@@ -31,6 +31,9 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
      */
     public function is_available()
     {
+        if(false === is_checkout())
+            return false;
+
         return 'yes' === $this->enabled
             && 'BR' === $this->get_country_code()
             && $this->container->api->accept_bank_slip()

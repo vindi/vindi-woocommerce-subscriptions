@@ -77,7 +77,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 			$this->includes();
 
 			$this->settings = new Vindi_Settings();
-            $this->webhook  = new Vindi_Webhook_Handler($this->settings);
+            $this->webhook_handler  = new Vindi_Webhook_Handler($this->settings);
 
             add_action('woocommerce_api_' . self::WC_API_CALLBACK, array(
                 $this->webhook_handler, 'handle'
@@ -86,6 +86,12 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             if(is_admin()) {
                 add_action('woocommerce_product_options_general_product_data',
                     array(&$this, 'vindi_subscription_pricing_fields')
+                );
+                add_action('add_meta_boxes_shop_order',
+                    array(&$this, 'vindi_order_metabox')
+                );
+                add_action('save_post',
+                    array(&$this, 'vindi_save_subscription_meta')
                 );
             }
 		}
@@ -97,9 +103,9 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         {
     		global $post;
 
-    		echo '<div class="options_group vindi-subscription_pricing show_if_vindi-subscription">';
+    		echo '<div class="options_group vindi-subscription_pricing show_if_subscription">';
 
-    		$plans         = [ __( '-- Selecione --', VINDI_IDENTIFIER ) ] + $this->settings->api->get_plans();
+    		$plans         = [__('-- Selecione --', VINDI_IDENTIFIER)] + $this->settings->api->get_plans();
     		$selected_plan = get_post_meta( $post->ID, 'vindi_subscription_plan', true );
 
     		woocommerce_wp_select( [
@@ -112,23 +118,37 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
     			]
     		);
 
-    		woocommerce_wp_text_input( [
-    				'id'                => 'vindi_subscription_price',
-    				'label'             => sprintf( __( 'Preço da Assinatura (%s)', VINDI_IDENTIFIER ), get_woocommerce_currency_symbol() ),
-    				'placeholder'       => __( '0,00', 'woocommerce-subscriptions' ),
-    				'type'              => 'text',
-    				'custom_attributes' => [
-    					'step' => 'any',
-    					'min'  => '0',
-    				],
-    				'description'       => __( 'Você deve manter o preço do produto igual ao do plano, este processo <strong>não</strong> é automático.', VINDI_IDENTIFIER ),
-    				'desc_tip'          => true,
-    			]
-    		);
-
-    		echo '</div>';
-    		echo '<div class="show_if_vindi-subscription clear"></div>';
+            echo '</div>';
+    		echo '<div class="show_if_subscription clear"></div>';
     	}
+
+        /**
+         * Create Vindi Order Meta Box
+         */
+        public function vindi_order_metabox()
+        {
+            add_meta_box('vindi-wc-subscription-meta-box',
+                __('Assinatura Vindi',VINDI_IDENTIFIER),
+                    array(&$this, 'vindi_order_metabox_content'),
+                    'shop_order',
+                    'normal',
+                    'default'
+                );
+        }
+
+        /**
+         * @param int $post_id
+         */
+        public function vindi_save_subscription_meta($post_id)
+        {
+            if (! isset($_POST['product-type']) || ('subscription' !== $_POST['product-type']))
+                return;
+
+            $subscription_plan  = (int) stripslashes($_REQUEST['vindi_subscription_plan']);
+
+            update_post_meta($post_id, 'vindi_subscription_plan', $subscription_plan);
+        }
+
 		/**
 		 * Return an instance of this class.
 		 * @return Vindi_WooCommerce_Subscriptions
@@ -155,7 +175,6 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-creditcard-gateway.php');
 			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-payment.php');
 			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-webhook-handler.php');
-			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-product-subscription.php');
 		}
 
         /**

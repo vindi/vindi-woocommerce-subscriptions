@@ -53,9 +53,6 @@ class Vindi_Settings extends WC_Settings_API
             add_filter('woocommerce_settings_tabs_array', array(&$this, 'add_settings_tab'), 50);
             add_action('woocommerce_settings_tabs_settings_vindi', array(&$this, 'settings_tab'));
             add_action('woocommerce_update_options_settings_vindi', array(&$this, 'process_admin_options'));
-            add_action('add_meta_boxes_shop_order', array(&$this, 'vindi_order_metabox'));
-            add_action('save_post', array(&$this, 'vindi_save_subscription_meta'));
-            add_filter('product_type_selector', array(&$this, 'vindi_subscription_product_type'));
         }
     }
 
@@ -231,49 +228,5 @@ class Vindi_Settings extends WC_Settings_API
             Vindi_WooCommerce_Subscriptions::generate_assets_url($path),
             $dependencies
         );
-    }
-
-    /**
-     * @param $types
-     *
-     * @return mixed
-     */
-    public function vindi_subscription_product_type($types)
-    {
-        $types['vindi-subscription'] = __('Assinatura Vindi', VINDI_IDENTIFIER);
-        return $types;
-    }
-
-    /**
-     * Create Vindi Order Meta Box
-     */
-    public function vindi_order_metabox()
-    {
-        add_meta_box('vindi-wc-subscription-meta-box',
-            __('Assinatura Vindi',VINDI_IDENTIFIER),
-                array(&$this, 'vindi_order_metabox_content'),
-                'shop_order',
-                'normal',
-                'default'
-            );
-    }
-
-    /**
-     * @param int $post_id
-     */
-    public function vindi_save_subscription_meta($post_id)
-    {
-        if (! isset($_POST['product-type']) || ('vindi-subscription' !== $_POST['product-type'])) {
-            return;
-        }
-
-        $subscription_price = stripslashes($_REQUEST['vindi_subscription_price']);
-        $subscription_plan  = (int) stripslashes($_REQUEST['vindi_subscription_plan']);
-
-        update_post_meta($post_id, 'vindi_subscription_price', $subscription_price);
-        update_post_meta($post_id, '_regular_price', $subscription_price);
-        update_post_meta($post_id, '_price', $subscription_price);
-
-        update_post_meta($post_id, 'vindi_subscription_plan', $subscription_plan);
     }
 }

@@ -90,6 +90,9 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     */
     public function is_available()
     {
+        if(false === is_checkout())
+            return false;
+
         $methods    = $this->container->api->get_payment_methods();
         $cc_methods = $methods['credit_card'];
 
@@ -140,6 +143,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
             return;
         }
 
+        //@TODO create a element into a view
         $months = '<option value="">' . __('Mês', VINDI_IDENTIFIER) . '</option>';
 
         for ($i = 1 ; $i <= 12 ; $i++) {

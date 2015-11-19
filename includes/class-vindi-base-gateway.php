@@ -49,8 +49,6 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
         } elseif ($this->container->woocommerce->customer->get_country()) {
             return $this->container->woocommerce->customer->get_country();
         }
-
-        return null;
     }
 
     /**
@@ -73,7 +71,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
     public function process_payment($order_id)
     {
         $this->container->logger->log(sprintf('Processando pedido %s.', $order_id));
-        $order   = new WC_Order($order_id);
+        $order   = wc_get_order($order_id);
         $payment = new Vindi_Payment($order, $this, $this->container);
 
         // exit if validation by validate_fields() fails

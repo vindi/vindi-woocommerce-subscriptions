@@ -53,7 +53,7 @@ class Vindi_Payment
         foreach ($items as $item) {
             $product = $this->order->get_product_from_item($item);
 
-            if ($product->is_type('vindi-subscription')) {
+            if ($product->is_type('subscription')) {
                 if (1 === count($items))
                     return static::ORDER_TYPE_SUBSCRIPTION;
 
@@ -75,7 +75,7 @@ class Vindi_Payment
         $product    = $this->order->get_product_from_item($item);
         $vindi_plan = get_post_meta($product->id, 'vindi_subscription_plan', true);
 
-        if (! $product->is_type('vindi-subscription') || empty($vindi_plan))
+        if (! $product->is_type('subscription') || empty($vindi_plan))
             $this->abort(__('O produto selecionado não é uma assinatura.', VINDI_IDENTIFIER), true);
 
         return $vindi_plan;
@@ -239,8 +239,6 @@ class Vindi_Payment
     {
         $customer_id  = $this->get_customer();
         $subscription = $this->create_subscription($customer_id);
-        add_post_meta($this->order->id, 'vindi_wc_subscription_id', $subscription['id']);
-        add_post_meta($this->order->id, 'vindi_wc_bill_id', $subscription['bill']['id']);
         $this->add_download_url_meta_for_subscription($subscription);
 
         return $this->finish_payment();
@@ -282,7 +280,7 @@ class Vindi_Payment
      */
     protected function get_product_items($vindi_plan, $order_total)
     {
-        $productItems = $this->container->api->build_plan_items_for_subscription($vindi_plan, $order_total);
+        $product_items = $this->container->api->build_plan_items_for_subscription($vindi_plan, $order_total);
 
         if (empty($product_items))
             return $this->abort(__('Falha ao recuperar informações sobre o produto na Vindi. Verifique os dados e tente novamente.', VINDI_IDENTIFIER), true);
@@ -299,12 +297,13 @@ class Vindi_Payment
     protected function create_subscription($customer_id)
     {
         $vindi_plan   = $this->get_plan();
-        $productItems = $this->get_product_items($vindi_plan, $this->order->get_total());
+        $product_items = $this->get_product_items($vindi_plan, $this->order->get_total());
         $body         = array(
             'customer_id'         => $customer_id,
             'payment_method_code' => $this->payment_method_code(),
             'plan_id'             => $vindi_plan,
             'product_items'       => $product_items,
+            'code'                => $this->order->id
         );
 
         $subscription = $this->container->api->create_subscription($body);
@@ -399,12 +398,12 @@ class Vindi_Payment
         $this->container->woocommerce->cart->empty_cart();
 
         $data_to_log    = sprintf('Aguardando confirmação de recebimento do pedido %s pela Vindi.', $this->order->id);
-        $status_message = __( 'Aguardando confirmação de recebimento do pedido pela Vindi.', VINDI_IDENTIFIER);
+        $status_message = __('Aguardando confirmação de recebimento do pedido pela Vindi.', VINDI_IDENTIFIER);
         $status         = 'pending';
 
         if (! $this->is_cc()) {
             $data_to_log    = sprintf('Aguardando pagamento do boleto do pedido %s.', $this->order->id);
-            $status_message = __( 'Aguardando pagamento do boleto do pedido', VINDI_IDENTIFIER);
+            $status_message = __('Aguardando pagamento do boleto do pedido', VINDI_IDENTIFIER);
         }
 
         $this->container->logger->log($data_to_log);

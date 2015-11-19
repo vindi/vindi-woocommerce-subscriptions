@@ -1,6 +1,6 @@
 <?php
 
-class WC_Product_Vindi_Subscription extends WC_Product_Simple
+class WC_Product_Vindi_Subscription extends WC_Product_Subscription
 {
 	/**
 	 * Create a vindi subscription product object.
@@ -9,7 +9,7 @@ class WC_Product_Vindi_Subscription extends WC_Product_Simple
 	public function __construct($product)
     {
 		parent::__construct($product);
-		$this->product_type = 'vindi-subscription';
+		$this->product_type = 'subscription';
 	}
 
     /**
