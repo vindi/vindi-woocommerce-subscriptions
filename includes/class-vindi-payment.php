@@ -239,6 +239,8 @@ class Vindi_Payment
     {
         $customer_id  = $this->get_customer();
         $subscription = $this->create_subscription($customer_id);
+        add_post_meta($this->order->id, 'vindi_wc_subscription_id', $subscription['id']);
+        add_post_meta($this->order->id, 'vindi_wc_bill_id', $subscription['bill']['id']);
         $this->add_download_url_meta_for_subscription($subscription);
 
         return $this->finish_payment();
@@ -251,7 +253,7 @@ class Vindi_Payment
     public function process_single_payment()
     {
         $customer_id = $this->get_customer();
-        $bill_id = $this->create_bill($customer_id);
+        $bill_id     = $this->create_bill($customer_id);
         add_post_meta($this->order->id, 'vindi_wc_bill_id', $bill_id);
         $this->add_download_url_meta_for_single_payment($bill_id);
 
@@ -265,7 +267,7 @@ class Vindi_Payment
      */
     protected function create_payment_profile($customer_id)
     {
-        $cc_info = $this->get_cc_payment_type($customer_id);
+        $cc_info            = $this->get_cc_payment_type($customer_id);
         $payment_profile_id = $this->container->api->create_customer_payment_profile($cc_info);
         if (false === $payment_profile_id)
             $this->abort(__('Falha ao registrar o método de pagamento. Verifique os dados e tente novamente.', VINDI_IDENTIFIER), true);
@@ -296,14 +298,13 @@ class Vindi_Payment
      */
     protected function create_subscription($customer_id)
     {
-        $vindi_plan   = $this->get_plan();
+        $vindi_plan    = $this->get_plan();
         $product_items = $this->get_product_items($vindi_plan, $this->order->get_total());
-        $body         = array(
+        $body = array(
             'customer_id'         => $customer_id,
             'payment_method_code' => $this->payment_method_code(),
             'plan_id'             => $vindi_plan,
             'product_items'       => $product_items,
-            'code'                => $this->order->id
         );
 
         $subscription = $this->container->api->create_subscription($body);
@@ -383,7 +384,7 @@ class Vindi_Payment
      */
     protected function add_download_url_meta_for_single_payment($bill_id)
     {
-        if ( $this->container->api->approve_bill($bill_id))
+        if ($this->container->api->approve_bill($bill_id))
             $download_url = $this->container->api->get_bank_slip_download($bill_id);
 
         if ($download_url)

@@ -83,15 +83,16 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 $this->webhook_handler, 'handle'
             ));
 
+            add_filter('plugin_action_links_' . plugin_basename(__FILE__),
+                array(&$this, 'action_links')
+            );
+
             if(is_admin()) {
                 add_action('woocommerce_product_options_general_product_data',
-                    array(&$this, 'vindi_subscription_pricing_fields')
-                );
-                add_action('add_meta_boxes_shop_order',
-                    array(&$this, 'vindi_order_metabox')
+                    array(&$this, 'subscription_custom_fields')
                 );
                 add_action('save_post',
-                    array(&$this, 'vindi_save_subscription_meta')
+                    array(&$this, 'save_subscription_meta')
                 );
             }
 		}
@@ -99,20 +100,20 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         /**
 		 * Show pricing fields at admin's product page.
 		 */
-        public function vindi_subscription_pricing_fields()
+        public function subscription_custom_fields()
         {
     		global $post;
 
     		echo '<div class="options_group vindi-subscription_pricing show_if_subscription">';
 
     		$plans         = [__('-- Selecione --', VINDI_IDENTIFIER)] + $this->settings->api->get_plans();
-    		$selected_plan = get_post_meta( $post->ID, 'vindi_subscription_plan', true );
+    		$selected_plan = get_post_meta($post->ID, 'vindi_subscription_plan', true);
 
     		woocommerce_wp_select( [
     				'id'          => 'vindi_subscription_plan',
-    				'label'       => __( 'Plano da Vindi', VINDI_IDENTIFIER ),
+    				'label'       => __('Plano da Vindi', VINDI_IDENTIFIER),
     				'options'     => $plans,
-    				'description' => __( 'Selecione o plano da Vindi que deseja relacionar a esse produto', VINDI_IDENTIFIER ),
+    				'description' => __('Selecione o plano da Vindi que deseja relacionar a esse produto', VINDI_IDENTIFIER),
     				'desc_tip'    => true,
     				'value'       => $selected_plan,
     			]
@@ -123,23 +124,9 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
     	}
 
         /**
-         * Create Vindi Order Meta Box
-         */
-        public function vindi_order_metabox()
-        {
-            add_meta_box('vindi-wc-subscription-meta-box',
-                __('Assinatura Vindi',VINDI_IDENTIFIER),
-                    array(&$this, 'vindi_order_metabox_content'),
-                    'shop_order',
-                    'normal',
-                    'default'
-                );
-        }
-
-        /**
          * @param int $post_id
          */
-        public function vindi_save_subscription_meta($post_id)
+        public function save_subscription_meta($post_id)
         {
             if (! isset($_POST['product-type']) || ('subscription' !== $_POST['product-type']))
                 return;
@@ -184,6 +171,16 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         public static function generate_assets_url($path)
         {
             return plugin_dir_url(__FILE__) . 'assets/' . $path;
+        }
+
+        /**
+         * Include Settings link on the plugins administration screen
+         * @param mixed $links
+         */
+        public function action_links($links)
+        {
+            $links[] = '<a href="admin.php?page=wc-settings&tab=settings_vindi">' . __('Configurações', VINDI_IDENTIFIER) . '</a>';
+            return $links;
         }
 	}
 }
