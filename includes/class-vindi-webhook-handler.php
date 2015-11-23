@@ -101,8 +101,8 @@ class Vindi_Webhook_Handler
         $subscription    = $this->find_subscription($data->period->subscription->code);
         $total_orders    = count($subscription->get_related_orders());
 
-        if($cycle < $total_orders)
-            throw new Exception("Não foi possível criar um novo pedido para o ciclo " . $data, 2);
+        if($cycle <= $total_orders)
+            throw new Exception("Não foi possível criar um novo pedido para o ciclo " . $cycle, 2);
 
         WC_Subscriptions_Manager::prepare_renewal($subscription->id);
     }
@@ -121,7 +121,10 @@ class Vindi_Webhook_Handler
             $order = $this->find_order($data->bill->code);
         }
 
-        if(false == $this->query_bill_id($data->bill->id) && get_post_meta($order->id, 'vindi_wc_bill_id'))
+        if(false !== $this->query_bill_id($data->bill->id))
+            return ;
+
+        if(get_post_meta($order->id, 'vindi_wc_bill_id'))
             throw new Exception(sprintf('Periodo ainda não criando para a fatura %d', $data->bill->id), 2);
 
         add_post_meta($order->id, 'vindi_wc_bill_id', $data->bill->id);
@@ -134,7 +137,7 @@ class Vindi_Webhook_Handler
      **/
     private function bill_paid($data)
     {
-        $order = $this->find_order_by_bill_id($data->bill->code);
+        $order = $this->find_order_by_bill_id($data->bill->id);
         $order->payment_complete();
     }
 
