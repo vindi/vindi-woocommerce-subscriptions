@@ -83,7 +83,8 @@ class Vindi_Webhook_Handler
      **/
     private function subscription_created($data)
     {
-        print_r($data->subscription->code);
+        $order = wcs_get_subscription($data->subscription->code);
+        print_r($order);
     }
 
     /**
