@@ -239,8 +239,6 @@ class Vindi_Payment
     {
         $customer_id  = $this->get_customer();
         $subscription = $this->create_subscription($customer_id);
-        add_post_meta($this->order->id, 'vindi_wc_subscription_id', $subscription['id']);
-        add_post_meta($this->order->id, 'vindi_wc_bill_id', $subscription['bill']['id']);
         $this->add_download_url_meta_for_subscription($subscription);
 
         return $this->finish_payment();
@@ -298,20 +296,23 @@ class Vindi_Payment
      */
     protected function create_subscription($customer_id)
     {
-        $vindi_plan    = $this->get_plan();
-        $product_items = $this->get_product_items($vindi_plan, $this->order->get_total());
+        $vindi_plan            = $this->get_plan();
+        $product_items         = $this->get_product_items($vindi_plan, $this->order->get_total());
+        $wc_subscription_array = wcs_get_subscriptions_for_order($this->order->id);
+        $wc_subscription       = end($wc_subscription_array);
+
         $body = array(
             'customer_id'         => $customer_id,
             'payment_method_code' => $this->payment_method_code(),
             'plan_id'             => $vindi_plan,
             'product_items'       => $product_items,
-            'code'                => $this->order->id,
+            'code'                => $wc_subscription->id,
         );
 
         $subscription = $this->container->api->create_subscription($body);
 
         if (! isset($subscription['id']) || empty($subscription['id'])) {
-            $this->container->logger->log(sprintf( 'Erro no pagamento do pedido %s.', $this->order->id));
+            $this->container->logger->log(sprintf('Erro no pagamento do pedido %s.', $this->order->id));
 
             $message = sprintf(__('Pagamento Falhou. (%s)', VINDI_IDENTIFIER), $this->container->api->last_error);
             $this->order->update_status('failed', $message);
