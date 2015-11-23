@@ -106,7 +106,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
         $items = $this->container->woocommerce->cart->cart_contents;
 
         foreach ($items as $item) {
-            if ('vindi-subscription' === $item['data']->product_type) {
+            if ('subscription' === $item['data']->product_type) {
                 return false;
             }
         }
