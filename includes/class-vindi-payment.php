@@ -305,6 +305,7 @@ class Vindi_Payment
             'payment_method_code' => $this->payment_method_code(),
             'plan_id'             => $vindi_plan,
             'product_items'       => $product_items,
+            'code'                => $this->order->id,
         );
 
         $subscription = $this->container->api->create_subscription($body);
@@ -340,6 +341,7 @@ class Vindi_Payment
                     'amount'     => $this->order->get_total(),
                 ),
             ),
+            'code'               => $this->order->id,
         );
 
         if ('credit_card' === $this->payment_method_code() && isset($_POST['vindi_cc_installments']))

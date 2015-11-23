@@ -74,7 +74,7 @@ class Vindi_Webhook_Handler
      */
     private function test($data)
     {
-        
+
     }
 
     /**
@@ -83,7 +83,7 @@ class Vindi_Webhook_Handler
      **/
     private function subscription_created($data)
     {
-
+        print_r($data->subscription->code);
     }
 
     /**
