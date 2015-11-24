@@ -82,6 +82,12 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             add_action('woocommerce_api_' . self::WC_API_CALLBACK, array(
                 $this->webhook_handler, 'handle'
             ));
+            add_action('woocommerce_add_to_cart_validation', array(
+                &$this, 'validate_add_to_cart'
+            ), 1, 3);
+            add_action('woocommerce_update_cart_validation', array(
+                &$this, 'validate_update_cart'
+            ), 1, 4);
 
             add_filter('plugin_action_links_' . plugin_basename(__FILE__),
                 array(&$this, 'action_links')
@@ -182,6 +188,74 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             $links[] = '<a href="admin.php?page=wc-settings&tab=settings_vindi">' . __('Configurações', VINDI_IDENTIFIER) . '</a>';
             return $links;
         }
+
+        /**
+		 * @param bool $valid
+		 * @param int  $product_id
+		 * @param int  $quantity
+		 *
+		 * @return bool
+		 */
+		public function validate_add_to_cart($valid, $product_id, $quantity)
+        {
+            $cart       = $this->settings->woocommerce->cart;
+			$cart_items = $cart->get_cart();
+
+			$product = wc_get_product($product_id);
+
+			if (empty($cart_items)) {
+				if ($product->is_type('subscription')) {
+					return 1 === $quantity;
+				}
+
+				return $valid;
+			}
+
+			foreach($cart_items as $item)
+            {
+				if ('subscription' === $item['data']->product_type) {
+					if ($product->is_type('subscription')) {
+						$cart->empty_cart();
+						wc_add_notice(__('Uma outra assinatura foi removida do carrinho. Você pode fazer apenas uma assinatura a cada vez.', VINDI_IDENTIFIER), 'notice');
+
+						return $valid;
+					}
+
+					wc_add_notice(__('Você não pode ter produtos e assinaturas juntos na mesma compra. Conclua sua compra atual ou limpe o carrinho para adicionar este item.', VINDI_IDENTIFIER), 'error');
+
+					return false;
+				} elseif ($product->is_type('subscription')) {
+					wc_add_notice(__('Você não pode ter produtos e assinaturas juntos na mesma compra. Conclua sua compra atual ou limpe o carrinho para adicionar este item.', VINDI_IDENTIFIER), 'error');
+
+					return false;
+				}
+			}
+
+			return $valid;
+		}
+
+		/**
+		 * @param bool $valid
+		 * @param      $cart_item_key
+		 * @param      $values
+		 * @param int  $quantity
+		 *
+		 * @return bool
+		 */
+		public function validate_update_cart($valid, $cart_item_key, $values, $quantity)
+        {
+            $cart    = $this->settings->woocommerce->cart;
+            $item    = $cart->get_cart_item($cart_item_key);
+			$product = $item['data'];
+
+			if ($product->is_type('subscription') && 1 !== $quantity && 0 !== $quantity) {
+				wc_add_notice(__('Você pode fazer apenas uma assinatura a cada vez.', VINDI_IDENTIFIER), 'error');
+
+				return false;
+			}
+
+			return $valid;
+		}
 	}
 }
 
