@@ -142,6 +142,17 @@ class Vindi_Webhook_Handler
     }
 
     /**
+     * Process subscription_canceled event from webhook
+     * @param $data array
+     **/
+    private function subscription_canceled($data)
+    {
+        $subscription_id = $data->subscription->code;
+        $subscription    = $this->find_subscription($subscription_id);
+        $subscription->cancel_order();
+    }
+
+    /**
      * find a subscription by id
      * @param int id
      * @return WC_Subscription

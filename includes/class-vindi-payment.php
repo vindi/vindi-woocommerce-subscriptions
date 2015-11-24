@@ -367,8 +367,8 @@ class Vindi_Payment
     protected function add_download_url_meta_for_subscription($subscription)
     {
         if (isset($subscription['bill'])) {
-            $bill        = $subscription['bill'];
-            $downloadUrl = false;
+            $bill         = $subscription['bill'];
+            $download_url = false;
 
             if ('review' === $bill['status']) {
                 $this->container->api->approve_bill($bill['id']);
@@ -387,6 +387,8 @@ class Vindi_Payment
      */
     protected function add_download_url_meta_for_single_payment($bill_id)
     {
+        $download_url = false;
+
         if ($this->container->api->approve_bill($bill_id))
             $download_url = $this->container->api->get_bank_slip_download($bill_id);
 
