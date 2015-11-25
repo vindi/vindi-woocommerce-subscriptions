@@ -239,6 +239,8 @@ class Vindi_Payment
     {
         $customer_id  = $this->get_customer();
         $subscription = $this->create_subscription($customer_id);
+        add_post_meta($this->order->id, 'vindi_wc_cycle', $subscription['current_period']['cycle']);
+        add_post_meta($this->order->id, 'vindi_wc_subscription_id', $subscription['id']);
         $this->add_download_url_meta_for_subscription($subscription);
 
         return $this->finish_payment();
@@ -315,7 +317,7 @@ class Vindi_Payment
                             'qty'      => 1,
                         );
         }
-        
+
         foreach ($order_items as $order_item) {
             if($order_type == 'subscription') {
                 $product_items[]     = array(

@@ -78,18 +78,18 @@ class Vindi_Webhook_Handler
         $this->container->logger->log('Evento de teste do webhook.');
     }
 
-    /**
-     * Process subscription_created event from webhook
-     * @param $data array
-     **/
-    private function subscription_created($data)
-    {
-        $subscription = $this->find_subscription($data->bill->subscription->code);
-
-        $this->container->logger->log('Nova assinatura criada: #' . $subscription->id);
-        $subscription->add_order_note(__('O pedido foi recebido com sucesso pela Vindi e está sendo processado.', VINDI_IDENTIFIER));
-    	$this->container->logger->log('O Pedido #' . $subscription->id . ' foi recebido com sucesso pela Vindi.');
-    }
+    // /**
+    //  * Process subscription_created event from webhook
+    //  * @param $data array
+    //  **/
+    // private function subscription_created($data)
+    // {
+    //     $subscription = $this->find_subscription_by_id($data->bill->subscription->code);
+    //
+    //     $this->container->logger->log('Nova assinatura criada: #' . $subscription->id);
+    //     $subscription->add_order_note(__('O pedido foi recebido com sucesso pela Vindi e está sendo processado.', VINDI_IDENTIFIER));
+    // 	$this->container->logger->log('O Pedido #' . $subscription->id . ' foi recebido com sucesso pela Vindi.');
+    // }
 
     /**
      * Process period_created event from webhook
@@ -98,15 +98,14 @@ class Vindi_Webhook_Handler
     private function period_created($data)
     {
         $cycle           = $data->period->cycle;
-        $subscription    = $this->find_subscription($data->period->subscription->code);
-        $total_orders    = count($subscription->get_related_orders());
+        $subscription    = $this->find_subscription_by_id($data->period->subscription->code);
 
-        if($cycle <= $total_orders)
-            throw new Exception("Não foi possível criar um novo pedido para o ciclo #" . $cycle, 2);
+        if($this->find_order_by_cycle($subscription->id, $cycle))
+            throw new Exception('Já existe o ciclo $cycle para a assinatura ' . $data->period->subscription->id . ' pedido ' . $subscription->id);
 
         WC_Subscriptions_Manager::prepare_renewal($subscription->id);
         $order_id = $subscription->get_last_order();
-        $order    = $this->find_order($order_id);
+        $order    = $this->find_order_by_id($order_id);
         add_post_meta($order->id, 'vindi_wc_cycle', $cycle);
         $this->container->logger->log('Novo Período criado: Pedido #'.$order->id);
     }
@@ -115,35 +114,20 @@ class Vindi_Webhook_Handler
      * Process bill_paid event from webhook
      * @param $data array
      **/
-    private function bill_created($data)
-    {
-        if(false === empty($data->bill->subscription)) {
-            $subscription = $this->find_subscription($data->bill->subscription->code);
-            $order_id     = $subscription->get_last_order();
-            $order        = $this->find_order($order_id);
-        } else {
-            $order = $this->find_order($data->bill->code);
-        }
-
-        if(false !== $this->query_bill_id($data->bill->id))
-            return ;
-
-        if(get_post_meta($order->id, 'vindi_wc_bill_id'))
-            throw new Exception('Periodo ainda não criando para a fatura #' . $data->bill->id, 2);
-
-        add_post_meta($order->id, 'vindi_wc_bill_id', $data->bill->id);
-        $this->container->logger->log('Pedido atualizado com bill_id #' . $data->bill->id);
-    }
-
-    /**
-     * Process bill_paid event from webhook
-     * @param $data array
-     **/
     private function bill_paid($data)
     {
-        $order = $this->find_order_by_bill_id($data->bill->id);
+        if(empty($data->bill->subscription)) {
+            $order = $this->find_order_by_id($data->bill->code);
+        } else {
+            $wc_subscription_id    = $data->bill->subscription->code;
+            $vindi_subscription_id = $data->bill->subscription->id;
+            $cycle                 = $data->bill->period->cycle;
+            $subscription          = $this->find_subscription_by_id($wc_subscription_id);
+            $order                 = $this->find_order_by_cycle($vindi_subscription_id, $cycle);
+        }
+        
         $order->payment_complete();
-        $this->container->logger->log('Nova confirmação para o pedido #' . $order->id);
+        $order->add_order_note('Nova confirmação de pagamento!');
     }
 
     /**
@@ -153,7 +137,7 @@ class Vindi_Webhook_Handler
     private function subscription_canceled($data)
     {
         $subscription_id = $data->subscription->code;
-        $subscription    = $this->find_subscription($subscription_id);
+        $subscription    = $this->find_subscription_by_id($subscription_id);
         $subscription->cancel_order();
     }
 
@@ -162,7 +146,7 @@ class Vindi_Webhook_Handler
      * @param int id
      * @return WC_Subscription
      **/
-    private function find_subscription($id)
+    private function find_subscription_by_id($id)
     {
         $subscription = wcs_get_subscription($id);
 
@@ -178,7 +162,7 @@ class Vindi_Webhook_Handler
      *
      * @return WC_Order
      **/
-    private function find_order($id)
+    private function find_order_by_id($id)
     {
         $order = wc_get_order($id);
 
@@ -197,24 +181,7 @@ class Vindi_Webhook_Handler
 	 */
 	private function find_order_by_bill_id($bill_id)
     {
-		$query = $this->query_bill_id($bill_id);
-
-        if(false === $query->have_posts())
-            throw new Exception('Pedido com bill_id #' . $bill_id . ' não encontrado!', 2);
-
-        return wc_get_order($query->post->ID);
-	}
-
-    /**
-	 * Query orders containing bill_id meta
-	 *
-	 * @param int $bill_id
-	 *
-	 * @return WC_Order
-	 */
-	private function query_bill_id($bill_id)
-    {
-		$args = array(
+        $args = array(
 			'post_type'   => 'shop_order',
 			'meta_key'    => 'vindi_wc_bill_id',
 			'meta_value'  => $bill_id,
@@ -223,9 +190,42 @@ class Vindi_Webhook_Handler
 
         $query = new WP_Query($args);
 
-        if($query->have_posts())
-            return $query;
+        if(false === $query->have_posts())
+            throw new Exception('Pedido com bill_id #' . $bill_id . ' não encontrado!', 2);
 
-        return false;
+        return wc_get_order($query->post->ID);
+	}
+
+    /**
+	 * Query orders containing cycle meta
+	 *
+	 * @param int $subscription_id
+	 * @param int $cycle
+	 *
+	 * @return WC_Order
+	 */
+	private function find_order_by_cycle($subscription_id, $cycle)
+    {
+		$args = array(
+			'post_type'   => 'shop_order',
+            'meta_query' => array(
+                array(
+        			'key'    => 'vindi_wc_cycle',
+        			'value'  => $cycle,
+                ),
+                array(
+        			'key'    => 'vindi_wc_subscription_id',
+        			'value'  => $subscription_id,
+                )
+            ),
+			'post_status' => 'any',
+		);
+
+        $query = new WP_Query($args);
+
+        if(false === $query->have_posts())
+            throw new Exception('Pedido da assinatura #' . $subscription_id . ' para o ciclo #' . $cycle . ' não encontrada!', 2);
+
+        return wc_get_order($query->post->ID);
 	}
 }
