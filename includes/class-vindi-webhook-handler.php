@@ -114,6 +114,25 @@ class Vindi_Webhook_Handler
      * Process bill_paid event from webhook
      * @param $data array
      **/
+    private function bill_created($data)
+    {
+        if($data->bill->subscription) {
+            $wc_subscription_id    = $data->bill->subscription->code;
+            $vindi_subscription_id = $data->bill->subscription->id;
+            $cycle                 = $data->bill->period->cycle;
+            $order                 = $this->find_order_by_cycle($vindi_subscription_id, $cycle);
+
+            if(!$order)
+                throw new Exception('Não existe o ciclo $cycle para a assinatura ' . $data->period->subscription->id . ' pedido ' . $wc_subscription_id, 2);
+
+            add_post_meta($order->id, 'vindi_wc_bill_id', $data->bill->id);
+        }
+    }
+
+    /**
+     * Process bill_paid event from webhook
+     * @param $data array
+     **/
     private function bill_paid($data)
     {
         if(empty($data->bill->subscription)) {
@@ -128,6 +147,21 @@ class Vindi_Webhook_Handler
         
         $order->payment_complete();
         $order->add_order_note('Nova confirmação de pagamento!');
+    }
+
+    /**
+     * Process charge_rejected event from webhook
+     * @param $data array
+     **/
+    private function charge_rejected($data)
+    {
+        $order = $this->find_order_by_bill_id($data->charge->bill->id);
+        
+        if($order->get_status() == 'pending'){
+            $order->update_status('failed', 'Pagamento rejeitado!');
+        }else{
+            throw new Exception('A fatura #' . $data->charge->bill->id . ' não está mais pendente!');
+        }
     }
 
     /**
