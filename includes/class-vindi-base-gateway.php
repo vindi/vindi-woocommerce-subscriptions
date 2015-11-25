@@ -34,7 +34,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      */
     public function admin_options()
     {
-        $this->container->get_template('admin-gateway-settings.html.php');
+        $this->container->get_template('admin-gateway-settings.html.php', array('gateway' => $this));
     }
 
     /**
