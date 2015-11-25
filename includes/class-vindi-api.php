@@ -459,13 +459,20 @@ class Vindi_API
      */
     public function find_product_by_code($code)
     {
+        $transient_key = 'vindi_product_' . $code;
+        $product       = get_transient($transient_key);
+
+        if(false !== $product)
+            return $product;
+
         $response = $this->request(sprintf('products?query=code:%s', $code), 'GET');
 
-        if ($response && (1 === count($response['products'])) && isset($response['products'][0]['id'])) {
-            return $response['products'][0];
+        if (false === empty($response['products'])) {
+            $product = end($response['products']);
+            set_transient($transient_key, $product, 1 * HOUR_IN_SECONDS);
         }
 
-        return false;
+        return $product;
     }
 
     /**

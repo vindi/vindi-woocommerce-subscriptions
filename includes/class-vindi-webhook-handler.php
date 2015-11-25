@@ -27,7 +27,7 @@ class Vindi_Webhook_Handler
         if(!$this->validate_access_token($token))
             die('invalid access token');
 
-        $this->container->logger->log(sprintf('Novo Webhook chamado: %s', $raw_body));
+        $this->container->logger->log('Novo Webhook chamado: ' . $raw_body);
 
         try {
              $this->process_event($body);
@@ -62,11 +62,11 @@ class Vindi_Webhook_Handler
 		$data = $body->event->data;
 
         if(method_exists($this, $type)) {
-            $this->container->logger->log(sprintf('Novo Evento processado: %s', $type));
+            $this->container->logger->log('Novo Evento processado: ' . $type);
             return $this->{$type}($data);
         }
 
-        $this->container->logger->log(sprintf('Evento do webhook ignorado pelo plugin: %s', $type));
+        $this->container->logger->log('Evento do webhook ignorado pelo plugin: ' . $type);
     }
 
     /**
@@ -86,9 +86,9 @@ class Vindi_Webhook_Handler
     {
         $subscription = $this->find_subscription($data->bill->subscription->code);
 
-        $this->container->logger->log(sprintf('Nova assinatura criada: %d', $subscription->id));
+        $this->container->logger->log('Nova assinatura criada: #' . $subscription->id);
         $subscription->add_order_note(__('O pedido foi recebido com sucesso pela Vindi e está sendo processado.', VINDI_IDENTIFIER));
-    	$this->container->logger->log(sprintf( 'O pedido %d foi recebido com sucesso pela Vindi.', $subscription->id));
+    	$this->container->logger->log('O Pedido #' . $subscription->id . ' foi recebido com sucesso pela Vindi.');
     }
 
     /**
@@ -102,9 +102,13 @@ class Vindi_Webhook_Handler
         $total_orders    = count($subscription->get_related_orders());
 
         if($cycle <= $total_orders)
-            throw new Exception("Não foi possível criar um novo pedido para o ciclo " . $cycle, 2);
+            throw new Exception("Não foi possível criar um novo pedido para o ciclo #" . $cycle, 2);
 
         WC_Subscriptions_Manager::prepare_renewal($subscription->id);
+        $order_id = $subscription->get_last_order();
+        $order    = $this->find_order($order_id);
+        add_post_meta($order->id, 'vindi_wc_cycle', $cycle);
+        $this->container->logger->log('Novo Período criado: Pedido #'.$order->id);
     }
 
     /**
@@ -125,10 +129,10 @@ class Vindi_Webhook_Handler
             return ;
 
         if(get_post_meta($order->id, 'vindi_wc_bill_id'))
-            throw new Exception(sprintf('Periodo ainda não criando para a fatura %d', $data->bill->id), 2);
+            throw new Exception('Periodo ainda não criando para a fatura #' . $data->bill->id, 2);
 
         add_post_meta($order->id, 'vindi_wc_bill_id', $data->bill->id);
-        $this->container->logger->log('Pedido atualizado com bill_id ' . $data->bill->id);
+        $this->container->logger->log('Pedido atualizado com bill_id #' . $data->bill->id);
     }
 
     /**
@@ -139,6 +143,7 @@ class Vindi_Webhook_Handler
     {
         $order = $this->find_order_by_bill_id($data->bill->id);
         $order->payment_complete();
+        $this->container->logger->log('Nova confirmação para o pedido #' . $order->id);
     }
 
     /**
@@ -162,7 +167,7 @@ class Vindi_Webhook_Handler
         $subscription = wcs_get_subscription($id);
 
         if(empty($subscription))
-            throw new Exception(sprintf('Assinatura #%d não encontrada!', $id), 2);
+            throw new Exception('Assinatura #' . $id . ' não encontrada!', 2);
 
         return $subscription;
     }
@@ -178,7 +183,7 @@ class Vindi_Webhook_Handler
         $order = wc_get_order($id);
 
         if(empty($order))
-            throw new Exception(sprintf('Pedido #%d não encontrado!', $id), 2);
+            throw new Exception('Pedido #' . $id . ' não encontrado!', 2);
 
         return $order;
     }
@@ -195,7 +200,7 @@ class Vindi_Webhook_Handler
 		$query = $this->query_bill_id($bill_id);
 
         if(false === $query->have_posts())
-            throw new Exception(sprintf('Pedido com bill_id %d não encontrado!', $bill_id), 2);
+            throw new Exception('Pedido com bill_id #' . $bill_id . ' não encontrado!', 2);
 
         return wc_get_order($query->post->ID);
 	}
