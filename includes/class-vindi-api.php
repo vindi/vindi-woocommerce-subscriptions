@@ -444,7 +444,7 @@ class Vindi_API
     public function create_product($body)
     {
         if ($response = $this->request('products', 'POST', $body)) {
-            return $response['product']['id'];
+            return $response['product'];
         }
 
         return false;
@@ -462,10 +462,32 @@ class Vindi_API
         $response = $this->request(sprintf('products?query=code:%s', $code), 'GET');
 
         if ($response && (1 === count($response['products'])) && isset($response['products'][0]['id'])) {
-            return $response['products'][0]['id'];
+            return $response['products'][0];
         }
 
         return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function find_or_create_product($name, $code)
+    {
+        $product = $this->find_product_by_code($code);
+
+        if (false === $product)
+        {
+            return $this->create_product(array(
+                'name'           => $name,
+                'code'           => $code,
+                'status'         => 'active',
+                'pricing_schema' => array(
+                    'price' => 0,
+                ),
+            ));
+        }
+
+        return $product;
     }
 
     /**

@@ -288,6 +288,60 @@ class Vindi_Payment
         return $product_items;
     }
 
+
+    protected function build_product_items()
+    {
+        $product_items = [];
+        $order_type    = 'bill';
+
+        $order_items = $this->order->get_items();
+
+        foreach ($order_items as $key => $order_item) {
+            $product             = wc_get_product($order_item['product_id']);
+            $item                = $this->container->api->find_or_create_product($product->get_title(), $product->id);
+
+            if($product->is_type('subscription'))
+                $order_type = 'subscription';
+
+            $order_items[$key]['vindi_id'] = $item['id'];
+            $order_items[$key]['price']    = $product->get_price();
+        }
+
+        if ($shipping_method = $this->order->get_shipping_method()) {
+            $item            = $this->container->api->find_or_create_product("Frete ($shipping_method)", sanitize_title($shipping_method));
+            $order_items[] = array(
+                            'vindi_id' => $item['id'],
+                            'price'    => $this->order->get_total_shipping(),
+                            'qty'      => 1,
+                        );
+        }
+        
+        foreach ($order_items as $order_item) {
+            if($order_type == 'subscription') {
+                $product_items[]     = array(
+                    'product_id' => $order_item['vindi_id'],
+                    'quantity'   => $order_item['qty'],
+                    'pricing_schema' => [
+                        'price'         => $order_item['price'],
+                        'schema_type'   => 'flat'
+                    ]
+                );
+            } else {
+                for($i=0 ; $i<$order_item['qty'] ; $i++) {
+                    $product_items[]     = array(
+                        'product_id' => $order_item['vindi_id'],
+                        'amount'     => $order_item['price'],
+                    );
+                }
+            }
+        }
+
+        if (empty($product_items))
+            return $this->abort(__('Falha ao recuperar informações sobre o produto na Vindi. Verifique os dados e tente novamente.', VINDI_IDENTIFIER), true);
+
+        return $product_items;
+    }
+
     /**
      * @param $customer_id
      *
@@ -297,7 +351,6 @@ class Vindi_Payment
     protected function create_subscription($customer_id)
     {
         $vindi_plan            = $this->get_plan();
-        $product_items         = $this->get_product_items($vindi_plan, $this->order->get_total());
         $wc_subscription_array = wcs_get_subscriptions_for_order($this->order->id);
         $wc_subscription       = end($wc_subscription_array);
 
@@ -305,7 +358,7 @@ class Vindi_Payment
             'customer_id'         => $customer_id,
             'payment_method_code' => $this->payment_method_code(),
             'plan_id'             => $vindi_plan,
-            'product_items'       => $product_items,
+            'product_items'       => $this->build_product_items(),
             'code'                => $wc_subscription->id,
         );
 
@@ -331,18 +384,11 @@ class Vindi_Payment
      */
     protected function create_bill($customer_id)
     {
-        $unique_payment_product = $this->container->api->find_or_create_unique_payment_product();
-        $this->container->logger->log('Produto para pagamento único: ' . $unique_payment_product);
         $body = array(
             'customer_id'         => $customer_id,
             'payment_method_code' => $this->payment_method_code(),
-            'bill_items'          => array(
-                array(
-                    'product_id' => $unique_payment_product,
-                    'amount'     => $this->order->get_total(),
-                ),
-            ),
-            'code'               => $this->order->id,
+            'bill_items'          => $this->build_product_items(),
+            'code'                => $this->order->id,
         );
 
         if ('credit_card' === $this->payment_method_code() && isset($_POST['vindi_cc_installments']))
@@ -352,7 +398,7 @@ class Vindi_Payment
 
         if (! $bill_id) {
             $this->container->logger->log(sprintf('Erro no pagamento do pedido %s.', $this->order->id));
-            $message = sprintf(__('Pagamento Falhou. (%s)', VINDI_IDENTIFIER), $this->gateway->api->last_error);
+            $message = sprintf(__('Pagamento Falhou. (%s)', VINDI_IDENTIFIER), $this->container->api->last_error);
             $this->order->update_status('failed', $message);
 
             throw new Exception($message);
