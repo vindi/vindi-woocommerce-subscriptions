@@ -35,7 +35,7 @@ class Vindi_Webhook_Handler
             $this->container->logger->log($e->getMessage());
 
             if(2 === $e->getCode()) {
-                http_response_code(429);
+                http_response_code(422);
                 die($e->getMessage());
             }
         }
