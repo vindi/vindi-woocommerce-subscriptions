@@ -160,7 +160,7 @@ class Vindi_Webhook_Handler
         if($order->get_status() == 'pending'){
             $order->update_status('failed', 'Pagamento rejeitado!');
         }else{
-            throw new Exception('A fatura #' . $data->charge->bill->id . ' não está mais pendente!');
+            throw new Exception('Erro ao trocar status da fatura para "failed" pois a fatura #' . $data->charge->bill->id . ' não está mais pendente!');
         }
     }
 
