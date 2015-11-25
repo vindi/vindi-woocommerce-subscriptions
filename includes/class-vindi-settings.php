@@ -49,6 +49,8 @@ class Vindi_Settings extends WC_Settings_API
 
         add_filter('woocommerce_payment_gateways', array(&$this, 'add_gateway'));
 
+        add_action('admin_notices', array(&$this, 'manual_renew_is_deactivated'));
+
         if(is_admin()) {
             add_filter('woocommerce_settings_tabs_array', array(&$this, 'add_settings_tab'), 50);
             add_action('woocommerce_settings_tabs_settings_vindi', array(&$this, 'settings_tab'));
@@ -228,5 +230,17 @@ class Vindi_Settings extends WC_Settings_API
             Vindi_WooCommerce_Subscriptions::generate_assets_url($path),
             $dependencies
         );
+    }
+
+    /**
+     * Warning if manual renew is not activated
+     **/
+    public function manual_renew_is_deactivated()
+    {
+        if('yes' === get_option('woocommerce_subscriptions_turn_off_automatic_payments') &&
+           'yes' === get_option('woocommerce_subscriptions_accept_manual_renewals'))
+            return ;
+
+        $this->get_template('manual_renew_is_deactivated.html.php');
     }
 }
