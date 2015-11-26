@@ -22,6 +22,12 @@ class Vindi_API
      */
     private $logger;
 
+    private $errors_list = array(
+        'invalid_parameter|card_number'          => 'Número do cartão inválido.',
+        'invalid_parameter|payment_company_code' => '',
+        'invalid_parameter|payment_company_id'   => ''
+    );
+
     /**
      * @const string API base path.
      */
@@ -65,7 +71,12 @@ class Vindi_API
      */
     private function get_error_message($error, $endpoint)
     {
-        return sprintf("%s Error: %s: %s - %s", $endpoint, $error['id'], $error['parameter'], $error['message']);
+        $error_identifier = sprintf('%s|%s', $error['id'], $error['parameter']);
+
+        if(false === array_key_exists($error_identifier, $this->errors_list))
+            return $error_identifier;
+
+        return __($this->errors_list[$error_identifier], VINDI_IDENTIFIER);
     }
 
     /**
