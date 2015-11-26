@@ -303,7 +303,7 @@ class Vindi_Payment
 
         foreach ($order_items as $key => $order_item) {
             $product             = wc_get_product($order_item['product_id']);
-            $item                = $this->container->api->find_or_create_product($product->get_title(), $product->id);
+            $item                = $this->container->api->find_or_create_product($product->get_title(), sanitize_title($product->get_title()));
 
             if($product->is_type('subscription'))
                 $order_type = 'subscription';
