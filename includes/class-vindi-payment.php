@@ -198,17 +198,17 @@ class Vindi_Payment
 
     /**
      * @param string $message
-     * @param bool   $throwException
+     * @param bool   $throw_exception
      *
      * @return bool
      * @throws Exception
      */
-    public function abort($message, $throwException = false)
+    public function abort($message, $throw_exception = false)
     {
         $this->container->logger->log($message);
         $this->order->add_order_note($message);
         wc_add_notice($message, 'error');
-        if ($throwException)
+        if ($throw_exception)
             throw new Exception($message);
 
         return false;
@@ -290,7 +290,10 @@ class Vindi_Payment
         return $product_items;
     }
 
-
+    /**
+     * @return array
+     * @throws Exception
+     */
     protected function build_product_items()
     {
         $product_items = [];
@@ -305,6 +308,7 @@ class Vindi_Payment
             if($product->is_type('subscription'))
                 $order_type = 'subscription';
 
+            $order_items[$key]['type']     = 'product';
             $order_items[$key]['vindi_id'] = $item['id'];
             $order_items[$key]['price']    = $product->get_price();
         }
@@ -312,22 +316,51 @@ class Vindi_Payment
         if ($shipping_method = $this->order->get_shipping_method()) {
             $item            = $this->container->api->find_or_create_product("Frete ($shipping_method)", sanitize_title($shipping_method));
             $order_items[] = array(
+                            'type'     => 'shipping',
                             'vindi_id' => $item['id'],
                             'price'    => $this->order->get_total_shipping(),
                             'qty'      => 1,
                         );
         }
 
+        $total_discount = $this->order->get_total_discount();
+        if('bill' == $order_type && !empty($total_discount)) {
+            $item          = $this->container->api->find_or_create_product("Cupom de desconto", 'wc-discount');
+            $order_items[] = array(
+                            'type'     => 'discount',
+                            'vindi_id' => $item['id'],
+                            'price'    => $total_discount * -1,
+                            'qty'      => 1,
+                        );
+        }
+
         foreach ($order_items as $order_item) {
             if($order_type == 'subscription') {
-                $product_items[]     = array(
-                    'product_id' => $order_item['vindi_id'],
-                    'quantity'   => $order_item['qty'],
-                    'pricing_schema' => [
-                        'price'         => $order_item['price'],
-                        'schema_type'   => 'flat'
-                    ]
-                );
+                if(!empty($total_discount) && $order_item['type'] == 'product') {
+                    $product_items[] = array(
+                        'product_id' => $order_item['vindi_id'],
+                        'quantity'   => $order_item['qty'],
+                        'pricing_schema' => array(
+                            'price'         => $order_item['price'],
+                            'schema_type'   => 'flat'
+                        ),
+                        'discounts' => array(
+                            array(
+                                'discount_type' => 'amount',
+                                'amount'        => $total_discount
+                            )
+                        )
+                    );
+                } else {
+                    $product_items[] = array(
+                        'product_id' => $order_item['vindi_id'],
+                        'quantity'   => $order_item['qty'],
+                        'pricing_schema' => array(
+                            'price'         => $order_item['price'],
+                            'schema_type'   => 'flat'
+                        )
+                    );
+                }
             } else {
                 for($i=0 ; $i<$order_item['qty'] ; $i++) {
                     $product_items[]     = array(
