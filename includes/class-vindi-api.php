@@ -531,29 +531,6 @@ class Vindi_API
     }
 
     /**
-     * Make an API request to retrieve the Unique Payment Product or to create it if not found.
-     * @return array|bool|mixed
-     */
-    public function find_or_create_unique_payment_product()
-    {
-        $product_id = $this->find_product_by_code('wc-pagtounico');
-
-        if (false === $product_id)
-        {
-            return $this->create_product(array(
-                'name'           => 'Pagamento Único (não remover)',
-                'code'           => 'wc-pagtounico',
-                'status'         => 'active',
-                'pricing_schema' => array(
-                    'price' => 0,
-                ),
-            ));
-        }
-
-        return $product_id;
-    }
-
-    /**
      * Make an API request to retrieve informations about the Merchant.
      * @return array|bool|mixed
      */
