@@ -71,9 +71,6 @@ class Vindi_API
      */
     private function get_error_message($error, $endpoint)
     {
-        var_dump($error);
-        exit;
-
         $error_id         = empty($error['id']) ? '' : $error['id'];
         $error_parameter  = empty($error['parameter']) ? '' : $error['parameter'];
 
@@ -597,7 +594,7 @@ class Vindi_API
     public function test_api_key($api_key)
     {
         delete_transient('vindi_merchant');
-        
+
         $url         = static::BASE_PATH . 'merchant';
         $method      = 'GET';
 		$request_id  = rand();
