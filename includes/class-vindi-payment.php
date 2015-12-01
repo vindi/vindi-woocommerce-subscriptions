@@ -237,10 +237,14 @@ class Vindi_Payment
      */
     public function process_subscription()
     {
-        $customer_id  = $this->get_customer();
-        $subscription = $this->create_subscription($customer_id);
+        $customer_id      = $this->get_customer();
+        $subscription     = $this->create_subscription($customer_id);
+        $wc_subscriptions = wcs_get_subscriptions_for_order($this->order);
+        $wc_subscription  = end($wc_subscriptions);
+
         add_post_meta($this->order->id, 'vindi_wc_cycle', $subscription['current_period']['cycle']);
         add_post_meta($this->order->id, 'vindi_wc_subscription_id', $subscription['id']);
+        add_post_meta($wc_subscription->id, 'vindi_wc_subscription_id', $subscription['id']);
         $this->add_download_url_meta_for_subscription($subscription);
 
         return $this->finish_payment();

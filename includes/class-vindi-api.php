@@ -71,7 +71,13 @@ class Vindi_API
      */
     private function get_error_message($error, $endpoint)
     {
-        $error_identifier = sprintf('%s|%s', $error['id'], $error['parameter']);
+        var_dump($error);
+        exit;
+
+        $error_id         = empty($error['id']) ? '' : $error['id'];
+        $error_parameter  = empty($error['parameter']) ? '' : $error['parameter'];
+
+        $error_identifier = sprintf('%s|%s', $error_id, $error_parameter);
 
         if(false === array_key_exists($error_identifier, $this->errors_list))
             return $error_identifier;
@@ -176,6 +182,25 @@ class Vindi_API
         if ($response = $this->request('customers', 'POST', $body)) {
             return $response['customer']['id'];
         }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param int   $subscription_id
+     *
+     * @return array|bool|mixed
+     */
+    public function delete_subscription($subscription_id, $cancel_bills = false)
+    {
+        $query = '';
+
+        if($cancel_bills)
+            $query = '?cancel_bills=true';
+
+        if ($response = $this->request('subscriptions/' . $subscription_id . $query, 'DELETE'))
+            return $response;
 
         return false;
     }

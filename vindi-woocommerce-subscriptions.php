@@ -3,7 +3,7 @@
 * Plugin Name: Vindi Woocommerce Subscriptions
 * Plugin URI:
 * Description: Adiciona o gateway de pagamentos da Vindi para o WooCommerce Subscriptions.
-* Version: 1.0.0
+* Version: 0.0.1
 * Author: Vindi
 * Author URI: https://www.vindi.com.br
 * Requires at least: 4.0
@@ -55,51 +55,69 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         const WC_API_CALLBACK = 'vindi_webhook';
 
         /**
-		 * Instance of this class.
 		 * @var Vindi_WooCommerce_Subscriptions
 		 */
 		protected static $instance = null;
 
         /**
-		 * Instance of Vindi_Settings.
 		 * @var Vindi_Settings
 		 */
 		protected $settings = null;
 
         /**
-		 * Instance of Vindi_Settings.
 		 * @var Vindi_Webhook_Handler
 		 */
 		private $webhook_handler = null;
 
+        /**
+		 * @var Vindi_Subscription_Status_Handler
+		 */
+		private $subscription_status_handler = null;
+
 		public function __construct()
 		{
-			$this->includes();
+			$this->includes(array(
+                'class-vindi-logger.php',
+    			'class-vindi-api.php',
+    			'class-vindi-settings.php',
+    			'class-vindi-base-gateway.php',
+    			'class-vindi-bank-slip-gateway.php',
+    			'class-vindi-creditcard-gateway.php',
+    			'class-vindi-payment.php',
+    			'class-vindi-webhook-handler.php',
+    			'class-vindi-subscription-status-handler.php',
+            ));
 
-			$this->settings = new Vindi_Settings();
-            $this->webhook_handler  = new Vindi_Webhook_Handler($this->settings);
+			$this->settings                    = new Vindi_Settings();
+            $this->webhook_handler             = new Vindi_Webhook_Handler($this->settings);
+            $this->subscription_status_handler = new Vindi_Subscription_Status_Handler($this->settings);
 
             add_action('woocommerce_api_' . self::WC_API_CALLBACK, array(
                 $this->webhook_handler, 'handle'
             ));
+
             add_action('woocommerce_add_to_cart_validation', array(
                 &$this, 'validate_add_to_cart'
             ), 1, 3);
+
             add_action('woocommerce_update_cart_validation', array(
                 &$this, 'validate_update_cart'
             ), 1, 4);
 
-            add_filter('plugin_action_links_' . plugin_basename(__FILE__),
-                array(&$this, 'action_links')
-            );
+            add_filter('plugin_action_links_' . plugin_basename(__FILE__), array(
+                &$this, 'action_links'
+            ));
 
             if(is_admin()) {
+
                 add_action('woocommerce_product_options_general_product_data',
                     array(&$this, 'subscription_custom_fields')
                 );
+
                 add_action('save_post',
                     array(&$this, 'save_subscription_meta')
                 );
+
             }
 		}
 
@@ -157,17 +175,12 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
 		/**
 		 * Include the dependents classes
+         * @param array $classes
 		 **/
-		public function includes()
+		public function includes(array $classes)
 		{
-			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-logger.php');
-			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-api.php');
-			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-settings.php');
-			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-base-gateway.php');
-			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-bank-slip-gateway.php');
-			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-creditcard-gateway.php');
-			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-payment.php');
-			include_once(dirname(__FILE__) . self::INCLUDES_DIR . 'class-vindi-webhook-handler.php');
+            foreach ($classes as $class)
+                include_once(dirname(__FILE__) . self::INCLUDES_DIR . $class);
 		}
 
         /**

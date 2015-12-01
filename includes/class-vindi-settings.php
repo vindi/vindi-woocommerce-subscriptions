@@ -158,7 +158,7 @@ class Vindi_Settings extends WC_Settings_API
 	 * @return string
 	 */
 	public function get_events_url() {
-		return sprintf('%s/wc-api/%s?token=%s',
+		return sprintf('%s/index.php/wc-api/%s?token=%s',
             get_site_url(),
             Vindi_WooCommerce_Subscriptions::WC_API_CALLBACK,
             $this->get_token()
