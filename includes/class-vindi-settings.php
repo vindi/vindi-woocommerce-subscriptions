@@ -243,4 +243,22 @@ class Vindi_Settings extends WC_Settings_API
 
         $this->get_template('manual_renew_is_deactivated.html.php');
     }
+
+    /**
+     * Validate API key field
+     * @param $text string
+     * @return $text string
+     */
+    public function validate_api_key_field($key) {
+
+        $api_key = $this->get_option($key);
+
+        if (isset($_POST[$this->plugin_id . $this->id . '_' . $key]) AND !empty($_POST[$this->plugin_id . $this->id . '_' . $key])) {
+            $api_key = wp_kses_post( trim( stripslashes($_POST[ $this->plugin_id . $this->id . '_' . $key])));
+            if('unauthorized' === $this->api->test_api_key($api_key))
+                $api_key = '';
+        }
+
+        return $api_key;
+    }
 }

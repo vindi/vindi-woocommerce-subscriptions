@@ -587,4 +587,64 @@ class Vindi_API
 
         return false;
     }
+
+    /**
+     * Verify API key authorization and clear
+     * all transient data if access was denied
+     *@param $api_key string
+     *@return mixed|boolean|string
+     */
+    public function test_api_key($api_key)
+    {
+        delete_transient('vindi_merchant');
+        
+        $url         = static::BASE_PATH . 'merchant';
+        $method      = 'GET';
+		$request_id  = rand();
+        $data_to_log = 'API Authorization Test';
+
+		$this->logger->log(sprintf("[Request #%s]: Novo Request para a API.\n%s %s\n%s", $request_id, $method, $url, $data_to_log));
+
+		$response = wp_remote_post( $url, [
+			'headers' => [
+				'Authorization' => 'Basic ' . base64_encode($api_key . ':'),
+				'Content-Type'  => 'application/json',
+			    'User-Agent'    => sprintf('Vindi-WooCommerce-Subscriptions/%s; %s', Vindi_WooCommerce_Subscriptions::VERSION, get_bloginfo( 'url' )),
+			],
+			'method'    => $method,
+			'timeout'   => 60,
+			'sslverify' => true,
+		] );
+
+		if (is_wp_error($response)) {
+			$this->logger->log(sprintf("[Request #%s]: Erro ao fazer request! %s", $request_id, print_r($response, true)));
+
+			return false;
+		}
+
+		$status = $response['response']['code'] . ' ' . $response['response']['message'];
+		$this->logger->log(sprintf("[Request #%s]: Nova Resposta da API.\n%s\n%s", $request_id, $status, print_r($response['body'], true)));
+
+		$response_body = wp_remote_retrieve_body($response);
+
+		if (!$response_body) {
+			$this->logger->log(sprintf('[Request #%s]: Erro ao recuperar corpo do request! %s', $request_id, print_r($response, true)));
+
+			return false;
+		}
+
+		$response_body_array = json_decode($response_body, true);
+
+        if (isset($response_body_array['errors']) && !empty($response_body_array['errors'])) {
+			foreach ($response_body_array['errors'] as $error) {
+				if('unauthorized' == $error['id'] AND 'authorization' == $error['parameter']) {
+                    delete_transient('vindi_plans');
+                    delete_transient('vindi_payment_methods');
+                    return $error['id'];
+                }
+			}
+		}
+
+		return true;
+    }
 }
