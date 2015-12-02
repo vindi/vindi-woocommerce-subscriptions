@@ -284,18 +284,13 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
          **/
         public function user_subscriptions_actions($actions, $subscription)
         {
-            $filtred_actions = array();
-
             // remove from second array to allow action
-            $filtred_actions_keys = array_diff(array_keys($actions), array(
+            $filtred_actions = $this->filter_actions    ($actions, array(
+                'resubscribe',
                 //'suspend',
                 //'reactivate',
-                'resubscribe',
                 //'cancel',
             ));
-
-            foreach ($filtred_actions_keys as $key)
-                $filtred_actions[$key] = $actions[$key];
 
             return $filtred_actions;
         }
@@ -306,14 +301,24 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
          **/
         public function user_related_orders_actions($actions, $order)
         {
-            $filtred_actions = array();
-
             //remove from second array to allow action
-            $filtred_actions_keys = array_diff(array_keys($actions), array(
+            $filtred_actions = $this->filter_actions($actions, array(
                 'pay',
                 //'cancel',
                 //'view',
             ));
+
+            return $filtred_actions;
+        }
+
+        /**
+         * @param array $actions
+         * @param array $filter
+         */
+        private function filter_actions($actions, $filter)
+        {
+            $filtred_actions      = array();
+            $filtred_actions_keys = array_diff(array_keys($actions), $filter);
 
             foreach ($filtred_actions_keys as $key)
                 $filtred_actions[$key] = $actions[$key];
