@@ -108,6 +108,14 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 &$this, 'action_links'
             ));
 
+            add_filter('wcs_view_subscription_actions', array(
+                &$this, 'user_subscriptions_actions'
+            ), 100, 2);
+
+            add_filter('woocommerce_my_account_my_orders_actions', array(
+                &$this, 'user_related_orders_actions'
+            ), 100, 2);
+
             if(is_admin()) {
 
                 add_action('woocommerce_product_options_general_product_data',
@@ -269,6 +277,49 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
 			return $valid;
 		}
+
+        /**
+         * @param array           $actions
+         * @param WC_Subscription $subscription
+         **/
+        public function user_subscriptions_actions($actions, $subscription)
+        {
+            $filtred_actions = array();
+
+            // remove from second array to allow action
+            $filtred_actions_keys = array_diff(array_keys($actions), array(
+                //'suspend',
+                //'reactivate',
+                'resubscribe',
+                //'cancel',
+            ));
+
+            foreach ($filtred_actions_keys as $key)
+                $filtred_actions[$key] = $actions[$key];
+
+            return $filtred_actions;
+        }
+
+        /**
+         * @param array    $actions
+         * @param WC_Order $order
+         **/
+        public function user_related_orders_actions($actions, $order)
+        {
+            $filtred_actions = array();
+
+            //remove from second array to allow action
+            $filtred_actions_keys = array_diff(array_keys($actions), array(
+                'pay',
+                //'cancel',
+                //'view',
+            ));
+
+            foreach ($filtred_actions_keys as $key)
+                $filtred_actions[$key] = $actions[$key];
+
+            return $filtred_actions;
+        }
 	}
 }
 
