@@ -285,7 +285,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         public function user_subscriptions_actions($actions, $subscription)
         {
             // remove from second array to allow action
-            $filtred_actions = $this->filter_actions    ($actions, array(
+            $filtred_actions = $this->filter_actions($actions, array(
                 'resubscribe',
                 'suspend',
                 'reactivate',
