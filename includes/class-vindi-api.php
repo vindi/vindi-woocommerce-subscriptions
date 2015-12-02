@@ -31,7 +31,7 @@ class Vindi_API
     /**
      * @const string API base path.
      */
-    const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
+    const BASE_PATH = 'https://app-vindi-com-br-kg9m79dj7yy7.runscope.net/api/v1/';
 
     /**
      * @param string $key
