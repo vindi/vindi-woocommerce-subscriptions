@@ -242,6 +242,37 @@ class Vindi_API
         return $customer_id;
     }
 
+
+    /**
+     * Search in API for a previously payment method registered for current user
+     *
+     * @return array|bool|mixed
+     */
+    public function get_payment_profile(){
+        $customer = $this->find_customer_by_code(get_user_meta(wp_get_current_user()->ID, 'vindi_user_code', true));
+
+        if($customer)
+        {
+            $query = [
+                        'customer_id'   => $customer,
+                        'status'        => 'active',
+                        'type'          => 'PaymentProfile::CreditCard',
+                     ];
+
+            $query = http_build_query($query);
+
+            $response = $this->request('payment_profiles?query='.$query, 'GET');
+
+            if(isset($response['payment_profiles'][0])
+               && $response['payment_profiles'][0]['customer']['id'] == $customer)
+            {
+                return $response['payment_profiles'][0];
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Make an API request to create a Payment Profile to a Customer.
      *
