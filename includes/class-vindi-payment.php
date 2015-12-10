@@ -160,7 +160,7 @@ class Vindi_Payment
      */
     public function get_cc_payment_type($customer_id)
     {
-        if(1 === (int) $_POST['vindi-old-cc-data-check'])
+        if($this->gateway->verify_user_payment_profile())
             return false;
 
         return array(

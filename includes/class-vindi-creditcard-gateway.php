@@ -198,7 +198,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
                 wc_add_notice(__('A Quantidade de Parcelas escolhidas é inválida.', VINDI_IDENTIFIER), 'error');
         }
 
-        if(1 === (int) $_POST['vindi-old-cc-data-check']) {
+        if($this->verify_user_payment_profile()) {
             $this->validated = ! wc_notice_count();
             return ;
         }
@@ -232,5 +232,19 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     {
         if (! (get_query_var('order-received')) && is_checkout())
             $this->container->add_script('js/checkout.js', array('jquery', 'jquery-payment'));
+    }
+
+    /**
+     * verify if a previous payment profile was used
+     **/
+    public function verify_user_payment_profile()
+    {
+        $old_payment_profile = (int) filter_input(
+            INPUT_POST,
+            'vindi-old-cc-data-check',
+            FILTER_SANITIZE_NUMBER_INT
+        );
+
+        return 1 === $old_payment_profile;
     }
 }
