@@ -248,27 +248,24 @@ class Vindi_API
      *
      * @return array|bool|mixed
      */
-    public function get_payment_profile(){
-        $customer = $this->find_customer_by_code(get_user_meta(wp_get_current_user()->ID, 'vindi_user_code', true));
+    public function get_payment_profile($user_code)
+    {
+        $customer = $this->find_customer_by_code($user_code);
 
-        if($customer)
-        {
-            $query = [
-                        'customer_id'   => $customer,
-                        'status'        => 'active',
-                        'type'          => 'PaymentProfile::CreditCard',
-                     ];
+        if(empty($customer))
+            return false;
 
-            $query = http_build_query($query);
+        $query = array(
+            'customer_id'   => $customer,
+            'status'        => 'active',
+            'type'          => 'PaymentProfile::CreditCard',
+        );
 
-            $response = $this->request('payment_profiles?query='.$query, 'GET');
+        $query    = http_build_query($query);
+        $response = $this->request('payment_profiles?query='.$query, 'GET');
 
-            if(isset($response['payment_profiles'][0])
-               && $response['payment_profiles'][0]['customer']['id'] == $customer)
-            {
-                return $response['payment_profiles'][0];
-            }
-        }
+        if(isset($response['payment_profiles'][0]))
+            return $response['payment_profiles'][0];
 
         return false;
     }

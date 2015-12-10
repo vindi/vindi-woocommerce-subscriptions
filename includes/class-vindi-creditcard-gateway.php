@@ -103,6 +103,27 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     }
 
     /**
+     * @param array $payment_profile
+     **/
+    private function build_user_payment_profile()
+    {
+        $user_payment_profile = array();
+        $user_code            = get_user_meta(wp_get_current_user()->ID, 'vindi_user_code', true);
+        $payment_profile      = $this->container->api->get_payment_profile($user_code);
+
+        if($payment_profile['type'] !== 'PaymentProfile::CreditCard')
+            return $user_payment_profile;
+
+        if(false === empty($payment_profile)) {
+            $user_payment_profile['holder_name']     = $payment_profile['holder_name'];
+            $user_payment_profile['payment_company'] = $payment_profile['payment_company']['code'];
+            $user_payment_profile['card_number']     = sprintf('**** **** **** %s', $payment_profile['card_number_last_four']);
+        }
+
+        return $user_payment_profile;
+    }
+
+    /**
      * Payment fields for Vindi Direct Checkout
      */
     public function payment_fields()
@@ -110,17 +131,18 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         if ($this->is_single_order() && $this->installments > 1) {
 
             $total = $this->container->woocommerce->cart->total;
-            $installments = '';
+            $installments = array();
 
-            for ( $i = 1; $i <= $this->installments; $i ++ ) {
+            for ($i = 1 ; $i <= $this->installments ; $i++) {
+
                 $value = ceil( $total / $i * 100 ) / 100;
-                if ($value >= $this->smallest_installment) {
-                    $price = wc_price($value);
-                    $installments .= '<option value="' . $i . '">' . sprintf(__('%dx de %s', VINDI_IDENTIFIER), $i, $price) . '</option>';
-                } else {
+
+                if ($value < $this->smallest_installment) {
                     $this->max_installments = $i - 1;
                     break;
                 }
+
+                $installments[$i] = $value;
             }
         }
 
@@ -136,32 +158,31 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
             return;
         }
 
-        $payment_methods = $this->container->api->get_payment_methods();
+        $user_payment_profile = $this->build_user_payment_profile();
+        $payment_methods      = $this->container->api->get_payment_methods();
 
         if ($payment_methods === false || empty($payment_methods) || ! count($payment_methods['credit_card'])) {
             _e( 'Estamos enfrentando problemas técnicos no momento. Tente novamente mais tarde ou entre em contato.', VINDI_IDENTIFIER);
             return;
         }
 
-        //@TODO create a element into a view
-        $months = '<option value="">' . __('Mês', VINDI_IDENTIFIER) . '</option>';
+        $months = array();
 
         for ($i = 1 ; $i <= 12 ; $i++) {
-            $timestamp = mktime( 0, 0, 0, $i, 1);
-            $num       = date('m', $timestamp);
-            $name      = date('F', $timestamp);
-            $months   .= sprintf('<option value="%s">%02d - %s</option>', $num, $num, __($name));
+            $timestamp    = mktime( 0, 0, 0, $i, 1);
+            $num          = date('m', $timestamp);
+            $name         = date('F', $timestamp);
+            $months[$num] = __($name);
         }
 
-        $years = '<option value="">' . __('Ano', VINDI_IDENTIFIER) . '</option>';
+        $years = array();
 
-        for ( $i = date( 'Y' ); $i <= date( 'Y' ) + 15; $i ++ ) {
-            $years .= sprintf( '<option value="%u">%u</option>', $i, $i );
-        }
+        for ($i = date('Y') ; $i <= date('Y') + 15 ; $i++)
+            $years[] = $i;
 
         $is_trial = $this->container->api->is_merchant_status_trial();
 
-        $this->container->get_template('creditcard-checkout.html.php', compact('months', 'years', 'installments', 'is_trial'));
+        $this->container->get_template('creditcard-checkout.html.php', compact('months', 'years', 'installments', 'is_trial', 'user_payment_profile'));
     }
 
     /**
@@ -169,6 +190,19 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
      */
     public function validate_fields()
     {
+        if ($this->is_single_order() && $this->installments > 1) {
+            if (! isset($_POST['vindi_cc_installments']) || empty($_POST['vindi_cc_installments']))
+                wc_add_notice(__('Quantidade de Parcelas requerido.', VINDI_IDENTIFIER ), 'error');
+
+            if (1 > $_POST['vindi_cc_installments'] || $this->max_installments < $_POST['vindi_cc_installments'])
+                wc_add_notice(__('A Quantidade de Parcelas escolhidas é inválida.', VINDI_IDENTIFIER), 'error');
+        }
+
+        if($this->verify_user_payment_profile()) {
+            $this->validated = ! wc_notice_count();
+            return ;
+        }
+
         $fields = array(
             'vindi_cc_fullname'    => __('Nome do Portador do Cartão de Crédito requerido.', VINDI_IDENTIFIER),
             'vindi_cc_number'      => __('Número do Cartão de Crédito requerido.', VINDI_IDENTIFIER),
@@ -188,14 +222,6 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         if ($now > $ccExpiry)
             wc_add_notice(__('Este cartão de crédito já expirou. Tente novamente com outro cartão de crédito dentro do prazo de validade.', VINDI_IDENTIFIER ), 'error');
 
-        if ($this->is_single_order() && $this->installments > 1) {
-            if (! isset($_POST['vindi_cc_installments']) || empty($_POST['vindi_cc_installments']))
-                wc_add_notice(__('Quantidade de Parcelas requerido.', VINDI_IDENTIFIER ), 'error');
-
-            if (1 > $_POST['vindi_cc_installments'] || $this->max_installments < $_POST['vindi_cc_installments'])
-                wc_add_notice(__('A Quantidade de Parcelas escolhidas é inválida.', VINDI_IDENTIFIER), 'error');
-        }
-
         $this->validated = ! wc_notice_count();
     }
 
@@ -206,5 +232,19 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     {
         if (! (get_query_var('order-received')) && is_checkout())
             $this->container->add_script('js/checkout.js', array('jquery', 'jquery-payment'));
+    }
+
+    /**
+     * verify if a previous payment profile was used
+     **/
+    public function verify_user_payment_profile()
+    {
+        $old_payment_profile = (int) filter_input(
+            INPUT_POST,
+            'vindi-old-cc-data-check',
+            FILTER_SANITIZE_NUMBER_INT
+        );
+
+        return 1 === $old_payment_profile;
     }
 }

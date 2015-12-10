@@ -160,6 +160,9 @@ class Vindi_Payment
      */
     public function get_cc_payment_type($customer_id)
     {
+        if($this->gateway->verify_user_payment_profile())
+            return false;
+
         return array(
             'customer_id'     => $customer_id,
             'holder_name'     => $_POST['vindi_cc_fullname'],
@@ -271,7 +274,11 @@ class Vindi_Payment
      */
     protected function create_payment_profile($customer_id)
     {
-        $cc_info            = $this->get_cc_payment_type($customer_id);
+        $cc_info = $this->get_cc_payment_type($customer_id);
+
+        if(false === $cc_info)
+            return ;
+
         $payment_profile_id = $this->container->api->create_customer_payment_profile($cc_info);
         if (false === $payment_profile_id)
             $this->abort(__('Falha ao registrar o método de pagamento. Verifique os dados e tente novamente.', VINDI_IDENTIFIER), true);
