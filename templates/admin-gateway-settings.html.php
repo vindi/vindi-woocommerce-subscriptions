@@ -1,3 +1,5 @@
+<?php if (!defined( 'ABSPATH')) exit; ?>
+
 <?php if (! $gateway->container->check_ssl()): ?>
     <div class="error">
         <p>

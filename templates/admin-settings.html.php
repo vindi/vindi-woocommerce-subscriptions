@@ -1,3 +1,5 @@
+<?php if (!defined( 'ABSPATH')) exit; ?>
+
 <?php if (! $settings->check_ssl()): ?>
 <div class="error">
     <p>
