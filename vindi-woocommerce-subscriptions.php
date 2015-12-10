@@ -128,31 +128,26 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
             }
 		}
-
+        
         /**
 		 * Show pricing fields at admin's product page.
 		 */
         public function subscription_custom_fields()
         {
-    		global $post;
+            global $post;
 
-    		echo '<div class="options_group vindi-subscription_pricing show_if_subscription">';
-
-    		$plans         = [__('-- Selecione --', VINDI_IDENTIFIER)] + $this->settings->api->get_plans();
+            $plans         = $this->settings->api->get_plans();
     		$selected_plan = get_post_meta($post->ID, 'vindi_subscription_plan', true);
 
-    		woocommerce_wp_select( [
-    				'id'          => 'vindi_subscription_plan',
-    				'label'       => __('Plano da Vindi', VINDI_IDENTIFIER),
-    				'options'     => $plans,
-    				'description' => __('Selecione o plano da Vindi que deseja relacionar a esse produto', VINDI_IDENTIFIER),
-    				'desc_tip'    => true,
-    				'value'       => $selected_plan,
-    			]
-    		);
+            array_unshift($plans, __('-- Selecione --', VINDI_IDENTIFIER));
 
-            echo '</div>';
-    		echo '<div class="show_if_subscription clear"></div>';
+            $this->settings->get_template(
+                'admin-product-subscription-fields.html.php',
+                compact(
+                    'plans',
+                    'selected_plan'
+                )
+            );
     	}
 
         /**
@@ -163,9 +158,11 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             if (! isset($_POST['product-type']) || ('subscription' !== $_POST['product-type']))
                 return;
 
-            $subscription_plan  = (int) stripslashes($_REQUEST['vindi_subscription_plan']);
+            $subscription_plan        = filter_input(INPUT_POST, 'vindi_subscription_plan', FILTER_SANITIZE_NUMBER_INT);
+            $subscription_plan_period = filter_input(INPUT_POST, 'vindi_subscription_plan_period', FILTER_SANITIZE_STRING);
 
             update_post_meta($post_id, 'vindi_subscription_plan', $subscription_plan);
+            update_post_meta($post_id, 'vindi_subscription_plan_period', $subscription_plan_period);
         }
 
 		/**

@@ -1,4 +1,4 @@
-<?php if (!defined( 'ABSPATH')) exit; ?>
+<?php if (!defined('ABSPATH')) exit; ?>
 
 <?php if ($is_trial): ?>
     <div style="padding: 10px;border: 1px solid #f00; background-color: #fdd; color: #f00; margin: 10px 2px">
