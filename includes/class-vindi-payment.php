@@ -115,23 +115,24 @@ class Vindi_Payment
             $name        = $this->order->billing_company;
             $cpf_or_cnpj = $this->order->billing_cnpj;
             $notes       = sprintf('Nome: %s %s', $this->order->billing_first_name, $this->order->billing_last_name);
+
             if ($this->container->send_nfe_information())
                 $metadata['inscricao_estadual'] = $this->order->billing_ie;
 
         } else {
             // Pessoa física
-            $name      = $this->order->billing_first_name . ' ' . $this->order->billing_last_name;
-            $cpfOrCnpj = $this->order->billing_cpf;
-            $notes     = '';
-            if ($this->container->send_nfe_information()) {
+            $name        = $this->order->billing_first_name . ' ' . $this->order->billing_last_name;
+            $cpf_or_cnpj = $this->order->billing_cpf;
+            $notes       = '';
+
+            if ($this->container->send_nfe_information())
                 $metadata['carteira_de_identidade'] = $this->order->billing_rg;
-            }
         }
 
         $customer = array(
             'name'          => $name,
             'email'         => $email,
-            'registry_code' => $cpfOrCnpj,
+            'registry_code' => $cpf_or_cnpj,
             'code'          => $userCode,
             'address'       => $address,
             'notes'         => $notes,
