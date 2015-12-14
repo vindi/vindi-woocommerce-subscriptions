@@ -29,7 +29,7 @@ class Vindi_API
     );
 
     /**
-     * @const string API base path.
+     * @var string API base path.
      */
     const BASE_PATH = 'https://app-vindi-com-br-kg9m79dj7yy7.runscope.net/api/v1/';
 
@@ -43,8 +43,6 @@ class Vindi_API
     }
 
     /**
-     * Build HTTP Query.
-     *
      * @param array $data
      *
      * @return string
@@ -109,8 +107,6 @@ class Vindi_API
     }
 
     /**
-     * Perform request to API.
-     *
      * @param string $endpoint
      * @param string $method
      * @param array  $data
@@ -168,8 +164,6 @@ class Vindi_API
     }
 
     /**
-     * Make an API request to create a Customer.
-     *
      * @param array $body (name, email, code)
      *
      * @return array|bool|mixed
@@ -184,7 +178,6 @@ class Vindi_API
     }
 
     /**
-     *
      * @param int   $subscription_id
      *
      * @return array|bool|mixed
@@ -203,8 +196,6 @@ class Vindi_API
     }
 
     /**
-     * Make an API request to retrieve an existing Customer.
-     *
      * @param string $code
      *
      * @return array|bool|mixed
@@ -225,8 +216,6 @@ class Vindi_API
     }
 
     /**
-     * Make an API request to retrieve an existing Customer or to create one if not found.
-     *
      * @param array $body (name, email, code)
      *
      * @return array|bool|mixed
@@ -244,8 +233,6 @@ class Vindi_API
 
 
     /**
-     * Search in API for a previously payment method registered for current user
-     *
      * @return array|bool|mixed
      */
     public function get_payment_profile($user_code)
@@ -271,8 +258,6 @@ class Vindi_API
     }
 
     /**
-     * Make an API request to create a Payment Profile to a Customer.
-     *
      * @param $body (holder_name, card_expiration, card_number, card_cvv, customer_id)
      *
      * @return array|bool|mixed
@@ -288,8 +273,6 @@ class Vindi_API
     }
 
     /**
-     * Make an API request to create a Subscription.
-     *
      * @param $body (plan_id, customer_id, payment_method_code, product_items[{product_id}])
      *
      * @return array
@@ -309,7 +292,6 @@ class Vindi_API
     }
 
     /**
-     * Make an API request to retrive Payment Methods.
      * @return array|bool
      */
     public function get_payment_methods()
@@ -496,8 +478,6 @@ class Vindi_API
     }
 
     /**
-     * Make an API request to create a Product.
-     *
      * @param array $body (name, code, status, pricing_schema (price))
      *
      * @return array|bool|mixed
@@ -512,8 +492,6 @@ class Vindi_API
     }
 
     /**
-     * Make an API request to retrieve an existing Product.
-     *
      * @param string $code
      *
      * @return array|bool|mixed
@@ -537,6 +515,9 @@ class Vindi_API
     }
 
     /**
+     * @param string $name
+     * @param string $code
+     *
      * @return array
      */
     public function find_or_create_product($name, $code)
@@ -576,6 +557,22 @@ class Vindi_API
         }
 
         return $merchant;
+    }
+
+    /**
+     * Make an API request to retrieve informations about a charge.
+     * @param int $id
+     *
+     * @return array|bool|mixed
+     */
+    public function get_charge($id)
+    {
+        $response = $this->request('charges/' . $id, 'GET');
+
+        if (empty($response['charge']))
+            return false;
+
+        return $response['charge'];
     }
 
     /**
