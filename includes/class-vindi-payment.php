@@ -103,9 +103,9 @@ class Vindi_Payment
 
         $user_id = $currentUser->ID;
 
-        if (! $userCode = get_user_meta($user_id, 'vindi_user_code', true)) {
-            $userCode = 'wc-' . $user_id . '-' . time();
-            add_user_meta($user_id, 'vindi_user_code', $userCode, true);
+        if (! $user_code = get_user_meta($user_id, 'vindi_user_code', true)) {
+            $user_code = 'wc-' . $user_id . '-' . time();
+            add_user_meta($user_id, 'vindi_user_code', $user_code, true);
         }
 
         $metadata = array();
@@ -133,7 +133,7 @@ class Vindi_Payment
             'name'          => $name,
             'email'         => $email,
             'registry_code' => $cpf_or_cnpj,
-            'code'          => $userCode,
+            'code'          => $user_code,
             'address'       => $address,
             'notes'         => $notes,
             'metadata'      => $metadata,
