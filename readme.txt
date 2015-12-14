@@ -12,7 +12,7 @@ Venda de assinaturas de produtos e serviços através do cartão de crédito e b
 
 == Description ==
 
-O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo Word Press com a praticidade que você só encontra na Vindi.
+O WooCommerce Subscriptions Vindi integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo Word Press com a praticidade que você só encontra na Vindi.
 
 = Requerimentos =
 

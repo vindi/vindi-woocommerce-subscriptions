@@ -1,16 +1,16 @@
 # Descrição
-O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo Word Press com a praticidade que você só encontra na Vindi.
+O WooCommerce Subscriptions Vindi integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo Word Press com a praticidade que você só encontra na Vindi.
 
 # Algumas funcionalidades suportadas
-- Pagamentos recorrentes por cartão de crédito. 
-- Pagamentos recorrentes por boleto bancário. 
-- Pagamentos avulsos por cartão de crédito. 
-- Pagamentos avulsos por boleto bancário. 
-- Parcelamento de pagamentos avulsos. 
-- Aceita cálculo de descontos vitalícios e frete. 
-- Atualização de pedido com informações de cobranças rejeitadas. 
-- Geração de novos pedidos para os próximos períodos da recorrência dos planos. 
-- Recuperação de informações do cartão já cadastrado do cliente, permitindo checkout com 1 clique. 
+- Pagamentos recorrentes por cartão de crédito.
+- Pagamentos recorrentes por boleto bancário.
+- Pagamentos avulsos por cartão de crédito.
+- Pagamentos avulsos por boleto bancário.
+- Parcelamento de pagamentos avulsos.
+- Aceita cálculo de descontos vitalícios e frete.
+- Atualização de pedido com informações de cobranças rejeitadas.
+- Geração de novos pedidos para os próximos períodos da recorrência dos planos.
+- Recuperação de informações do cartão já cadastrado do cliente, permitindo checkout com 1 clique.
 - Area do cliente (nativo do WooCommerce Subscriptions)
 - Integração com notas fiscais de produtos e serviços através de nossos parceiros.
 
