@@ -248,6 +248,7 @@ class Vindi_Payment
 
         add_post_meta($this->order->id, 'vindi_wc_cycle', $subscription['current_period']['cycle']);
         add_post_meta($this->order->id, 'vindi_wc_subscription_id', $subscription['id']);
+        add_post_meta($this->order->id, 'vindi_wc_bill_id', $subscription['bill']['id']);
         add_post_meta($wc_subscription->id, 'vindi_wc_subscription_id', $subscription['id']);
         $this->add_download_url_meta_for_subscription($subscription);
 

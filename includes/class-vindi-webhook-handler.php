@@ -23,7 +23,7 @@ class Vindi_Webhook_Handler
         $token    = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
         $raw_body = file_get_contents('php://input');
         $body     = json_decode($raw_body);
-
+        
         if(!$this->validate_access_token($token))
             die('invalid access token');
 
@@ -77,19 +77,6 @@ class Vindi_Webhook_Handler
     {
         $this->container->logger->log('Evento de teste do webhook.');
     }
-
-    // /**
-    //  * Process subscription_created event from webhook
-    //  * @param $data array
-    //  **/
-    // private function subscription_created($data)
-    // {
-    //     $subscription = $this->find_subscription_by_id($data->bill->subscription->code);
-    //
-    //     $this->container->logger->log('Nova assinatura criada: #' . $subscription->id);
-    //     $subscription->add_order_note(__('O pedido foi recebido com sucesso pela Vindi e está sendo processado.', VINDI_IDENTIFIER));
-    // 	$this->container->logger->log('O Pedido #' . $subscription->id . ' foi recebido com sucesso pela Vindi.');
-    // }
 
     /**
      * Process period_created event from webhook
@@ -150,6 +137,38 @@ class Vindi_Webhook_Handler
     }
 
     /**
+     * Process issue_created event from webhook
+     * @param $data array
+     **/
+    private function issue_created($data)
+    {
+        $issue_type   = $data->issue->issue_type;
+        $issue_status = $data->issue->status;
+        $item_type    = strtolower($data->issue->item_type);
+
+        if('charge_underpay' !== $issue_type)
+            throw new Exception("issue_create with issue_type '{$issue_type}' not handled");
+
+        if('open' !== $issue_status)
+            throw new Exception("issue_create with status '{$issue_status}' not handled");
+
+        if('charge' !== $item_type)
+            throw new Exception("issue_create with item_type '{$item_type}' not handled");
+
+        $item_id    = (int) $data->issue->item_id;
+        $issue_data = $data->issue->data;
+        $bill       = $this->find_bill_by_charge_id($item_id);
+        $order      = $this->find_order_by_bill_id($bill->id);
+
+        $order->add_order_note(sprintf(
+            "Divergencia de valores do Pedido #%s: Valor Esperado R$ %s, Valor Pago R$ %s",
+            $order->id,
+            $issue_data->expected_amount,
+            $issue_data->transaction_amount
+        ));
+    }
+
+    /**
      * Process charge_rejected event from webhook
      * @param $data array
      **/
@@ -188,6 +207,21 @@ class Vindi_Webhook_Handler
             throw new Exception('Assinatura #' . $id . ' não encontrada!', 2);
 
         return $subscription;
+    }
+
+    /**
+     * @param int id
+     *
+     * @return WC_Subscription
+     **/
+    private function find_bill_by_charge_id($id)
+    {
+        $charge = $this->container->api->get_charge($id);
+
+        if(empty($charge))
+            throw new Exception('Charge #' . $id . ' não encontrada!', 2);
+
+        return (object) $charge['bill'];
     }
 
     /**
