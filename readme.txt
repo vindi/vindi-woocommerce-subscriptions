@@ -8,7 +8,7 @@ Stable Tag: 0.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Venda de assinaturas de produtos e serviços através do cartão de crédito e boletos pelo plugin de cobrança recorrente para o WooCommerce Subscriptions.
+Venda de assinaturas de produtos e serviços pelo plugin de cobrança recorrente para o WooCommerce Subscriptions.
 
 == Description ==
 
