@@ -1,4 +1,4 @@
-=== WooCommerce Subscriptions Vindi ===
+=== Vindi WooCommerce Subscriptions ===
 Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar
 Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
@@ -12,7 +12,7 @@ Venda de assinaturas de produtos e serviços pelo plugin de cobrança recorrente
 
 == Description ==
 
-O WooCommerce Subscriptions Vindi integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo Word Press com a praticidade que você só encontra na Vindi.
+O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo Word Press com a praticidade que você só encontra na Vindi.
 
 = Requerimentos =
 
@@ -55,8 +55,8 @@ Na Vindi
 
 == License ==
 
-WooCommerce Subscriptions Vindi is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Vindi WooCommerce Subscriptions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-WooCommerce Subscriptions Vindi is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+Vindi WooCommerce Subscriptions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with WooCommerce Subscriptions Vindi. If not, see http://www.gnu.org/licenses/.
+You should have received a copy of the GNU General Public License along with Vindi WooCommerce Subscriptions. If not, see http://www.gnu.org/licenses/.

@@ -1,5 +1,5 @@
 # Descrição
-O WooCommerce Subscriptions Vindi integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo Word Press com a praticidade que você só encontra na Vindi.
+O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo Word Press com a praticidade que você só encontra na Vindi.
 
 # Algumas funcionalidades suportadas
 - Pagamentos recorrentes por cartão de crédito.
