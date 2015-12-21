@@ -50,15 +50,13 @@ class Vindi_Payment
     {
         $items = $this->order->get_items();
 
+        //@TODO validate if all subscription products were associated to the same vindi plan
         foreach ($items as $item) {
             $product = $this->order->get_product_from_item($item);
 
-            if ($product->is_type('subscription')) {
-                if (1 === count($items))
-                    return static::ORDER_TYPE_SUBSCRIPTION;
+            if ($product->is_type('subscription'))
+                return static::ORDER_TYPE_SUBSCRIPTION;
 
-                return static::ORDER_TYPE_INVALID;
-            }
         }
 
         return static::ORDER_TYPE_SINGLE;
@@ -70,15 +68,20 @@ class Vindi_Payment
      */
     public function get_plan()
     {
-        $items      = $this->order->get_items();
-        $item       = array_shift($items); //get only the first item
-        $product    = $this->order->get_product_from_item($item);
-        $vindi_plan = get_post_meta($product->id, 'vindi_subscription_plan', true);
+        $items = $this->order->get_items();
 
-        if (! $product->is_type('subscription') || empty($vindi_plan))
-            $this->abort(__('O produto selecionado não é uma assinatura.', VINDI_IDENTIFIER), true);
+        foreach($items as $item) {
 
-        return $vindi_plan;
+            $product    = $this->order->get_product_from_item($item);
+            $vindi_plan = get_post_meta($product->id, 'vindi_subscription_plan', true);
+
+            if (! $product->is_type('subscription') || empty($vindi_plan))
+                continue;
+
+            return $vindi_plan;
+        }
+
+        $this->abort(__('O produto selecionado não é uma assinatura.', VINDI_IDENTIFIER), true);
     }
 
     /**
@@ -304,6 +307,22 @@ class Vindi_Payment
     }
 
     /**
+     * @param array $product
+     **/
+    private function return_cycle_from_product_type(array $product)
+    {
+        if(!isset($product['item_meta']))
+            return null;
+
+        $product_vindi_subscription_plan_meta = get_post_meta($product['item_meta']['_product_id'][0], 'vindi_subscription_plan');
+
+        if(empty($product_vindi_subscription_plan_meta))
+            return 1;
+
+        return null;
+    }
+
+    /**
      * @return array
      * @throws Exception
      */
@@ -312,7 +331,8 @@ class Vindi_Payment
         $product_items = [];
         $order_type    = 'bill';
 
-        $order_items = $this->order->get_items();
+        $order_items    = $this->order->get_items();
+        $total_products = count($order_items);
 
         foreach ($order_items as $key => $order_item) {
             $product             = wc_get_product($order_item['product_id']);
@@ -323,7 +343,7 @@ class Vindi_Payment
 
             $order_items[$key]['type']     = 'product';
             $order_items[$key]['vindi_id'] = $item['id'];
-            $order_items[$key]['price']    = $product->get_price();
+            $order_items[$key]['price']    = (float) $product->get_price();
         }
 
         if ($shipping_method = $this->order->get_shipping_method()) {
@@ -331,7 +351,7 @@ class Vindi_Payment
             $order_items[] = array(
                             'type'     => 'shipping',
                             'vindi_id' => $item['id'],
-                            'price'    => $this->order->get_total_shipping(),
+                            'price'    => (float) $this->order->get_total_shipping(),
                             'qty'      => 1,
                         );
         }
@@ -342,7 +362,7 @@ class Vindi_Payment
             $order_items[] = array(
                             'type'     => 'discount',
                             'vindi_id' => $item['id'],
-                            'price'    => $total_discount * -1,
+                            'price'    => (float) $total_discount * -1,
                             'qty'      => 1,
                         );
         }
@@ -351,16 +371,17 @@ class Vindi_Payment
             if($order_type == 'subscription') {
                 if(!empty($total_discount) && $order_item['type'] == 'product') {
                     $product_items[] = array(
-                        'product_id' => $order_item['vindi_id'],
-                        'quantity'   => $order_item['qty'],
-                        'pricing_schema' => array(
-                            'price'         => $order_item['price'],
-                            'schema_type'   => 'flat'
+                        'product_id'      => $order_item['vindi_id'],
+                        'quantity'        => $order_item['qty'],
+                        'cycles'          => $this->return_cycle_from_product_type($order_item),
+                        'pricing_schema'  => array(
+                            'price'       => $order_item['price'],
+                            'schema_type' => 'per_unit'
                         ),
                         'discounts' => array(
                             array(
                                 'discount_type' => 'amount',
-                                'amount'        => $total_discount
+                                'amount'        => $total_discount / $total_products
                             )
                         )
                     );
@@ -368,9 +389,10 @@ class Vindi_Payment
                     $product_items[] = array(
                         'product_id' => $order_item['vindi_id'],
                         'quantity'   => $order_item['qty'],
+                        'cycles'     => $this->return_cycle_from_product_type($order_item),
                         'pricing_schema' => array(
                             'price'         => $order_item['price'],
-                            'schema_type'   => 'flat'
+                            'schema_type'   => 'per_unit'
                         )
                     );
                 }
