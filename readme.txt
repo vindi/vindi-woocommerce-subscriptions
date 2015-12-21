@@ -4,7 +4,7 @@ Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
 Requires at least: 4.0
 Tested up to: 4.4
-Beta Tag: 0.0.1
+Beta Tag: 0.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -52,6 +52,9 @@ Na Vindi
 
 = 0.0.1 - 14/12/2015 =
 - Primeira versão BETA
+
+= 0.2.1 - 21/12/2015 =
+- Adicionado suporte a multiplos produtos na mesma assinatura
 
 == License ==
 
