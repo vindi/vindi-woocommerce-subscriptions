@@ -461,7 +461,7 @@ class Vindi_API
      */
     public function get_plans()
     {
-        // if (false === ($list = get_transient('vindi_plans'))) {
+        if (false === ($list = get_transient('vindi_plans'))) {
             $list = array(
                 'names' => array(),
                 'infos' => array()
@@ -483,8 +483,8 @@ class Vindi_API
                 }
             }
 
-        //     set_transient('vindi_plans', $list, 10 * MINUTE_IN_SECONDS);
-        // }
+            set_transient('vindi_plans', $list, 10 * MINUTE_IN_SECONDS);
+        }
 
         return $list;
     }
