@@ -58,7 +58,8 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
     public function validate_settings()
     {
         $currency = get_option('woocommerce_currency');
-        return in_array($currency, ['BRL']) && ! empty($this->container->get_api_key());
+        $api_key = $this->container->get_api_key();
+        return in_array($currency, ['BRL']) && ! empty($api_key);
     }
 
     /**

@@ -118,6 +118,10 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
             if(is_admin()) {
 
+                add_action('admin_enqueue_scripts', array(
+                    &$this, 'add_admin_scripts'
+                ));
+
                 add_action('woocommerce_product_options_general_product_data',
                     array(&$this, 'subscription_custom_fields')
                 );
@@ -128,7 +132,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
             }
 		}
-        
+
         /**
 		 * Show pricing fields at admin's product page.
 		 */
@@ -139,7 +143,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             $plans         = $this->settings->api->get_plans();
     		$selected_plan = get_post_meta($post->ID, 'vindi_subscription_plan', true);
 
-            array_unshift($plans, __('-- Selecione --', VINDI_IDENTIFIER));
+            $plans['names'] = array(__('-- Selecione --', VINDI_IDENTIFIER)) + $plans['names'];
 
             $this->settings->get_template(
                 'admin-product-subscription-fields.html.php',
@@ -158,11 +162,8 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             if (! isset($_POST['product-type']) || ('subscription' !== $_POST['product-type']))
                 return;
 
-            $subscription_plan        = filter_input(INPUT_POST, 'vindi_subscription_plan', FILTER_SANITIZE_NUMBER_INT);
-            $subscription_plan_period = filter_input(INPUT_POST, 'vindi_subscription_plan_period', FILTER_SANITIZE_STRING);
-
+            $subscription_plan = filter_input(INPUT_POST, 'vindi_subscription_plan', FILTER_SANITIZE_NUMBER_INT);
             update_post_meta($post_id, 'vindi_subscription_plan', $subscription_plan);
-            update_post_meta($post_id, 'vindi_subscription_plan_period', $subscription_plan_period);
         }
 
 		/**
@@ -321,6 +322,13 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 $filtred_actions[$key] = $actions[$key];
 
             return $filtred_actions;
+        }
+
+        /**
+         */
+        public function add_admin_scripts()
+        {
+            return $this->settings->add_script('js/simple-subscription-fields.js', array('jquery'));
         }
 	}
 }

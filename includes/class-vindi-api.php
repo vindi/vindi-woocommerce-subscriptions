@@ -461,18 +461,30 @@ class Vindi_API
      */
     public function get_plans()
     {
-        if (false === ($list = get_transient('vindi_plans'))) {
-            $list     = array();
+        // if (false === ($list = get_transient('vindi_plans'))) {
+            $list = array(
+                'names' => array(),
+                'infos' => array()
+            );
+
             $response = $this->request('plans?query=status:active', 'GET');
 
             if ($plans = $response['plans']) {
                 foreach ($plans as $plan) {
-                    $list[$plan['id']] = $plan['name'];
+                    $list['names'][$plan['id']] = $plan['name'];
+                    $list['infos'][$plan['id']] = array(
+                        'name'                 => $plan['name'],
+                        'interval'             => $plan['interval'],
+                        'interval_count'       => $plan['interval_count'],
+                        'billing_trigger_type' => $plan['billing_trigger_type'],
+                        'billing_trigger_day'  => $plan['billing_trigger_day'],
+                        'billing_cycles'       => $plan['billing_cycles'],
+                    );
                 }
             }
 
-            set_transient('vindi_plans', $list, 10 * MINUTE_IN_SECONDS);
-        }
+        //     set_transient('vindi_plans', $list, 10 * MINUTE_IN_SECONDS);
+        // }
 
         return $list;
     }
