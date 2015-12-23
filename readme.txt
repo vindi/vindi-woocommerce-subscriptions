@@ -18,9 +18,9 @@ O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando co
 
 - PHP versão 5.4 ou superior.
 - Um site com o WordPress instalado.
-- Plugin [WooCommerce](https://wordpress.org/plugins/woocommerce/ "Plugin WooCommerce")instalado e habilitado.
+- Plugin [WooCommerce](https://wordpress.org/plugins/woocommerce/ "Plugin WooCommerce") instalado e habilitado.
 - Plugin [WooCommerce Extra Checkout](https://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/ "WooCommerce Extra Checkout") Fields for Brazil instalado e habilitado.
-- Plugin [WooCommerce Subscriptions instalado](https://www.woothemes.com/products/woocommerce-subscriptions/ "WooCommerce Subscriptions instalado") e habilitado.
+- Plugin [WooCommerce Subscriptions instalado](https://www.woothemes.com/products/woocommerce-subscriptions/ "WooCommerce Subscriptions") instalado e habilitado.
 - Utilizar HTTPS (é recomendado um certificado de 2048 bits).
 - Possuir uma conta habilitada na [Vindi](https://www.vindi.com.br "Vindi").
 
@@ -42,7 +42,7 @@ O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando co
 - Em WooCOmmerce -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"
 Na Vindi
 
-= Suporte =
+= Support =
 
 - Para suporte ao Plugin e dúvidas relacionadas ao Vindi WooCommerce Subscriptions você pode seguir pelos canais:
 - [Atendimento Vindi](https://atendimento.vindi.com.br "Atendimento Vindi")
