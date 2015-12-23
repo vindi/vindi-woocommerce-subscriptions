@@ -12,7 +12,7 @@ Venda de assinaturas de produtos e serviços pelo plugin de cobrança recorrente
 
 == Description ==
 
-O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo Word Press com a praticidade que você só encontra na Vindi.
+O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo WordPress com a praticidade que você só encontra na Vindi.
 
 = Requerimentos =
 
@@ -50,11 +50,11 @@ Na Vindi
 
 == Changelog ==
 
+= 0.2.1 - 21/12/2015 =
+- Adicionado suporte a múltiplos produtos na mesma assinatura
+
 = 0.0.1 - 14/12/2015 =
 - Primeira versão BETA
-
-= 0.2.1 - 21/12/2015 =
-- Adicionado suporte a multiplos produtos na mesma assinatura
 
 == License ==
 
