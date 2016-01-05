@@ -17,7 +17,7 @@
 <?php
 
     $merchant = false;
-    $api_key  = $this->container->get_api_key();
+    $api_key  = $settings->get_api_key();
     if(!empty($api_key))
         $merchant = $settings->api->get_merchant();
 
