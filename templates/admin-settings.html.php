@@ -22,7 +22,7 @@
         $merchant = $settings->api->get_merchant();
 
 ?>
-<div class="<?php echo $merchant !== false ? 'updated' : 'error'; ?>">
+<div class="below-h2 <?php echo $merchant !== false ? 'updated' : 'error'; ?>">
 	<h3 class="wc-settings-sub-title">
 		<?php _e('Link de configuração dos Eventos da Vindi', VINDI_IDENTIFIER); ?>
 	</h3>
