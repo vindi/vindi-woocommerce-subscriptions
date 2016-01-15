@@ -19,64 +19,57 @@ class Vindi_Dependencies
     }
 
     /**
-    * WooCommerce fallback notice.
     * @return  boolean
     */
     public static function check()
     {
-        if (! self::$active_plugins) self::init();
+        if (! self::$active_plugins)
+            self::init();
 
-        if (! self::is_woocommerce_activated()) {
-            add_action('admin_notices', 'Vindi_Dependencies::woocommerce_missing_notice');
+        $required_plugins = [
+            'woocommerce/woocommerce.php' => [
+                'WooCommerce' => 'https://wordpress.org/extend/plugins/woocommerce/'
+            ],
+            'woocommerce-subscriptions/woocommerce-subscriptions.php' => [
+                'WooCommerce Subscriptions' => 'http://www.woothemes.com/products/woocommerce-subscriptions/'
+            ],
+            'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php' => [
+                'WooCommerce Extra Checkout Fields for Brazil' => 'https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/'
+            ]
+        ];
+
+        if (! self::plugins_are_activated($required_plugins))
             return false;
-        }
 
-        if (! self::is_woocommerce_subscription_activated()) {
-            add_action('admin_notices', 'Vindi_Dependencies::woocommerce_subscriptions_missing_notice');
-            return false;
-        }
+        return true;
     }
 
     /**
-    * WooCommerce fallback notice.
+    * @param string $name
+    * @param string $link
+    *
     * @return  string
     */
-    public static function woocommerce_missing_notice()
+    public static function missing_notice($name, $link)
     {
-        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER), '<a href="https://wordpress.org/extend/plugins/woocommerce/">' . __('WooCommerce', VINDI_IDENTIFIER) . '</a>') . '</p></div>';
+        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER), "<a href=\"{$link}\">" . __($name, VINDI_IDENTIFIER) . '</a>') . '</p></div>';
     }
 
     /**
-    * WooCommerceSubscriptions fallback notice.
-    * @return  string
-    */
-    public static function woocommerce_subscriptions_missing_notice()
-    {
-        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER), '<a href="http://www.woothemes.com/products/woocommerce-subscriptions/">' . __('WooCommerce Subscriptions', VINDI_IDENTIFIER) . '</a>') . '</p></div>';
-    }
-
-    /**
-    * WooCommerce Extra Checkout Fields for Brazil fallback notice.
-    * @return  string
-    */
-    public static function extra_checkout_missing_notice()
-    {
-        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER), '<a href="https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/">' . __('WooCommerce Extra Checkout Fields for Brazil', VINDI_IDENTIFIER) . '</a>') . '</p></div>';
-    }
-
-    /**
+    * @param array $plugin
+    *
     * @return boolean
     **/
-    public static function is_woocommerce_activated()
+    public static function plugins_are_activated($plugins)
     {
-        return in_array('woocommerce/woocommerce.php', self::$active_plugins ) || array_key_exists('woocommerce/woocommerce.php', self::$active_plugins);
-    }
+        $valid = true;
+        foreach($plugins as $path => $plugin) {
+            if(!in_array($path, self::$active_plugins ) || array_key_exists($path, self::$active_plugins)) {
+                add_action('admin_notices', self::missing_notice(key($plugin), current($plugin)));
+                $valid = false;
+            }
+        }
 
-    /**
-    * @return boolean
-    **/
-    public static function is_woocommerce_subscription_activated()
-    {
-        return in_array('woocommerce-subscriptions/woocommerce-subscriptions.php', self::$active_plugins ) || array_key_exists('woocommerce-subscriptions/woocommerce-subscriptions.php', self::$active_plugins);
+        return $valid;
     }
 }
