@@ -14,6 +14,9 @@ Venda de assinaturas de produtos e serviços pelo plugin de cobrança recorrente
 
 O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo WordPress com a praticidade que você só encontra na Vindi.
 
+= Observações =
+- Até o momento só são suportados produtos e assinaturas simples.
+
 = Requerimentos =
 
 - PHP versão 5.4 ou superior.
@@ -21,40 +24,53 @@ O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando co
 - Plugin [WooCommerce](https://wordpress.org/plugins/woocommerce/ "Plugin WooCommerce") instalado e habilitado.
 - Plugin [WooCommerce Extra Checkout](https://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/ "WooCommerce Extra Checkout") Fields for Brazil instalado e habilitado.
 - Plugin [WooCommerce Subscriptions instalado](https://www.woothemes.com/products/woocommerce-subscriptions/ "WooCommerce Subscriptions") instalado e habilitado.
-- Utilizar HTTPS (é recomendado um certificado de 2048 bits).
-- Possuir uma conta habilitada na [Vindi](https://www.vindi.com.br "Vindi").
+- Certificado Digital.
+- Conta ativa na [Vindi](https://www.vindi.com.br "Vindi").
 
 == Installation ==
 
-- Envie os arquivos do plugin para a pasta wp-content/plugins, ou utilize o instalador de plugins do WordPress.
-- Ative o plugin.
-- Ative os Webhooks abaixo na Vindi em Configurações -> Dados da empresa -> API & Webhooks:
+1. Envie os arquivos do plugin para a pasta wp-content/plugins, ou utilize o instalador de plugins do WordPress.
+1. Ative o plugin.
+
+= Configuração =
+1. Ative os Webhooks abaixo na Vindi em Configurações -> Dados da empresa -> API & Webhooks:
     - Assinatura efetuada
     - Cobrança rejeitada
     - Fatura emitida
     - Fatura paga
     - Período criado
-- Copie a Chave API que está localizada na Vindi em Configurações->Dados da empresa->API & Webhooks.
-- De volta no WooCommerce Cole a Chave API na página administrativa do plugin WooCommerce -> Configurações -> Vindi:
-- Após salvar a Chave API o Woocommerce Subscriptions vai preencher o campo com sua URL de retorno + um token de segurança, copie essa URL e cole na Vindi em Configurações -> Dados da empresa -> API & Webhooks -> URL
-- De volta no WooCommerce -> Configurações -> Finalizar Compra -> Cartão de crédito / Boleto Bancário.
-- Em WooCommerce -> Campos do Checkout, ative Tipo de Pessoa Física e Jurídica, RG e Inscrição estadual.
-- Em WooCOmmerce -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"
+1. Copie a Chave API que está localizada na Vindi em Configurações->Dados da empresa->API & Webhooks.
+1. De volta no WooCommerce Cole a Chave API na página administrativa do plugin WooCommerce -> Configurações -> Vindi:
+1. Após salvar a Chave API o Woocommerce Subscriptions vai preencher o campo com sua URL de retorno + um token de segurança, copie essa URL e cole na Vindi em Configurações -> Dados da empresa -> API & Webhooks -> URL
+1. De volta no WooCommerce -> Configurações -> Finalizar Compra -> Cartão de crédito / Boleto Bancário.
+1. Em WooCommerce -> Campos do Checkout, ative Tipo de Pessoa Física e Jurídica, RG e Inscrição estadual.
+1. Em WooCOmmerce -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"
 Na Vindi
 
-= Support =
+== Frequently Asked Questions ==
 
-- Para suporte ao Plugin e dúvidas relacionadas ao Vindi WooCommerce Subscriptions você pode seguir pelos canais:
-- [Atendimento Vindi](https://atendimento.vindi.com.br "Atendimento Vindi")
-- [Github](https://github.com/vindi "Github")
+Para suporte ou dúvidas relacionadas ao Plugin você pode seguir pelos canais:
+- [Github](https://github.com/vindi/vindi-woocommerce/issues)
+- [Fórum do Plugin](https://wordpress.org/plugins/vindi-woocommerce-assinaturas) (apenas em inglês)
+
+Caso necessite de informações sobre a plataforma ou API por favor siga através do canal
+- [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
 
+= 0.2.3 - 18/01/2015 =
+- Melhorias na verificação de dependências do plugin.
+- Adicionando WooCommerce Extra Checkout Fields for Brazil como dependência.
+- Ajustando o bug do aviso de conexão com a Vindi.
+
+= 0.2.2 - 05/01/2015 =
+- Ajustando o bug de renderização das views na configuração dos produtos.
+
 = 0.2.1 - 21/12/2015 =
-- Adicionado suporte a múltiplos produtos na mesma assinatura
+- Adicionado suporte a múltiplos produtos na mesma assinatura.
 
 = 0.0.1 - 14/12/2015 =
-- Primeira versão BETA
+- Primeira versão BETA.
 
 == License ==
 

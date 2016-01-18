@@ -42,19 +42,19 @@ O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando co
 Na Vindi
 
 ## Dúvidas
-Caso necessite de informações sobre a plataforma ou API por favor siga atravéz do canal [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
+Caso necessite de informações sobre a plataforma ou API por favor siga através do canal [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 ## Contribuindo
 Por favor, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Caso tenha alguma sugestão ou bug para reportar por favor nos comunique atravéz das [issues](./issues).
+Caso tenha alguma sugestão ou bug para reportar por favor nos comunique através das [issues](./issues).
 
 ## Changelog
 Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md).
 
 ## Créditos
-- [Vindi][link-author]
-- [Todos os Contribuidores][link-contributors]
+- [Vindi](https://github.com/vindi)
+- [Todos os Contribuidores](https://github.com/vindi/vindi-woocommerce-subscriptions/contributors)
 
 ## Licença
 GNU GPLv3. Por favor, veja o [Arquivo de Licença](license.txt) para mais informações.
