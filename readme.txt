@@ -72,6 +72,15 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 = 0.0.1 - 14/12/2015 =
 - Primeira versão BETA.
 
+== Screenshots ==
+
+1. Configurações do plugin com a Vindi.
+2. Configurações do plugin para cartão de crédito.
+3. Configurações do plugin para boleto bancário.
+4. Método de pagamento na página de finalizar o pedido para cartão de crédito.
+5. Método de pagamento na página de finalizar o pedido para boleto bancário.
+6. Botão de download do boleto ao concluir o pedido via boleto bancário.
+
 == License ==
 
 Vindi WooCommerce Subscriptions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
