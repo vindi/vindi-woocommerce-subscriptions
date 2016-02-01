@@ -3,7 +3,7 @@
 * Plugin Name: Vindi Woocommerce Subscriptions
 * Plugin URI:
 * Description: Adiciona o gateway de pagamentos da Vindi para o WooCommerce Subscriptions.
-* Version: 0.2.3
+* Version: 0.2.4
 * Author: Vindi
 * Author URI: https://www.vindi.com.br
 * Requires at least: 4.0
@@ -37,7 +37,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 	    /**
 		 * @var string
 		 */
-		const VERSION = '0.2.3';
+		const VERSION = '0.2.4';
 
         /**
 		 * @var string
@@ -91,6 +91,8 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 			$this->settings                    = new Vindi_Settings();
             $this->webhook_handler             = new Vindi_Webhook_Handler($this->settings);
             $this->subscription_status_handler = new Vindi_Subscription_Status_Handler($this->settings);
+
+            add_action('http_api_curl', [ &$this, 'add_support_to_tlsv1_2' ]);
 
             add_action('woocommerce_api_' . self::WC_API_CALLBACK, array(
                 $this->webhook_handler, 'handle'
@@ -324,6 +326,20 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         public function add_admin_scripts()
         {
             return $this->settings->add_script('js/simple-subscription-fields.js', array('jquery'));
+        }
+
+        /**
+         * @param resource $ch Curl Resource
+         **/
+        public function add_support_to_tlsv1_2($ch)
+        {
+            if(empty($ch))
+                return;
+
+            if(!defined('CURL_SSLVERSION_TLSv1_2'))
+                return;
+
+            curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         }
 	}
 }

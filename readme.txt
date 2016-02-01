@@ -17,9 +17,9 @@ O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando co
 = Observações =
 - Até o momento só são suportados produtos e assinaturas simples.
 
-= Requerimentos =
+= Requisitos =
 
-- PHP versão 5.4 ou superior.
+- PHP versão 5.5.19 ou superior.
 - Um site com o WordPress instalado.
 - Plugin [WooCommerce](https://wordpress.org/plugins/woocommerce/ "Plugin WooCommerce") instalado e habilitado.
 - Plugin [WooCommerce Extra Checkout](https://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/ "WooCommerce Extra Checkout") Fields for Brazil instalado e habilitado.
@@ -57,6 +57,9 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+
+= 0.2.4 - 01/02/2015 =
+- Adicionando suporte para tls 1.2 e aumentando versão mínima do PHP para 5.5.19​
 
 = 0.2.3 - 18/01/2015 =
 - Melhorias na verificação de dependências do plugin.
