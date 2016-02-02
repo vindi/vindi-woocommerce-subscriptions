@@ -1,4 +1,4 @@
-# 0.2.4 - 01/02/2015
+# 0.2.4 - 02/02/2015
 - Adicionando suporte para tls 1.2 e aumentando versão mínima do PHP para 5.5.19​
 
 # 0.2.3 - 18/01/2015
