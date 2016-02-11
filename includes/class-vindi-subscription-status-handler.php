@@ -38,6 +38,6 @@ class Vindi_Subscription_Status_Handler
     public function filter_pre_cancelled_status($wc_subscription, $new_status)
     {
         if('pending-cancel' === $new_status)
-            $this->update_status('cancelled');
+            $wc_subscription->update_status('cancelled');
     }
 }
