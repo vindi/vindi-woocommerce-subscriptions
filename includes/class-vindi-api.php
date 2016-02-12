@@ -142,7 +142,6 @@ class Vindi_API
 
             return false;
         }
-
         $status = sprintf('%s %s', $response['response']['code'], $response['response']['message']);
         $this->logger->log(sprintf("[Request #%s]: Nova Resposta da API.\n%s\n%s", $request_id, $status, print_r($response['body'], true)));
 
@@ -242,13 +241,7 @@ class Vindi_API
         if(empty($customer))
             return false;
 
-        $query = array(
-            'customer_id'   => $customer,
-            'status'        => 'active',
-            'type'          => 'PaymentProfile::CreditCard',
-        );
-
-        $query    = http_build_query($query);
+        $query    = urlencode("customer_id={$customer} status=active type=PaymentProfile::CreditCard");
         $response = $this->request('payment_profiles?query='.$query, 'GET');
 
         if(isset($response['payment_profiles'][0]))

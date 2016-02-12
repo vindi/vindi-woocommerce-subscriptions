@@ -1,6 +1,7 @@
 # 0.2.5 - 02/02/2015
 - Correção no bug de cancelamento da assinatura pela Área do Cliente
 - Melhorias na listagem dos planos para criação dos produtos
+- Ajustes na exibição do método de pagemento atual do Cliente na tela de checkout
 
 # 0.2.4 - 02/02/2015
 - Adicionando suporte para tls 1.2 e aumentando versão mínima do PHP para 5.5.19​
