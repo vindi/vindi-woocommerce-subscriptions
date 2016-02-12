@@ -466,9 +466,17 @@ class Vindi_API
             'infos' => array()
         );
 
-        $response = $this->request('plans?query=status:active', 'GET');
+        $plans    = [];
+        $page     = 1;
+        $per_page = 50;
 
-        if ($plans = $response['plans']) {
+        do{
+            $response = $this->request('plans?query=status:active&per_page=' . $per_page . '&page=' . $page, 'GET');
+            $plans    = array_merge($plans, $response['plans']);
+            $page++;
+        } while(count($response['plans']) >= $per_page);
+
+        if (false == empty($plans)) {
             foreach ($plans as $plan) {
                 $list['names'][$plan['id']] = $plan['name'];
                 $list['infos'][$plan['id']] = array(
