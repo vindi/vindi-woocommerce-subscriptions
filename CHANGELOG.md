@@ -1,3 +1,6 @@
+# 0.2.6 - 25/02/2015
+- Correção no bug ao atualizar as informações dos Produtos
+
 # 0.2.5 - 02/02/2015
 - Correção no bug de cancelamento da assinatura pela Área do Cliente
 - Melhorias na listagem dos planos para criação dos produtos

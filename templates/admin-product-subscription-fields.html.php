@@ -2,7 +2,10 @@
 <style type="text/css">
     ._subscription_sign_up_fee_field,
     ._subscription_trial_length_field,
-    ._subscription_trial_period_field {
+    ._subscription_trial_period_field,
+    ._subscription_period_interval_field,
+    ._subscription_period_field,
+    ._subscription_length_field {
         display: none !important;
     }
 </style>
@@ -22,8 +25,5 @@
         )
     ));
 ?>
-<input type="hidden" name="_subscription_period_interval">
-<input type="hidden" name="_subscription_period">
-<input type="hidden" name="_subscription_length">
 </div>
 <div class="show_if_subscription clear"></div>
