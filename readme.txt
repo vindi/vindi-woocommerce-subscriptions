@@ -11,8 +11,11 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Venda de assinaturas de produtos e serviços pelo plugin de cobrança recorrente para o WooCommerce Subscriptions.
 
 == Description ==
+O **Vindi WooCommerce Subscriptions** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
 
-O Vindi WooCommerce Subscriptions integra a Vindi na sua loja, possibilitando com isso a gestão de assinaturas e compras avulsas pelo WordPress com a praticidade que você só encontra na Vindi.
+Veja também o nosso plugin [Vindi WooCommerce](https://wordpress.org/plugins/vindi-assinaturas-e-cobranca-recorrente/) que oferece uma gestão mais simples e leia [nosso artigo](http://www.google.com) com um comparativo de recursos entre os dois plugins.
+
+A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil. Com centenas de clientes usando soluções como pagamento online, soluções de notas fiscais integradas, emissão de boletos por email e PDF, integrações com ERPs e diversos relatórios, a Vindi possibilita um sistema online completo para negócios de venda recorrente. Além disso, empresas podem usar o gateway de pagamento integrado ao billing recorrente ou para faturas avulsas.
 
 = Observações =
 - Até o momento só são suportados produtos e assinaturas simples.
