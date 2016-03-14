@@ -1,3 +1,6 @@
+# 0.2.7 - 14/03/2015
+- Ajustes no hook 'http_api_curl' para manipular somente request do plugin
+
 # 0.2.6 - 25/02/2015
 - Correção no bug ao atualizar as informações dos Produtos
 
