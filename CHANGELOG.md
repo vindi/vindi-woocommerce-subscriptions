@@ -1,3 +1,7 @@
+# 1.0.0 - 27/04/2015
+- Adicionado suporte a produtos e assinaturas variáveis
+- Correção da exibição de planos anuais
+
 # 0.2.7 - 14/03/2015
 - Ajustes no hook 'http_api_curl' para manipular somente request do plugin
 

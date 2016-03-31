@@ -31,7 +31,8 @@ class Vindi_API
     /**
      * @var string API base path.
      */
-    const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
+    // const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
+    const BASE_PATH = 'https://staging-recurrent.vindi.com.br/api/v1/';
 
     /**
      * @param string $key
@@ -142,6 +143,7 @@ class Vindi_API
 
             return false;
         }
+
         $status = sprintf('%s %s', $response['response']['code'], $response['response']['message']);
         $this->logger->log(sprintf("[Request #%s]: Nova Resposta da API.\n%s\n%s", $request_id, $status, print_r($response['body'], true)));
 
