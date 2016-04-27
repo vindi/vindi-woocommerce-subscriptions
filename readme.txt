@@ -17,9 +17,6 @@ Veja também o nosso plugin [Vindi WooCommerce](https://wordpress.org/plugins/vi
 
 A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil. Com centenas de clientes usando soluções como pagamento online, soluções de notas fiscais integradas, emissão de boletos por email e PDF, integrações com ERPs e diversos relatórios, a Vindi possibilita um sistema online completo para negócios de venda recorrente. Além disso, empresas podem usar o gateway de pagamento integrado ao billing recorrente ou para faturas avulsas.
 
-= Observações =
-- Até o momento só são suportados produtos e assinaturas simples.
-
 = Requisitos =
 
 - PHP versão 5.5.19 ou superior.
