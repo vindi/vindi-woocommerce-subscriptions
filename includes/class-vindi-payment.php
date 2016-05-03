@@ -340,7 +340,7 @@ class Vindi_Payment
             $order_items[$key]['vindi_id'] = $product->vindi_id;
             $order_items[$key]['price']    = (float) $product->get_price();
         }
-
+        
         return $order_items;
     }
 
@@ -569,7 +569,7 @@ class Vindi_Payment
         $product_title = $product->get_title();
 
         if($this->is_variable($product)) {
-            $variations    = join(" - ", $product->get_variation_attributes());
+            $variations    = $this->parse_variation_name($product->get_attributes(), $order_item);
             $product_title = sprintf("%s (%s)", $product_title, $variations);
         }
 
@@ -581,6 +581,20 @@ class Vindi_Payment
 
         return $product;
 
+    }
+
+    protected function parse_variation_name($attributes, $order_item)
+    {
+        $keys  = array_keys($attributes);
+        $names = [];
+
+        foreach($order_item['item_meta'] as $key => $meta) {
+            if(in_array($key, $keys)) {
+                $names[] = end($meta);
+            }
+        }
+
+        return join(' - ', $names);
     }
 
     protected function is_variable($product)
