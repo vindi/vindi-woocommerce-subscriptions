@@ -4,7 +4,7 @@ Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
 Requires at least: 4.0
 Tested up to: 4.4
-Beta Tag: 0.2.7
+Stable Tag: 1.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,12 +13,12 @@ Venda de assinaturas de produtos e serviços pelo plugin de cobrança recorrente
 == Description ==
 O **Vindi WooCommerce Subscriptions** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
 
+**Observações**
+- Ainda não são suportados Upgrades ou Downgrades de assinaturas.
+
 Veja também o nosso plugin [Vindi WooCommerce](https://wordpress.org/plugins/vindi-assinaturas-e-cobranca-recorrente/) que oferece uma gestão mais simples e leia [nosso artigo](http://atendimento.vindi.com.br/hc/pt-br/articles/217612217) com um comparativo de recursos entre os dois plugins.
 
 A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil. Com centenas de clientes usando soluções como pagamento online, soluções de notas fiscais integradas, emissão de boletos por email e PDF, integrações com ERPs e diversos relatórios, a Vindi possibilita um sistema online completo para negócios de venda recorrente. Além disso, empresas podem usar o gateway de pagamento integrado ao billing recorrente ou para faturas avulsas.
-
-= Observações =
-- Até o momento só são suportados produtos e assinaturas simples.
 
 = Requisitos =
 
@@ -62,6 +62,10 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+
+= 1.0.0 - 27/04/2015 =
+- Adicionado suporte a produtos e assinaturas variáveis
+- Correção da exibição de planos anuais
 
 = 0.2.7 - 14/03/2015 =
 - Ajustes no hook 'http_api_curl' para manipular somente request do plugin

@@ -142,6 +142,7 @@ class Vindi_API
 
             return false;
         }
+
         $status = sprintf('%s %s', $response['response']['code'], $response['response']['message']);
         $this->logger->log(sprintf("[Request #%s]: Nova Resposta da API.\n%s\n%s", $request_id, $status, print_r($response['body'], true)));
 
