@@ -63,7 +63,7 @@ Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md)
 - [Todos os Contribuidores](https://github.com/vindi/vindi-woocommerce-subscriptions/contributors)
 
 ## Licença
-GNU GPLv3. Por favor, veja o [Arquivo de Licença](license.txt) para mais informações.
+GNU GPLv3. Por favor, veja o [Arquivo de Licença](LICENSE) para mais informações.
 
 [ico-version]: https://img.shields.io/wordpress/plugin/v/vindi-woocommerce-subscriptions.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat-square
