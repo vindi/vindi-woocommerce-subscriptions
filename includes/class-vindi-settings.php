@@ -50,6 +50,7 @@ class Vindi_Settings extends WC_Settings_API
         add_filter('woocommerce_payment_gateways', array(&$this, 'add_gateway'));
 
         add_action('admin_notices', array(&$this, 'manual_renew_is_deactivated'));
+        add_action('admin_notices', array(&$this, 'allow_switching_is_activated'));
 
         if(is_admin()) {
             add_filter('woocommerce_settings_tabs_array', array(&$this, 'add_settings_tab'), 50);
@@ -242,6 +243,14 @@ class Vindi_Settings extends WC_Settings_API
             return ;
 
         $this->get_template('manual_renew_is_deactivated.html.php');
+    }
+
+    public function allow_switching_is_activated()
+    {
+        if('no' === get_option('woocommerce_subscriptions_allow_switching'))
+            return ;
+
+        $this->get_template('allow_switching_is_activated.html.php');
     }
 
     /**
