@@ -122,6 +122,10 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 }
             );
 
+            add_action('woocommerce_customer_save_address', array(
+                &$this, 'maybe_update_user_informations'
+            ), 1, 2 );
+
             if(is_admin()) {
 
                 add_action('admin_enqueue_scripts', array(
@@ -141,6 +145,34 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 , 10);
             }
 		}
+
+        /**
+         * Update user informations from My Account form
+         */
+        public function maybe_update_user_informations($user_id, $address_type)
+        {
+            if ( ! wcs_user_has_subscription( $user_id ) || wc_notice_count( 'error' ) > 0 || empty( $_POST['_wcsnonce'] ) || ! wp_verify_nonce( $_POST['_wcsnonce'], 'wcs_edit_address' ) ) {
+                return;
+            }
+
+            if('billing' !== $address_type) {
+                return;
+            }
+
+            $user_code      = get_user_meta($user_id, 'vindi_user_code', true);
+            $address_fields = WC()->countries->get_address_fields( esc_attr( $_POST[ $address_type . '_country' ] ), $address_type . '_' );
+            $address        = array();
+
+            foreach ( $address_fields as $key => $field ) {
+                if ( isset( $_POST[ $key ] ) ) {
+                    $address[ str_replace( $address_type . '_', '', $key ) ] = woocommerce_clean( $_POST[ $key ] );
+                }
+            }
+
+            if(!$this->settings->api->update_user_billing_informations($user_code, $address)) {
+                return;
+            }
+        }
 
         /**
 		 * Show pricing fields at admin's product page.
