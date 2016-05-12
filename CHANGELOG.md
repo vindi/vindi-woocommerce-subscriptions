@@ -1,3 +1,6 @@
+# 1.0.1 - 12/05/2015
+- Correção do bug not_found para assinaturas com frete desabilitado.
+
 # 1.0.0 - 27/04/2015
 - Adicionado suporte a produtos e assinaturas variáveis
 - Correção da exibição de planos anuais
