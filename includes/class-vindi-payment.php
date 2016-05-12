@@ -340,7 +340,7 @@ class Vindi_Payment
             $order_items[$key]['vindi_id'] = $product->vindi_id;
             $order_items[$key]['price']    = (float) $product->get_price();
         }
-        
+
         return $order_items;
     }
 
@@ -400,6 +400,11 @@ class Vindi_Payment
     protected function build_product_items_for_subscription($order_item)
     {
         $product_items  = [];
+
+        if(empty($order_item)) {
+            return $product_items;
+        }
+
         $total_discount = $this->order->get_total_discount();
 
         if(!empty($total_discount) && $order_item['type'] == 'product') {
