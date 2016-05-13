@@ -24,8 +24,9 @@ class Vindi_API
 
     private $errors_list = array(
         'invalid_parameter|card_number'          => 'Número do cartão inválido.',
-        'invalid_parameter|payment_company_code' => '',
-        'invalid_parameter|payment_company_id'   => ''
+        'invalid_parameter|registry_code'        => 'CPF ou CNPJ Invalidos',
+        'invalid_parameter|payment_company_code' => 'Método de pagamento Inválido',
+        'invalid_parameter|payment_company_id'   => 'Método de pagamento Inválido'
     );
 
     /**
@@ -92,8 +93,9 @@ class Vindi_API
             foreach ($response['errors'] as $error) {
                 $message = $this->get_error_message($error, $endpoint);
 
-                if (function_exists('wc_add_notice'))
-                    wc_add_notice($message, 'error');
+                if (function_exists('wc_add_notice')) {
+                    wc_add_notice(__($message, VINDI_IDENTIFIER), 'error');
+                }
 
                 $this->last_error = $message;
             }
@@ -655,5 +657,31 @@ class Vindi_API
 		}
 
 		return true;
+    }
+
+    public function update_user_billing_informations($code, $informations)
+    {
+        $user_id = $this->find_customer_by_code($code);
+
+        if(empty($user_id)) {
+            return false;
+        }
+
+        $data = [
+            'name'          => $informations['first_name'] . " " . $informations['last_name'],
+            'registry_code' => empty($informations['cpf']) ? $informations['cnpj'] : $informations['cpf'],
+            'email'         => $informations['email'],
+            'address' => [
+              'street'       => $informations['address_1'],
+              'number'       => $informations['number'],
+              'zipcode'      => $informations['postcode'],
+              'neighborhood' => $informations['neighborhood'],
+              'city'         => $informations['city'],
+              'state'        => $informations['state'],
+              'country'      => $informations['country']
+            ]
+        ];
+
+        return $this->request("customers/{$user_id}", 'PUT', $data);
     }
 }
