@@ -1,3 +1,6 @@
+# 1.0.2 - 08/06/2015
+- Correção do bug de parcelamento para faturas avulsas.
+
 # 1.0.1 - 12/05/2015
 - Correção do bug not_found para assinaturas com frete desabilitado.
 - Atualização de informações do usuário na Vindi pela Área do Cliente no WooCommerce Subscriptions.

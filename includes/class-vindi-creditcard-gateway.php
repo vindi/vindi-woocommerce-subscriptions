@@ -129,20 +129,12 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     public function payment_fields()
     {
         if ($this->is_single_order() && $this->installments > 1) {
-
-            $total = $this->container->woocommerce->cart->total;
+            $total        = $this->container->woocommerce->cart->total;
+            $max_times    = $this->get_order_max_installments($total);
             $installments = array();
 
-            for ($i = 1 ; $i <= $this->installments ; $i++) {
-
-                $value = ceil( $total / $i * 100 ) / 100;
-
-                if ($value < $this->smallest_installment) {
-                    $this->max_installments = $i - 1;
-                    break;
-                }
-
-                $installments[$i] = $value;
+            for ($times = 1; $times <= $max_times; $times++) {
+                $installments[$times] = ceil($total / $times * 100) / 100;
             }
         }
 
@@ -185,17 +177,29 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         $this->container->get_template('creditcard-checkout.html.php', compact('months', 'years', 'installments', 'is_trial', 'user_payment_profile'));
     }
 
+    protected function get_order_max_installments($order_total)
+    {
+        $order_max_times = floor($order_total / $this->smallest_installment);
+        $max_times       = empty($order_max_times) ? 1 : $order_max_times;
+
+        return min($this->max_installments, $max_times, $this->installments);
+    }
+
     /**
      * Validate payment fields
      */
     public function validate_fields()
     {
         if ($this->is_single_order() && $this->installments > 1) {
-            if (! isset($_POST['vindi_cc_installments']) || empty($_POST['vindi_cc_installments']))
+            if (! isset($_POST['vindi_cc_installments']) || empty($_POST['vindi_cc_installments'])) {
                 wc_add_notice(__('Quantidade de Parcelas requerido.', VINDI_IDENTIFIER ), 'error');
+            }
 
-            if (1 > $_POST['vindi_cc_installments'] || $this->max_installments < $_POST['vindi_cc_installments'])
+            $total = $this->container->woocommerce->cart->total;
+
+            if ($_POST['vindi_cc_installments'] > $this->get_order_max_installments($total)) {
                 wc_add_notice(__('A Quantidade de Parcelas escolhidas é inválida.', VINDI_IDENTIFIER), 'error');
+            }
         }
 
         if($this->verify_user_payment_profile()) {
