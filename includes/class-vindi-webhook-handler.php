@@ -84,11 +84,13 @@ class Vindi_Webhook_Handler
      **/
     private function period_created($data)
     {
-        $cycle           = $data->period->cycle;
-        $subscription    = $this->find_subscription_by_id($data->period->subscription->code);
+        $cycle                 = $data->period->cycle;
+        $subscription          = $this->find_subscription_by_id($data->period->subscription->code);
+        $vindi_subscription_id = $data->period->subscription->id;
 
-        if($this->subscription_has_order_in_cycle($subscription->id, $cycle))
-            throw new Exception('Já existe o ciclo $cycle para a assinatura ' . $data->period->subscription->id . ' pedido ' . $subscription->id);
+        if($this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
+            throw new Exception('Já existe o ciclo $cycle para a assinatura ' . $vindi_subscription_id . ' pedido ' . $subscription->id);
+        }
 
         WC_Subscriptions_Manager::prepare_renewal($subscription->id);
         $order_id = $subscription->get_last_order();
