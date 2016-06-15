@@ -101,17 +101,17 @@ class Vindi_Settings extends WC_Settings_API
 				'description'      => sprintf(__('Envia informações de RG e Inscrição Estadual para Emissão de NFe\'s com nossos parceiros. %s', VINDI_IDENTIFIER), $nfe_know_more),
 				'default'          => 'no',
 			),
-			// 'return_status'        => array(
-			// 	'title'            => __('Status de conclusão do pedido', VINDI_IDENTIFIER),
-			// 	'type'             => 'select',
-			// 	'description'      => __('Status que o pedido deverá ter após receber a confirmação de pagamento da Vindi.', VINDI_IDENTIFIER),
-			// 	'default'          => 'processing',
-			// 	'options'          => array(
-			// 		'processing'   => 'Processando',
-			// 		'on-hold'      => 'Aguardando',
-			// 		'completed'    => 'Concluído',
-			// 	),
-			// ),
+			'return_status'        => array(
+				'title'            => __('Status de conclusão do pedido', VINDI_IDENTIFIER),
+				'type'             => 'select',
+				'description'      => __('Status que o pedido deverá ter após receber a confirmação de pagamento da Vindi.', VINDI_IDENTIFIER),
+				'default'          => 'processing',
+				'options'          => array(
+					'processing'   => 'Processando',
+					'on-hold'      => 'Aguardando',
+					'completed'    => 'Concluído',
+				),
+			),
 			'testing'              => array(
 				'title'            => __('Testes', 'vindi-woocommerce'),
 				'type'             => 'title',
@@ -143,6 +143,19 @@ class Vindi_Settings extends WC_Settings_API
     public function get_api_key()
     {
         return $this->settings['api_key'];
+    }
+
+    /**
+     * Get Return Status
+     * @return string
+     **/
+    public function get_return_status()
+    {
+        if(isset($this->settings['return_status'])) {
+            return $this->settings['return_status'];
+        } else {
+            return 'processing';
+        }
     }
 
     /**

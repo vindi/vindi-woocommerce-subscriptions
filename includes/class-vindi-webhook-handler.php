@@ -23,7 +23,7 @@ class Vindi_Webhook_Handler
         $token    = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
         $raw_body = file_get_contents('php://input');
         $body     = json_decode($raw_body);
-        
+
         if(!$this->validate_access_token($token))
             die('invalid access token');
 
@@ -132,8 +132,8 @@ class Vindi_Webhook_Handler
             $order                 = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
         }
 
-        $order->payment_complete();
-        $order->add_order_note('Nova confirmação de pagamento!');
+        $new_status = $this->container->get_return_status();
+        $order->update_status($new_status, __('O Pagamento foi realizado com sucesso pela Vindi.', 'woocommerce-vindi'));
     }
 
     /**
