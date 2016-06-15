@@ -400,7 +400,6 @@ class Vindi_Payment
     protected function build_product_items_for_subscription($order_item)
     {
         $product_items  = [];
-
         if(empty($order_item)) {
             return $product_items;
         }
@@ -422,7 +421,8 @@ class Vindi_Payment
                 'discounts' => array(
                     array(
                         'discount_type' => 'percentage',
-                        'percentage'    => $discount_percentage
+                        'percentage'    => $discount_percentage,
+                        'cycles'        => $this->container->cycles_to_discount()
                     )
                 )
             );
