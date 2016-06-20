@@ -490,6 +490,35 @@ class Vindi_API
     }
 
     /**
+     * @return array
+     */
+    public function get_plan($id)
+    {
+        $response = $this->request('plans/' . $id, 'GET');
+
+        if (empty($response['plan'])) {
+            return false;
+        }
+
+        return $response['plan'];
+    }
+
+    /**
+     * @return int|bool|mixed
+     */
+    public function get_plan_billing_cycles($plan_id)
+    {
+        $plan = $this->get_plan($plan_id);
+
+        if(empty($plan)) {
+            return false;
+        }
+
+        return (int) $plan['billing_cycles'];
+
+    }
+
+    /**
      * @param array $body (name, code, status, pricing_schema (price))
      *
      * @return array|bool|mixed
