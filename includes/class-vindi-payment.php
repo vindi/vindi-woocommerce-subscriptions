@@ -400,12 +400,20 @@ class Vindi_Payment
     protected function build_product_items_for_subscription($order_item)
     {
         $product_items  = [];
-
         if(empty($order_item)) {
             return $product_items;
         }
 
         $total_discount = $this->order->get_total_discount();
+        $cupons_cycles  = $this->container->cycles_to_discount();
+
+        if(empty($cupons_cycles)) {
+            $discount_cycles = $cupons_cycles;
+        } else {
+            $vindi_plan_id   = $this->get_plan();
+            $plan_cycles     = $this->container->api->get_plan_billing_cycles($vindi_plan_id);
+            $discount_cycles = min($plan_cycles, $cupons_cycles);
+        }
 
         if(!empty($total_discount) && $order_item['type'] == 'product') {
             $order_subtotal      = $this->order->get_subtotal();
@@ -422,7 +430,8 @@ class Vindi_Payment
                 'discounts' => array(
                     array(
                         'discount_type' => 'percentage',
-                        'percentage'    => $discount_percentage
+                        'percentage'    => $discount_percentage,
+                        'cycles'        => $discount_cycles
                     )
                 )
             );
