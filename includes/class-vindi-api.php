@@ -26,7 +26,9 @@ class Vindi_API
         'invalid_parameter|card_number'          => 'Número do cartão inválido.',
         'invalid_parameter|registry_code'        => 'CPF ou CNPJ Invalidos',
         'invalid_parameter|payment_company_code' => 'Método de pagamento Inválido',
-        'invalid_parameter|payment_company_id'   => 'Método de pagamento Inválido'
+        'invalid_parameter|payment_company_id'   => 'Método de pagamento Inválido',
+        'invalid_parameter|phones.number'        => 'Número de telefone inválido',
+        'invalid_parameter|phones'               => 'Erro ao cadastrar o telefone'
     );
 
     /**
@@ -325,6 +327,34 @@ class Vindi_API
         $this->accept_bank_slip = $payment_methods['bank_slip'];
 
         return $payment_methods;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return array|bool|mixed
+     */
+    public function update_customer_phone($id_customer, $phone_number)
+    {
+        $response = $this->request(sprintf('customers/%s', $id_customer),'GET');
+
+        if(empty($response['customer'])) {
+            return false;
+        }
+
+        $phone_data = [
+            'phones' => []
+        ];
+
+        if(empty($response['customer']['phones'])) {
+            array_push($phone_data['phones'], [
+                'phone_type' => 'landline',
+                'number'     => $phone_number,
+            ]);
+            return (boolean) $this->request(sprintf('customers/%s', $id_customer),'PUT', $phone_data);
+        }
+
+        return true;
     }
 
     /**

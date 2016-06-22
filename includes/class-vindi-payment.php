@@ -1,5 +1,4 @@
 <?php
-
 class Vindi_Payment
 {
     /**
@@ -126,6 +125,8 @@ class Vindi_Payment
                 $metadata['carteira_de_identidade'] = $this->order->billing_rg;
         }
 
+        $phone_number = preg_replace('/\D+/', '', '55' . $this->order->billing_phone);
+
         $customer = array(
             'name'          => $name,
             'email'         => $email,
@@ -133,13 +134,24 @@ class Vindi_Payment
             'code'          => $user_code,
             'address'       => $address,
             'notes'         => $notes,
-            'metadata'      => $metadata,
+            'phones'        => [
+                [
+                    'phone_type' => 'landline',
+                    'number'     => $phone_number,
+                ]
+            ],
+            'metadata' => $metadata,
         );
 
         $customer_id = $this->container->api->find_or_create_customer($customer);
 
-        if (false === $customer_id)
+        if(!$this->container->api->update_customer_phone($customer_id, $phone_number)) {
             $this->abort(__('Falha ao registrar o usuário. Verifique os dados e tente novamente.', VINDI_IDENTIFIER ), true);
+        }
+
+        if (false === $customer_id) {
+            $this->abort(__('Falha ao registrar o usuário. Verifique os dados e tente novamente.', VINDI_IDENTIFIER ), true);
+        }
 
         $this->container->logger->log(sprintf('Cliente Vindi: %s', $customer_id));
 
