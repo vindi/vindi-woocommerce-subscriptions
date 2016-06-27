@@ -255,16 +255,17 @@ class Vindi_Payment
         $wc_subscriptions = wcs_get_subscriptions_for_order($this->order);
         $wc_subscription  = end($wc_subscriptions);
 
-        if ($message = $this->cancel_if_denied_bill_status($subscription['bill'])) {
-            $this->container->api->delete_subscription($subscription['id'], true);
-            $this->order->update_status('cancelled', __($message, VINDI_IDENTIFIER));
-            $this->abort(__($message, VINDI_IDENTIFIER), true);
-        }
-
         add_post_meta($this->order->id, 'vindi_wc_cycle', $subscription['current_period']['cycle']);
         add_post_meta($this->order->id, 'vindi_wc_subscription_id', $subscription['id']);
         add_post_meta($this->order->id, 'vindi_wc_bill_id', $subscription['bill']['id']);
         add_post_meta($wc_subscription->id, 'vindi_wc_subscription_id', $subscription['id']);
+
+        if ($message = $this->cancel_if_denied_bill_status($subscription['bill'])) {
+            $wc_subscription->update_status('cancelled', __($message, VINDI_IDENTIFIER));
+            $this->order->update_status('cancelled', __($message, VINDI_IDENTIFIER));
+            $this->abort(__($message, VINDI_IDENTIFIER), true);
+        }
+
         $this->add_download_url_meta_for_subscription($subscription);
 
         return $this->finish_payment($subscription['bill']);
