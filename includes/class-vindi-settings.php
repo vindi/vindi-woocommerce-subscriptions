@@ -101,6 +101,27 @@ class Vindi_Settings extends WC_Settings_API
 				'description'      => sprintf(__('Envia informações de RG e Inscrição Estadual para Emissão de NFe\'s com nossos parceiros. %s', VINDI_IDENTIFIER), $nfe_know_more),
 				'default'          => 'no',
 			),
+            'discounts_to_cycles' => array(
+                'title'       => __('Número de ciclos dos cupons de desconto', VINDI_IDENTIFIER),
+                'type'        => 'select',
+                'description' => __('Número de ciclos que os cupons de desconto serão aplicados nas assinaturas.', VINDI_IDENTIFIER),
+                'default'     => '0',
+                'options'     => array(
+                    '0'  => 'Todos os ciclos',
+                    '1'  => '1 ciclo',
+                    '2'  => '2 ciclos',
+                    '3'  => '3 ciclos',
+                    '4'  => '4 ciclos',
+                    '5'  => '5 ciclos',
+                    '6'  => '6 ciclos',
+                    '7'  => '7 ciclos',
+                    '8'  => '8 ciclos',
+                    '9'  => '9 ciclos',
+                    '10' => '10 ciclos',
+                    '11' => '11 ciclos',
+                    '12' => '12 ciclos',
+                ),
+			),
 			'return_status'        => array(
 				'title'            => __('Status de conclusão do pedido', VINDI_IDENTIFIER),
 				'type'             => 'select',
@@ -165,6 +186,18 @@ class Vindi_Settings extends WC_Settings_API
     public function send_nfe_information()
     {
         return 'yes' === $this->settings['send_nfe_information'];
+    }
+
+    /**
+     * @return int
+     **/
+    public function cycles_to_discount()
+    {
+        if(!empty($this->settings['discounts_to_cycles'])) {
+            return (int) $this->settings['discounts_to_cycles'];
+        }
+
+        return null;
     }
 
     /**

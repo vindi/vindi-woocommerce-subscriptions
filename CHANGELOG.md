@@ -1,3 +1,9 @@
+# 1.0.4 - 22/06/2015
+- Envio de telefone no checkout para a Vindi.
+
+# 1.0.3 - 21/06/2015
+- Adicionado suporte a configuração de ciclos para cupons de desconto.
+
 # 1.0.2 - 08/06/2015
 - Correção do bug de parcelamento para faturas avulsas.
 
