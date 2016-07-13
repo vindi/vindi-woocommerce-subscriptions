@@ -200,6 +200,19 @@ class Vindi_API
     }
 
     /**
+     * @param int   $bill_id
+     *
+     * @return array|bool|mixed
+     */
+    public function delete_bill($bill_id)
+    {
+        if ($response = $this->request('bills/' . $bill_id, 'DELETE'))
+            return $response;
+
+        return false;
+    }
+
+    /**
      * @param string $code
      *
      * @return array|bool|mixed
@@ -377,7 +390,7 @@ class Vindi_API
     public function create_bill($body)
     {
         if ($response = $this->request('bills', 'POST', $body)) {
-            return $response['bill']['id'];
+            return $response['bill'];
         }
 
         return false;

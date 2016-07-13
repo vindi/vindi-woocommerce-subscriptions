@@ -23,7 +23,7 @@ class Vindi_Webhook_Handler
         $token    = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
         $raw_body = file_get_contents('php://input');
         $body     = json_decode($raw_body);
-        
+
         if(!$this->validate_access_token($token))
             die('invalid access token');
 
@@ -84,11 +84,13 @@ class Vindi_Webhook_Handler
      **/
     private function period_created($data)
     {
-        $cycle           = $data->period->cycle;
-        $subscription    = $this->find_subscription_by_id($data->period->subscription->code);
+        $cycle                 = $data->period->cycle;
+        $subscription          = $this->find_subscription_by_id($data->period->subscription->code);
+        $vindi_subscription_id = $data->period->subscription->id;
 
-        if($this->subscription_has_order_in_cycle($subscription->id, $cycle))
-            throw new Exception('Já existe o ciclo $cycle para a assinatura ' . $data->period->subscription->id . ' pedido ' . $subscription->id);
+        if($this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
+            throw new Exception('Já existe o ciclo $cycle para a assinatura ' . $vindi_subscription_id . ' pedido ' . $subscription->id);
+        }
 
         WC_Subscriptions_Manager::prepare_renewal($subscription->id);
         $order_id = $subscription->get_last_order();
@@ -132,8 +134,8 @@ class Vindi_Webhook_Handler
             $order                 = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
         }
 
-        $order->payment_complete();
-        $order->add_order_note('Nova confirmação de pagamento!');
+        $new_status = $this->container->get_return_status();
+        $order->update_status($new_status, __('O Pagamento foi realizado com sucesso pela Vindi.', 'woocommerce-vindi'));
     }
 
     /**

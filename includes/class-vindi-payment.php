@@ -259,9 +259,16 @@ class Vindi_Payment
         add_post_meta($this->order->id, 'vindi_wc_subscription_id', $subscription['id']);
         add_post_meta($this->order->id, 'vindi_wc_bill_id', $subscription['bill']['id']);
         add_post_meta($wc_subscription->id, 'vindi_wc_subscription_id', $subscription['id']);
+
+        if ($message = $this->cancel_if_denied_bill_status($subscription['bill'])) {
+            $wc_subscription->update_status('cancelled', __($message, VINDI_IDENTIFIER));
+            $this->order->update_status('cancelled', __($message, VINDI_IDENTIFIER));
+            $this->abort(__($message, VINDI_IDENTIFIER), true);
+        }
+
         $this->add_download_url_meta_for_subscription($subscription);
 
-        return $this->finish_payment();
+        return $this->finish_payment($subscription['bill']);
     }
 
     /**
@@ -271,11 +278,18 @@ class Vindi_Payment
     public function process_single_payment()
     {
         $customer_id = $this->get_customer();
-        $bill_id     = $this->create_bill($customer_id);
-        add_post_meta($this->order->id, 'vindi_wc_bill_id', $bill_id);
-        $this->add_download_url_meta_for_single_payment($bill_id);
+        $bill        = $this->create_bill($customer_id);
 
-        return $this->finish_payment();
+        if($message = $this->cancel_if_denied_bill_status($bill)) {
+            $this->container->api->delete_bill($bill['id']);
+            $this->order->update_status('cancelled', __($message, VINDI_IDENTIFIER));
+            $this->abort(__($message, VINDI_IDENTIFIER), true);
+        }
+
+        add_post_meta($this->order->id, 'vindi_wc_bill_id', $bill['id']);
+        $this->add_download_url_meta_for_single_payment($bill['id']);
+
+        return $this->finish_payment($bill);
     }
 
     /**
@@ -561,20 +575,40 @@ class Vindi_Payment
             add_post_meta($this->order->id, 'vindi_wc_invoice_download_url', $download_url);
     }
 
+    protected function cancel_if_denied_bill_status($bill)
+    {
+        if(empty($bill['charges'])) {
+            return false;
+        }
+
+        $last_charge        = end($bill['charges']);
+        $transaction_status = $last_charge['last_transaction']['status'];
+        $denied_status      = [
+            'rejected' => 'Infelizmente não foi possível autorizar seu pagamento.',
+            'failure'  => 'Ocorreu um erro ao aprovar a transação, tente novamente.'
+        ];
+
+        if(array_key_exists($transaction_status, $denied_status)) {
+            return $denied_status[$transaction_status];
+        }
+
+        return false;
+    }
+
     /**
      * @return array
      */
-    protected function finish_payment()
+    protected function finish_payment($bill)
     {
         $this->container->woocommerce->cart->empty_cart();
 
-        $data_to_log    = sprintf('Aguardando confirmação de recebimento do pedido %s pela Vindi.', $this->order->id);
-        $status_message = __('Aguardando confirmação de recebimento do pedido pela Vindi.', VINDI_IDENTIFIER);
-        $status         = 'pending';
-
-        if (! $this->is_cc()) {
-            $data_to_log    = sprintf('Aguardando pagamento do boleto do pedido %s.', $this->order->id);
-            $status_message = __('Aguardando pagamento do boleto do pedido', VINDI_IDENTIFIER);
+        if($bill['status'] == 'paid') {
+            $status         = $this->container->get_return_status();
+            $status_message = __('O Pagamento foi realizado com sucesso pela Vindi.', VINDI_IDENTIFIER);
+        } else {
+            $data_to_log    = sprintf('Aguardando pagamento do pedido %s pela Vindi.', $this->order->id);
+            $status_message = __('Aguardando pagamento do pedido.', VINDI_IDENTIFIER);
+            $status         = 'pending';
         }
 
         $this->container->logger->log($data_to_log);
