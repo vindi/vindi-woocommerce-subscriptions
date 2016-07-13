@@ -606,14 +606,9 @@ class Vindi_Payment
             $status         = $this->container->get_return_status();
             $status_message = __('O Pagamento foi realizado com sucesso pela Vindi.', VINDI_IDENTIFIER);
         } else {
-            $data_to_log    = sprintf('Aguardando confirmação de recebimento do pedido %s pela Vindi.', $this->order->id);
-            $status_message = __('Aguardando confirmação de recebimento do pedido pela Vindi.', VINDI_IDENTIFIER);
+            $data_to_log    = sprintf('Aguardando pagamento do pedido %s pela Vindi.', $this->order->id);
+            $status_message = __('Aguardando pagamento do pedido.', VINDI_IDENTIFIER);
             $status         = 'pending';
-
-            if (! $this->is_cc()) {
-                $data_to_log    = sprintf('Aguardando pagamento do boleto do pedido %s.', $this->order->id);
-                $status_message = __('Aguardando pagamento do boleto do pedido', VINDI_IDENTIFIER);
-            }
         }
 
         $this->container->logger->log($data_to_log);
