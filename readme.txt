@@ -4,7 +4,7 @@ Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
 Requires at least: 4.0
 Tested up to: 4.4
-Stable Tag: 1.0.4
+Stable Tag: 1.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -62,6 +62,12 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+
+= 1.1.0 - 18/07/2015 =
+- Corrige problemas nos cupons de desconto para planos indeterminados.
+- Adicionado seleção de status para orders com pagamento confirmado.
+- Corrige o webhook de período criado.
+- Corrige o problema de cancelamento de assinaturas e faturas em caso de falha no checkout.
 
 = 1.0.4 - 22/06/2015 =
 - Envio de telefone no checkout para a Vindi.

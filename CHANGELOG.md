@@ -1,3 +1,9 @@
+# 1.1.0 - 18/07/2015
+- Corrige problemas nos cupons de desconto para planos indeterminados.
+- Adicionado seleção de status para orders com pagamento confirmado.
+- Corrige o webhook de período criado.
+- Corrige o problema de cancelamento de assinaturas e faturas em caso de falha no checkout.
+
 # 1.0.4 - 22/06/2015
 - Envio de telefone no checkout para a Vindi.
 
