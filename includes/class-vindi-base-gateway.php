@@ -102,16 +102,16 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      * Check if the order is a Single Payment Order (not a Subscription).
      * @return bool
      */
-    protected function is_single_order()
-    {
-        $items = $this->container->woocommerce->cart->cart_contents;
 
-        foreach ($items as $item) {
-            if ('subscription' === $item['data']->product_type) {
-                return false;
+
+     protected function is_single_order()
+        {
+            $types = [];
+
+            foreach ($this->container->woocommerce->cart->cart_contents as $item) {
+                $types[] = $item['data']->product_type;
             }
-        }
 
-        return true;
+            return !(boolean) preg_grep('/subscription/', $types);
+        }
     }
-}

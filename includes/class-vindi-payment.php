@@ -174,11 +174,12 @@ class Vindi_Payment
             return false;
 
         return array(
-            'customer_id'     => $customer_id,
-            'holder_name'     => $_POST['vindi_cc_fullname'],
-            'card_expiration' => $_POST['vindi_cc_monthexpiry'] . '/' . $_POST['vindi_cc_yearexpiry'],
-            'card_number'     => $_POST['vindi_cc_number'],
-            'card_cvv'        => $_POST['vindi_cc_cvc'],
+            'customer_id'           => $customer_id,
+            'holder_name'           => $_POST['vindi_cc_fullname'],
+            'card_expiration'       => $_POST['vindi_cc_monthexpiry'] . '/' . $_POST['vindi_cc_yearexpiry'],
+            'card_number'           => $_POST['vindi_cc_number'],
+            'card_cvv'              => $_POST['vindi_cc_cvc'],
+            'payment_method_code'   => 'credit_card'
         );
     }
 
@@ -300,6 +301,7 @@ class Vindi_Payment
     protected function create_payment_profile($customer_id)
     {
         $cc_info = $this->get_cc_payment_type($customer_id);
+
 
         if(false === $cc_info)
             return ;
