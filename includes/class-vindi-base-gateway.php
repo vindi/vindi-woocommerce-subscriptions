@@ -104,14 +104,12 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
      */
     protected function is_single_order()
     {
-        $items = $this->container->woocommerce->cart->cart_contents;
+        $types = [];
 
-        foreach ($items as $item) {
-            if ('subscription' === $item['data']->product_type) {
-                return false;
-            }
+        foreach ($this->container->woocommerce->cart->cart_contents as $item) {
+            $types[] = $item['data']->product_type;
         }
 
-        return true;
+        return !(boolean) preg_grep('/subscription/', $types);
     }
 }

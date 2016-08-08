@@ -1,3 +1,7 @@
+# 1.1.1 - 08/08/2015
+- Remove a opção de parcelamento em assinaturas variáveis
+- Corrige erro na atualização do perfil de pagamento
+
 # 1.1.0 - 18/07/2015
 - Corrige problemas nos cupons de desconto para planos indeterminados.
 - Adicionado seleção de status para orders com pagamento confirmado.
