@@ -302,7 +302,6 @@ class Vindi_Payment
     {
         $cc_info = $this->get_cc_payment_type($customer_id);
 
-
         if(false === $cc_info)
             return ;
 
@@ -440,7 +439,7 @@ class Vindi_Payment
         } else {
             $vindi_plan_id   = $this->get_plan();
             $plan_cycles     = $this->container->api->get_plan_billing_cycles($vindi_plan_id);
-            
+
             if ($plan_cycles == 0) {
                 $discount_cycles = $coupons_cycles;
             } else {
