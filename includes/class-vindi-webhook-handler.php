@@ -84,7 +84,6 @@ class Vindi_Webhook_Handler
      **/
     private function subscription_renew($data)
     {
-
         $cycle                 = $data->bill->period->cycle;
         $subscription          = $this->find_subscription_by_id($data->bill->subscription->code);
         $vindi_subscription_id = $data->bill->subscription->id;
@@ -106,7 +105,6 @@ class Vindi_Webhook_Handler
      **/
     private function bill_created($data)
     {
-
         if($data->bill->subscription) {
 
             $this->subscription_renew($data);
@@ -121,7 +119,6 @@ class Vindi_Webhook_Handler
 
             add_post_meta($order->id, 'vindi_wc_bill_id', $data->bill->id);
         }
-
     }
 
     /**
