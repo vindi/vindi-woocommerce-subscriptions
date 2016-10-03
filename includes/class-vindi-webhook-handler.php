@@ -106,7 +106,6 @@ class Vindi_Webhook_Handler
     private function bill_created($data)
     {
         if($data->bill->subscription) {
-
             $this->subscription_renew($data);
 
             $wc_subscription_id    = $data->bill->subscription->code;
