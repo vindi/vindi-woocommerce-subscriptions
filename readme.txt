@@ -4,7 +4,7 @@ Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
 Requires at least: 4.0
 Tested up to: 4.4
-Stable Tag: 1.1.1
+Stable Tag: 1.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -41,13 +41,12 @@ A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil.
     - Cobrança rejeitada
     - Fatura emitida
     - Fatura paga
-    - Período criado
 1. Copie a Chave API que está localizada na Vindi em Configurações->Dados da empresa->API & Webhooks.
 1. De volta no WooCommerce Cole a Chave API na página administrativa do plugin WooCommerce -> Configurações -> Vindi:
 1. Após salvar a Chave API o Woocommerce Subscriptions vai preencher o campo com sua URL de retorno + um token de segurança, copie essa URL e cole na Vindi em Configurações -> Dados da empresa -> API & Webhooks -> URL
 1. De volta no WooCommerce -> Configurações -> Finalizar Compra -> Cartão de crédito / Boleto Bancário.
 1. Em WooCommerce -> Campos do Checkout, ative Tipo de Pessoa Física e Jurídica, RG e Inscrição estadual.
-1. Em WooCOmmerce -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"
+1. Em WooCOmmerce -> Configurações -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"
 1. Em WooCommerce -> Configurações -> Produtos -> Inventário, coloque um zero na opção "Manter estoque (minutos)".
 
 Para mais detalhes sobre a instalação de plugins no WordPress leia o tutorial [WordPress - Gerenciando Plugins](http://codex.wordpress.org/pt-br:Gerenciando_Plugins#Instalando_Plugins).
@@ -62,54 +61,56 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+= 1.2.0 - 05/10/2016 =
+- Alterada a forma de renovação dos pedidos se baseando no evento bill_created da Vindi.
 
-= 1.1.1 - 08/08/2015 =
+= 1.1.1 - 08/08/2016 =
 - Remove a opção de parcelamento em assinaturas variáveis.
 - Corrige erro na atualização do perfil de pagamento.
 
-= 1.1.0 - 18/07/2015 =
+= 1.1.0 - 18/07/2016 =
 - Corrige problemas nos cupons de desconto para planos indeterminados.
 - Adicionado seleção de status para orders com pagamento confirmado.
 - Corrige o webhook de período criado.
 - Corrige o problema de cancelamento de assinaturas e faturas em caso de falha no checkout.
 
-= 1.0.4 - 22/06/2015 =
+= 1.0.4 - 22/06/2016 =
 - Envio de telefone no checkout para a Vindi.
 
-= 1.0.3 - 21/06/2015 =
+= 1.0.3 - 21/06/2016 =
 - Adicionado suporte a configuração de ciclos para cupons de desconto.
 
-= 1.0.2 - 08/06/2015 =
+= 1.0.2 - 08/06/2016 =
 - Correção do bug de parcelamento para faturas avulsas.
 
-= 1.0.1 - 12/05/2015 =
+= 1.0.1 - 12/05/2016 =
 - Correção do bug not_found para assinaturas com frete desabilitado.
 - Atualização de informações do usuário na Vindi pela Área do Cliente no WooCommerce Subscriptions.
 
-= 1.0.0 - 27/04/2015 =
+= 1.0.0 - 27/04/2016 =
 - Adicionado suporte a produtos e assinaturas variáveis
 - Correção da exibição de planos anuais
 
-= 0.2.7 - 14/03/2015 =
+= 0.2.7 - 14/03/2016 =
 - Ajustes no hook 'http_api_curl' para manipular somente request do plugin
 
-= 0.2.6 - 25/02/2015 =
+= 0.2.6 - 25/02/2016 =
 - Correção no bug ao atualizar as informações dos Produtos
 
-= 0.2.5 - 02/02/2015 =
+= 0.2.5 - 02/02/2016 =
 - Correção no bug de cancelamento da assinatura pela Área do Cliente
 - Melhorias na listagem dos planos para criação dos produtos
 - Ajustes na exibição do método de pagemento atual do Cliente na tela de checkout
 
-= 0.2.4 - 02/02/2015 =
+= 0.2.4 - 02/02/2016 =
 - Adicionando suporte para tls 1.2 e aumentando versão mínima do PHP para 5.5.19​
 
-= 0.2.3 - 18/01/2015 =
+= 0.2.3 - 18/01/2016 =
 - Melhorias na verificação de dependências do plugin.
 - Adicionando WooCommerce Extra Checkout Fields for Brazil como dependência.
 - Ajustando o bug do aviso de conexão com a Vindi.
 
-= 0.2.2 - 05/01/2015 =
+= 0.2.2 - 05/01/2016 =
 - Ajustando o bug de renderização das views na configuração dos produtos.
 
 = 0.2.1 - 21/12/2015 =
