@@ -36,13 +36,12 @@ A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil.
     - Cobrança rejeitada
     - Fatura emitida
     - Fatura paga
-    - Período criado
 1. Copie a Chave API que está localizada na Vindi em Configurações->Dados da empresa->API & Webhooks.
 1. De volta no WooCommerce Cole a Chave API na página administrativa do plugin WooCommerce -> Configurações -> Vindi:
 1. Após salvar a Chave API o Woocommerce Subscriptions vai preencher o campo com sua URL de retorno + um token de segurança, copie essa URL e cole na Vindi em Configurações -> Dados da empresa -> API & Webhooks -> URL
 1. De volta no WooCommerce -> Configurações -> Finalizar Compra -> Cartão de crédito / Boleto Bancário.
 1. Em WooCommerce -> Campos do Checkout, ative Tipo de Pessoa Física e Jurídica, RG e Inscrição estadual.
-1. Em WooCommerce -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"
+1. Em WooCommerce -> Configurações -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"
 1. Em WooCommerce -> Configurações -> Produtos -> Inventário, coloque um zero na opção "Manter estoque (minutos)".
 
 >Para mais detalhes sobre a instalação de plugins no WordPress leia o tutorial [WordPress - Gerenciando Plugins](http://codex.wordpress.org/pt-br:Gerenciando_Plugins#Instalando_Plugins).
