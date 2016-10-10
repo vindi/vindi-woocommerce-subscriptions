@@ -63,6 +63,7 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 == Changelog ==
 = 1.2.1 - 10/10/2016 =
 - Ajustes no problema de comunicação com a API da Vindi.
+- Alterando o cache métodos de pagamento para 1 hora.
 
 = 1.2.0 - 05/10/2016 =
 - Alterada a forma de renovação dos pedidos se baseando no evento bill_created da Vindi.
