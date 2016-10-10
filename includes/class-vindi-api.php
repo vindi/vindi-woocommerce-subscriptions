@@ -48,11 +48,17 @@ class Vindi_API
     /**
      * @param array $data
      *
-     * @return string
+     * @return mixed
      */
     private function build_body($data)
     {
-        return json_encode($data);
+        $body = null;
+
+        if (!empty($data)) {
+            $body = json_encode($data);
+        }
+
+        return $body;
     }
 
     /**
@@ -61,7 +67,7 @@ class Vindi_API
      */
     private function get_auth_header()
     {
-        return sprintf('Basic %s:', base64_encode($this->key));
+        return sprintf('Basic %s', base64_encode($this->key . ":"));
     }
 
     /**
