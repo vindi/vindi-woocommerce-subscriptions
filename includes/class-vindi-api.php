@@ -340,7 +340,7 @@ class Vindi_API
                 }
             }
 
-            set_transient('vindi_payment_methods', $payment_methods, 12 * HOUR_IN_SECONDS);
+            set_transient('vindi_payment_methods', $payment_methods, 1 * HOUR_IN_SECONDS);
         }
 
         $this->accept_bank_slip = $payment_methods['bank_slip'];
