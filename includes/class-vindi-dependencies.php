@@ -52,7 +52,7 @@ class Vindi_Dependencies
     */
     public static function missing_notice($name, $link)
     {
-        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Gateway depende da última versão do %s para funcionar!', VINDI_IDENTIFIER), "<a href=\"{$link}\">" . __($name, VINDI_IDENTIFIER) . '</a>') . '</p></div>';
+        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Subscriptions depende da última versão do %s para funcionar!', VINDI_IDENTIFIER), "<a href=\"{$link}\">" . __($name, VINDI_IDENTIFIER) . '</a>') . '</p></div>';
     }
 
     /**
