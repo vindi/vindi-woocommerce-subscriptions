@@ -4,7 +4,7 @@ Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
 Requires at least: 4.0
 Tested up to: 4.4
-Stable Tag: 1.2.1
+Stable Tag: 1.2.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,6 +61,10 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+= 1.2.2 - 24/01/2017 =
+- Ajuste na mensagem de envio de boleto bancário.
+- Adicionado os arquivos .PO e .MO para facilitar traduções.
+
 = 1.2.1 - 10/10/2016 =
 - Ajustes no problema de comunicação com a API da Vindi.
 - Alterando o cache métodos de pagamento para 1 hora.

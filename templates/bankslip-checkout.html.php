@@ -11,6 +11,12 @@
 <?php endif; ?>
 <fieldset>
 	<div class="vindi-invoice-description" style="padding: 20px 0; font-weight: bold;">
-		<?php _e('Um Boleto Bancário será enviado mensalmente para o seu endereço de e-mail.', VINDI_IDENTIFIER); ?>
+		<?php
+		if ($is_single_order){
+			_e('Um Boleto Bancário será enviado para o seu endereço de e-mail.', VINDI_IDENTIFIER);
+		} else {
+			_e('Um Boleto Bancário será enviado mensalmente para o seu endereço de e-mail.', VINDI_IDENTIFIER);
+		}
+		?>
 	</div>
 </fieldset>
