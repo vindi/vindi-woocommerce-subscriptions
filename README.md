@@ -46,22 +46,25 @@ A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil.
 
 >Para mais detalhes sobre a instalação de plugins no WordPress leia o tutorial [WordPress - Gerenciando Plugins](http://codex.wordpress.org/pt-br:Gerenciando_Plugins#Instalando_Plugins).
 
-## Dúvidas
+# Dúvidas
 Caso necessite de informações sobre a plataforma ou API por favor siga através do canal [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
-## Contribuindo
+# Notas fiscais
+Para emissão de notas fiscais, o mais indicado é a utilização de um plugin para emissão em seu Word Press.
+
+# Contribuindo
 Por favor, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Caso tenha alguma sugestão ou bug para reportar por favor nos comunique através das [issues](./issues).
 
-## Changelog
+# Changelog
 Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md).
 
-## Créditos
+# Créditos
 - [Vindi](https://github.com/vindi)
 - [Todos os Contribuidores](https://github.com/vindi/vindi-woocommerce-subscriptions/contributors)
 
-## Licença
+# Licença
 GNU GPLv3. Por favor, veja o [Arquivo de Licença](LICENSE) para mais informações.
 
 [ico-version]: https://img.shields.io/wordpress/plugin/v/vindi-woocommerce-subscriptions.svg?style=flat-square

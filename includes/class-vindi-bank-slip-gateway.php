@@ -62,8 +62,9 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
             return;
         }
 
+        $is_single_order = $this->is_single_order();
         $is_trial = $this->container->api->is_merchant_status_trial();
-        $this->container->get_template('bankslip-checkout.html.php', compact('is_trial'));
+        $this->container->get_template('bankslip-checkout.html.php', compact('is_trial', 'is_single_order'));
     }
 
     /**

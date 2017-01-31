@@ -1,3 +1,7 @@
+# 1.2.2 - 24/01/2017
+- Ajuste na mensagem de envio de boleto bancário.
+- Adicionado os arquivos .PO e .MO para facilitar traduções.
+
 # 1.2.1 - 10/10/2016
 - Ajustes no problema de comunicação com a API da Vindi.
 - Alterando o tempo de cache dos métodos de pagamento para 1 hora.
