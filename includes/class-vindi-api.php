@@ -34,7 +34,7 @@ class Vindi_API
     /**
      * @var string API base path.
      */
-    const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
+    const BASE_PATH = 'https://staging-recurrent.vindi.com.br/api/v1/';
 
     /**
      * @param string $key

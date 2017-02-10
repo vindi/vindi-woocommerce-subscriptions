@@ -116,9 +116,11 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
             add_filter('woocommerce_subscription_period_interval_strings',
                 function ($intervals) {
-                    return array_merge($intervals, [
-                        7, 8, 9, 10, 11, 12, 13
-                    ]);
+                    foreach ([7, 8, 9, 10, 11, 12, 13] as $new_interval) {
+                        array_push($intervals, $new_interval);
+                    }
+
+                    return $intervals;
                 }
             );
 
