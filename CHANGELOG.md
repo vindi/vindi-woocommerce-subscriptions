@@ -1,6 +1,6 @@
-# 1.2.2 - 24/01/2017
+# 1.2.2 - 20/02/2017
 - Ajuste na mensagem de envio de boleto bancário.
-- Adicionado os arquivos .PO e .MO para facilitar traduções.
+- Ajustes na exibição de periodicidade para assinaturas com cobranças diferentes de mensais.
 
 # 1.2.1 - 10/10/2016
 - Ajustes no problema de comunicação com a API da Vindi.
