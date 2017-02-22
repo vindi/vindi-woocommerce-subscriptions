@@ -179,7 +179,8 @@ class Vindi_Payment
             'card_expiration'       => $_POST['vindi_cc_monthexpiry'] . '/' . $_POST['vindi_cc_yearexpiry'],
             'card_number'           => $_POST['vindi_cc_number'],
             'card_cvv'              => $_POST['vindi_cc_cvc'],
-            'payment_method_code'   => 'credit_card'
+            'payment_method_code'   => 'credit_card',
+            'payment_company_code'  => $_POST['vindi_cc_paymentcompany'],
         );
     }
 
