@@ -174,7 +174,15 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
 
         $is_trial = $this->container->api->is_merchant_status_trial();
 
-        $this->container->get_template('creditcard-checkout.html.php', compact('months', 'years', 'installments', 'is_trial', 'user_payment_profile'));
+        $this->container->get_template('creditcard-checkout.html.php', compact(
+            'months',
+            'years',
+            'installments',
+            'is_trial',
+            'user_payment_profile',
+            'payment_methods'
+        ));
+
     }
 
     protected function get_order_max_installments($order_total)

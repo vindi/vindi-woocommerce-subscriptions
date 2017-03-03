@@ -46,12 +46,9 @@
                 <span class="required">*</span>
             </label>
             <select name="vindi_cc_paymentcompany" class="input-text" style="width: 100%">
-                <?php $payment_method = get_transient('vindi_payment_methods');
-                    foreach ($payment_method as $companies => $name):
-                        $payment_companies = $name;
-                        foreach($payment_companies as $company): ?>
+                <?php foreach ($payment_methods['credit_card'] as $company): ?>
                         <option value="<?php echo $company['code']; ?>"><?php echo $company['name']; ?></option>
-                <?php endforeach; endforeach; ?>
+                <?php endforeach; ?>
             </select>
         </p>
 
