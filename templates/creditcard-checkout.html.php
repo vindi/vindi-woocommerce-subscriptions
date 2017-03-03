@@ -32,12 +32,24 @@
     <?php endif; ?>
 
     <div class='vindi-new-cc-data'>
-        <p class="form-row form-row-first">
+        <p class="form-row form-row-wide">
             <label for="vindi_cc_fullname">
                 <?php _e("Nome Impresso no Cartão", VINDI_IDENTIFIER); ?>
                 <span class="required">*</span>
             </label>
             <input type="text" class="input-text" name="vindi_cc_fullname"/>
+        </p>
+        
+        <p class="form-row form-row-first">
+            <label for="vindi_cc_paymentcompany">
+                <?php _e("Bandeira do cartão", VINDI_IDENTIFIER); ?>
+                <span class="required">*</span>
+            </label>
+            <select name="vindi_cc_paymentcompany" class="input-text" style="width: 100%">
+                <?php foreach ($payment_methods['credit_card'] as $company): ?>
+                        <option value="<?php echo $company['code']; ?>"><?php echo $company['name']; ?></option>
+                <?php endforeach; ?>
+            </select>
         </p>
 
         <p class="form-row form-row-last">

@@ -174,7 +174,15 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
 
         $is_trial = $this->container->api->is_merchant_status_trial();
 
-        $this->container->get_template('creditcard-checkout.html.php', compact('months', 'years', 'installments', 'is_trial', 'user_payment_profile'));
+        $this->container->get_template('creditcard-checkout.html.php', compact(
+            'months',
+            'years',
+            'installments',
+            'is_trial',
+            'user_payment_profile',
+            'payment_methods'
+        ));
+
     }
 
     protected function get_order_max_installments($order_total)
@@ -208,11 +216,12 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         }
 
         $fields = array(
-            'vindi_cc_fullname'    => __('Nome do Portador do Cartão de Crédito requerido.', VINDI_IDENTIFIER),
-            'vindi_cc_number'      => __('Número do Cartão de Crédito requerido.', VINDI_IDENTIFIER),
-            'vindi_cc_cvc'         => __('Código de Segurança do Cartão requerido.', VINDI_IDENTIFIER),
-            'vindi_cc_monthexpiry' => __('Mês de Validade do Cartão requerido.', VINDI_IDENTIFIER),
-            'vindi_cc_yearexpiry'  => __('Ano de Validade do Cartão requerido.', VINDI_IDENTIFIER),
+            'vindi_cc_fullname'         => __('Nome do Portador do Cartão de Crédito requerido.', VINDI_IDENTIFIER),
+            'vindi_cc_paymentcompany'   => __('Bandeira do Cartão de Crédito requerido.', VINDI_IDENTIFIER),
+            'vindi_cc_number'           => __('Número do Cartão de Crédito requerido.', VINDI_IDENTIFIER),
+            'vindi_cc_cvc'              => __('Código de Segurança do Cartão requerido.', VINDI_IDENTIFIER),
+            'vindi_cc_monthexpiry'      => __('Mês de Validade do Cartão requerido.', VINDI_IDENTIFIER),
+            'vindi_cc_yearexpiry'       => __('Ano de Validade do Cartão requerido.', VINDI_IDENTIFIER),
         );
 
         foreach ( $fields as $field => $message ) {
