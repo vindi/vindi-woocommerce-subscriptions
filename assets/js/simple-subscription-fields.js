@@ -12,7 +12,7 @@
         
         $(".wc_input_subscription_period_interval").val(plan.interval_count);
         $(".wc_input_subscription_period").val(plan.interval.toString().replace(/s/g, ''));
-        $(".wc_input_subscription_length").val(plan.billing_cycles);
+        $(".wc_input_subscription_length").val(plan.billing_cycles || 0);
       });
     });
   }(jQuery)
