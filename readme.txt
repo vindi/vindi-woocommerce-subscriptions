@@ -61,6 +61,10 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+= 1.2.3 - 06/03/2017 =
+- Adicionado select no checkout para atender vendas com a bandeira Elo.
+- Ajuste na exibição de periodicidade da assinatura.
+
 = 1.2.2 - 24/01/2017 =
 - Ajuste na mensagem de envio de boleto bancário.
 - Adicionado os arquivos .PO e .MO para facilitar traduções.
