@@ -84,17 +84,17 @@ class Vindi_Payment
     public function get_customer()
     {
         $currentUser = wp_get_current_user();
-        $email       = $this->order->billing_email;
+        $email       = $this->order->get_billing_email();
 
         $address = array(
-            'street'             => $this->order->billing_address_1,
-            'number'             => $this->order->billing_number,
-            'additional_details' => $this->order->billing_address_2,
-            'zipcode'            => $this->order->billing_postcode,
-            'neighborhood'       => $this->order->billing_neighborhood,
-            'city'               => $this->order->billing_city,
-            'state'              => $this->order->billing_state,
-            'country'            => $this->order->billing_country,
+            'street'             => $this->order->get_billing_address_1(),
+            'number'             => $this->order->get_meta( '_billing_number' ),
+            'additional_details' => $this->order->get_billing_address_2(),
+            'zipcode'            => $this->order->get_billing_postcode(),
+            'neighborhood'       => $this->order->get_meta( '_neighborhood' ),
+            'city'               => $this->order->get_billing_city(),
+            'state'              => $this->order->get_billing_state(),
+            'country'            => $this->order->get_billing_country(),
         );
 
         $user_id = $currentUser->ID;
@@ -106,26 +106,26 @@ class Vindi_Payment
 
         $metadata = array();
 
-        if ('2' === $this->order->billing_persontype) {
+        if ('2' === $this->order->get_meta( '_billing_persontype' )) {
             // Pessoa jurídica
-            $name        = $this->order->billing_company;
-            $cpf_or_cnpj = $this->order->billing_cnpj;
-            $notes       = sprintf('Nome: %s %s', $this->order->billing_first_name, $this->order->billing_last_name);
+            $name        = $this->order->get_billing_company();
+            $cpf_or_cnpj = $this->order->get_meta( '_billing_cnpj' );
+            $notes       = sprintf('Nome: %s %s', $this->order->get_billing_first_name(), $this->order->get_billing_last_name());
 
             if ($this->container->send_nfe_information())
-                $metadata['inscricao_estadual'] = $this->order->billing_ie;
+                $metadata['inscricao_estadual'] = $this->order->get_meta( '_billing_ie' );
 
         } else {
             // Pessoa física
-            $name        = $this->order->billing_first_name . ' ' . $this->order->billing_last_name;
-            $cpf_or_cnpj = $this->order->billing_cpf;
+            $name        = $this->order->get_billing_first_name() . ' ' . $this->order->get_billing_last_name();
+            $cpf_or_cnpj = $this->order->get_meta( '_billing_cpf' );
             $notes       = '';
 
             if ($this->container->send_nfe_information())
-                $metadata['carteira_de_identidade'] = $this->order->billing_rg;
+                $metadata['carteira_de_identidade'] = $this->order->get_meta( '_billing_rg' );
         }
 
-        $phone_number = preg_replace('/\D+/', '', '55' . $this->order->billing_phone);
+        $phone_number = preg_replace('/\D+/', '', '55' . $this->order->get_billing_phone());
 
         $customer = array(
             'name'          => $name,
@@ -312,17 +312,13 @@ class Vindi_Payment
     }
 
     /**
-     * @param array $product
+     * @param array $item
      **/
-    private function return_cycle_from_product_type(array $product)
+    private function return_cycle_from_product_type($item)
     {
-        if(!isset($product['item_meta']))
-            return null;
-
-        $product_vindi_subscription_plan_meta = get_post_meta($product['item_meta']['_product_id'][0], 'vindi_subscription_plan');
-
-        if(empty($product_vindi_subscription_plan_meta))
+        if(!$this->is_subscription_type($item->get_product())) {
             return 1;
+        }
 
         return null;
     }
@@ -669,7 +665,7 @@ class Vindi_Payment
         return (boolean) preg_match('/variation/', $product->get_type());
     }
 
-    protected function is_subscription_type(WC_Product $product)
+    protected function is_subscription_type($product)
     {
         return (boolean) preg_match('/subscription/', $product->get_type());
     }

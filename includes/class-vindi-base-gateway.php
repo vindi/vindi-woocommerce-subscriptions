@@ -46,8 +46,8 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
         if (isset($_GET['order_id'])) {
             $order = new WC_Order($_GET['order_id']);
             return $order->billing_country;
-        } elseif ($this->container->woocommerce->customer->get_country()) {
-            return $this->container->woocommerce->customer->get_country();
+        } elseif ($this->container->woocommerce->customer->get_billing_country()) {
+            return $this->container->woocommerce->customer->get_billing_country();
         }
     }
 
@@ -107,7 +107,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
         $types = [];
 
         foreach ($this->container->woocommerce->cart->cart_contents as $item) {
-            $types[] = $item['data']->product_type;
+            $types[] = $item['data']->get_type();
         }
 
         return !(boolean) preg_grep('/subscription/', $types);
