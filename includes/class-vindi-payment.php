@@ -91,7 +91,7 @@ class Vindi_Payment
             'number'             => $this->order->get_meta( '_billing_number' ),
             'additional_details' => $this->order->get_billing_address_2(),
             'zipcode'            => $this->order->get_billing_postcode(),
-            'neighborhood'       => $this->order->get_meta( '_neighborhood' ),
+            'neighborhood'       => $this->order->get_meta( '_billing_neighborhood' ),
             'city'               => $this->order->get_billing_city(),
             'state'              => $this->order->get_billing_state(),
             'country'            => $this->order->get_billing_country(),
@@ -665,7 +665,7 @@ class Vindi_Payment
         return (boolean) preg_match('/variation/', $product->get_type());
     }
 
-    protected function is_subscription_type($product)
+    protected function is_subscription_type(WC_Product $product)
     {
         return (boolean) preg_match('/subscription/', $product->get_type());
     }

@@ -1,3 +1,6 @@
+# 3.0.0 - 16/05/2017
+- Ajustes de compatibilidade com o WooCommerce 3.0 ou superior.
+
 # 1.2.2 - 06/03/2017
 - Ajuste na mensagem de envio de boleto bancário.
 - Ajustes na exibição de periodicidade para assinaturas com cobranças diferentes de mensais.
