@@ -653,7 +653,7 @@ class Vindi_Payment
 
         foreach($order_item['item_meta'] as $key => $meta) {
             if(in_array($key, $keys)) {
-                $names[] = end($meta);
+                $names[] = $meta;
             }
         }
 
