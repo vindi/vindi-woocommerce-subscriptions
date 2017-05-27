@@ -84,17 +84,17 @@ class Vindi_Payment
     public function get_customer()
     {
         $currentUser = wp_get_current_user();
-        $email       = $this->order->billing_email;
+        $email       = $this->order->get_billing_email();
 
         $address = array(
-            'street'             => $this->order->billing_address_1,
-            'number'             => $this->order->billing_number,
-            'additional_details' => $this->order->billing_address_2,
-            'zipcode'            => $this->order->billing_postcode,
-            'neighborhood'       => $this->order->billing_neighborhood,
-            'city'               => $this->order->billing_city,
-            'state'              => $this->order->billing_state,
-            'country'            => $this->order->billing_country,
+            'street'             => $this->order->get_billing_address_1(),
+            'number'             => $this->order->get_meta( '_billing_number' ),
+            'additional_details' => $this->order->get_billing_address_2(),
+            'zipcode'            => $this->order->get_billing_postcode(),
+            'neighborhood'       => $this->order->get_meta( '_billing_neighborhood' ),
+            'city'               => $this->order->get_billing_city(),
+            'state'              => $this->order->get_billing_state(),
+            'country'            => $this->order->get_billing_country(),
         );
 
         $user_id = $currentUser->ID;
@@ -106,26 +106,26 @@ class Vindi_Payment
 
         $metadata = array();
 
-        if ('2' === $this->order->billing_persontype) {
+        if ('2' === $this->order->get_meta( '_billing_persontype' )) {
             // Pessoa jurídica
-            $name        = $this->order->billing_company;
-            $cpf_or_cnpj = $this->order->billing_cnpj;
-            $notes       = sprintf('Nome: %s %s', $this->order->billing_first_name, $this->order->billing_last_name);
+            $name        = $this->order->get_billing_company();
+            $cpf_or_cnpj = $this->order->get_meta( '_billing_cnpj' );
+            $notes       = sprintf('Nome: %s %s', $this->order->get_billing_first_name(), $this->order->get_billing_last_name());
 
             if ($this->container->send_nfe_information())
-                $metadata['inscricao_estadual'] = $this->order->billing_ie;
+                $metadata['inscricao_estadual'] = $this->order->get_meta( '_billing_ie' );
 
         } else {
             // Pessoa física
-            $name        = $this->order->billing_first_name . ' ' . $this->order->billing_last_name;
-            $cpf_or_cnpj = $this->order->billing_cpf;
+            $name        = $this->order->get_billing_first_name() . ' ' . $this->order->get_billing_last_name();
+            $cpf_or_cnpj = $this->order->get_meta( '_billing_cpf' );
             $notes       = '';
 
             if ($this->container->send_nfe_information())
-                $metadata['carteira_de_identidade'] = $this->order->billing_rg;
+                $metadata['carteira_de_identidade'] = $this->order->get_meta( '_billing_rg' );
         }
 
-        $phone_number = preg_replace('/\D+/', '', '55' . $this->order->billing_phone);
+        $phone_number = preg_replace('/\D+/', '', '55' . $this->order->get_billing_phone());
 
         $customer = array(
             'name'          => $name,
@@ -179,7 +179,7 @@ class Vindi_Payment
             'card_expiration'       => $_POST['vindi_cc_monthexpiry'] . '/' . $_POST['vindi_cc_yearexpiry'],
             'card_number'           => $_POST['vindi_cc_number'],
             'card_cvv'              => $_POST['vindi_cc_cvc'],
-            'payment_method_code'   => 'credit_card',
+            'payment_method_code'   => $this->payment_method_code(),
             'payment_company_code'  => $_POST['vindi_cc_paymentcompany'],
         );
     }
@@ -312,17 +312,16 @@ class Vindi_Payment
     }
 
     /**
-     * @param array $product
+     * @param array $item
      **/
-    private function return_cycle_from_product_type(array $product)
+  private function return_cycle_from_product_type($item)
     {
-        if(!isset($product['item_meta']))
+        if ($item['type'] == 'shipping')
             return null;
-
-        $product_vindi_subscription_plan_meta = get_post_meta($product['item_meta']['_product_id'][0], 'vindi_subscription_plan');
-
-        if(empty($product_vindi_subscription_plan_meta))
+        
+        if(!$this->is_subscription_type($item->get_product())) {
             return 1;
+        }
 
         return null;
     }
@@ -427,13 +426,14 @@ class Vindi_Payment
 
     protected function build_product_items_for_subscription($order_item)
     {
-        $product_items  = [];
         if(empty($order_item)) {
-            return $product_items;
+            return [];
         }
+
 
         $total_discount = $this->order->get_total_discount();
         $coupons_cycles  = $this->container->cycles_to_discount();
+       
 
         if(empty($coupons_cycles)) {
             $discount_cycles = $coupons_cycles;
@@ -447,40 +447,31 @@ class Vindi_Payment
                 $discount_cycles = min($plan_cycles, $coupons_cycles);
             }
         }
-
-        if(!empty($total_discount) && $order_item['type'] == 'product') {
+        
+        $product_item =  array(
+            'product_id'      => $order_item['vindi_id'],
+            'quantity'        => $order_item['qty'],
+            'cycles'          => $this->return_cycle_from_product_type($order_item),
+            'pricing_schema'  => array(
+                'price'       => $order_item['price'],
+                'schema_type' => 'per_unit'
+            )
+        );
+        
+        if(!empty($total_discount) && $order_item['type'] == 'line_item') {
             $order_subtotal      = $this->order->get_subtotal();
             $discount_percentage = ($total_discount / $order_subtotal) * 100;
+            $product_item['discounts']  = array(
+                array(
+                    'discount_type' => 'percentage',
+                    'percentage'    => $discount_percentage,
+                    'cycles'        => $discount_cycles
+                )
+            );
 
-            $product_items[] = array(
-                'product_id'      => $order_item['vindi_id'],
-                'quantity'        => $order_item['qty'],
-                'cycles'          => $this->return_cycle_from_product_type($order_item),
-                'pricing_schema'  => array(
-                    'price'       => $order_item['price'],
-                    'schema_type' => 'per_unit'
-                ),
-                'discounts' => array(
-                    array(
-                        'discount_type' => 'percentage',
-                        'percentage'    => $discount_percentage,
-                        'cycles'        => $discount_cycles
-                    )
-                )
-            );
-        } else {
-            $product_items[] = array(
-                'product_id' => $order_item['vindi_id'],
-                'quantity'   => $order_item['qty'],
-                'cycles'     => $this->return_cycle_from_product_type($order_item),
-                'pricing_schema' => array(
-                    'price'         => $order_item['price'],
-                    'schema_type'   => 'per_unit'
-                )
-            );
         }
-
-        return $product_items;
+        
+        return [$product_item];
     }
     /**
      * @param $customer_id
@@ -657,7 +648,7 @@ class Vindi_Payment
 
         foreach($order_item['item_meta'] as $key => $meta) {
             if(in_array($key, $keys)) {
-                $names[] = end($meta);
+                $names[] = $meta;
             }
         }
 

@@ -24,8 +24,10 @@ class Vindi_Webhook_Handler
         $raw_body = file_get_contents('php://input');
         $body     = json_decode($raw_body);
 
-        if(!$this->validate_access_token($token))
+        if(!$this->validate_access_token($token)) {
+            http_response_code(403);
             die('invalid access token');
+        }
 
         $this->container->logger->log('Novo Webhook chamado: ' . $raw_body);
 
@@ -96,6 +98,8 @@ class Vindi_Webhook_Handler
         $order_id = $subscription->get_last_order();
         $order    = $this->find_order_by_id($order_id);
         add_post_meta($order->id, 'vindi_wc_cycle', $cycle);
+        add_post_meta($order->id, 'vindi_wc_bill_id', $data->bill->id);
+        add_post_meta($order->id, 'vindi_wc_subscription_id', $data->bill->subscription->id);
         $this->container->logger->log('Novo Período criado: Pedido #'.$order->id);
     }
 
@@ -112,11 +116,6 @@ class Vindi_Webhook_Handler
             $vindi_subscription_id = $data->bill->subscription->id;
             $cycle                 = $data->bill->period->cycle;
             $order                 = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
-
-            if(!$order)
-                throw new Exception('Não existe o ciclo $cycle para a assinatura ' . $data->period->subscription->id . ' pedido ' . $wc_subscription_id, 2);
-
-            add_post_meta($order->id, 'vindi_wc_bill_id', $data->bill->id);
         }
     }
 
