@@ -2,9 +2,9 @@
 Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar
 Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
-Requires at least: 4.0
-Tested up to: 4.4
-Stable Tag: 1.2.2
+Requires at least: 4.4
+Tested up to: 4.7
+Stable Tag: 3.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,6 +61,11 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+= 3.0.0 - 16/05/2017 =
+- Ajustes de compatibilidade com o WooCommerce 3.0 ou superior.
+- Melhorias na renovação das assinaturas.
+- Ajustes de compatibilidade para frete.
+
 = 1.2.2 - 06/03/2017 =
 - Ajuste na mensagem de envio de boleto bancário.
 - Adicionado os arquivos .PO e .MO para facilitar traduções.
