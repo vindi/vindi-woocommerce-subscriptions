@@ -13,8 +13,6 @@ O **Vindi WooCommerce Subscriptions** oferece uma solução completa para pagame
 # Observações
 - Ainda não são suportados Upgrades ou Downgrades de assinaturas.
 
->Veja também o nosso plugin [Vindi WooCommerce](https://wordpress.org/plugins/vindi-assinaturas-e-cobranca-recorrente/) que oferece uma gestão mais simples e leia [nosso artigo](http://atendimento.vindi.com.br/hc/pt-br/articles/217612217) com um comparativo de recursos entre os dois plugins.
-
 A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil. Com centenas de clientes usando soluções como pagamento online, soluções de notas fiscais integradas, emissão de boletos por email e PDF, integrações com ERPs e diversos relatórios, a Vindi possibilita um sistema online completo para negócios de venda recorrente. Além disso, empresas podem usar o gateway de pagamento integrado ao billing recorrente ou para faturas avulsas.
 
 # Requisitos
