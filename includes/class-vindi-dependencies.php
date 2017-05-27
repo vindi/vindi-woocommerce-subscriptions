@@ -1,5 +1,9 @@
 <?php
 
+if ( ! function_exists( 'get_plugins' ) ) {
+  require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+}
+
 class Vindi_Dependencies
 {
     /**
@@ -28,7 +32,8 @@ class Vindi_Dependencies
 
         $required_plugins = [
             'woocommerce/woocommerce.php' => [
-                'WooCommerce' => 'https://wordpress.org/extend/plugins/woocommerce/'
+                'WooCommerce' => 'https://wordpress.org/extend/plugins/woocommerce/',
+                'version'     => ['>=', '2.2']
             ],
             'woocommerce-subscriptions/woocommerce-subscriptions.php' => [
                 'WooCommerce Subscriptions' => 'http://www.woothemes.com/products/woocommerce-subscriptions/'
@@ -62,14 +67,25 @@ class Vindi_Dependencies
     **/
     public static function plugins_are_activated($plugins)
     {
-        $valid = true;
         foreach($plugins as $path => $plugin) {
             if(!in_array($path, self::$active_plugins ) || array_key_exists($path, self::$active_plugins)) {
                 add_action('admin_notices', self::missing_notice(key($plugin), current($plugin)));
-                $valid = false;
+                return false;
+            }
+
+            if(empty($plugin['version'])) {
+              return true;
+            }
+
+            $plugin_data   = get_plugin_data(ABSPATH . "wp-content/plugins/" . $path);
+            $version_match = $plugin['version'];
+
+            if(!version_compare( $plugin_data['Version'], $version_match[1], $version_match[0] )) {
+                add_action('admin_notices', self::missing_notice(key($plugin), current($plugin)));
+                return false;
             }
         }
 
-        return $valid;
+        return true;
     }
 }
