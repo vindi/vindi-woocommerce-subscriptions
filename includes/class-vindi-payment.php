@@ -179,7 +179,7 @@ class Vindi_Payment
             'card_expiration'       => $_POST['vindi_cc_monthexpiry'] . '/' . $_POST['vindi_cc_yearexpiry'],
             'card_number'           => $_POST['vindi_cc_number'],
             'card_cvv'              => $_POST['vindi_cc_cvc'],
-            'payment_method_code'   => 'credit_card',
+            'payment_method_code'   => $this->payment_method_code(),
             'payment_company_code'  => $_POST['vindi_cc_paymentcompany'],
         );
     }
@@ -314,8 +314,11 @@ class Vindi_Payment
     /**
      * @param array $item
      **/
-    private function return_cycle_from_product_type($item)
+  private function return_cycle_from_product_type($item)
     {
+        if ($item['type'] == 'shipping')
+            return null;
+        
         if(!$this->is_subscription_type($item->get_product())) {
             return 1;
         }
@@ -423,13 +426,14 @@ class Vindi_Payment
 
     protected function build_product_items_for_subscription($order_item)
     {
-        $product_items  = [];
         if(empty($order_item)) {
-            return $product_items;
+            return [];
         }
+
 
         $total_discount = $this->order->get_total_discount();
         $coupons_cycles  = $this->container->cycles_to_discount();
+       
 
         if(empty($coupons_cycles)) {
             $discount_cycles = $coupons_cycles;
@@ -443,40 +447,31 @@ class Vindi_Payment
                 $discount_cycles = min($plan_cycles, $coupons_cycles);
             }
         }
-
-        if(!empty($total_discount) && $order_item['type'] == 'product') {
+        
+        $product_item =  array(
+            'product_id'      => $order_item['vindi_id'],
+            'quantity'        => $order_item['qty'],
+            'cycles'          => $this->return_cycle_from_product_type($order_item),
+            'pricing_schema'  => array(
+                'price'       => $order_item['price'],
+                'schema_type' => 'per_unit'
+            )
+        );
+        
+        if(!empty($total_discount) && $order_item['type'] == 'line_item') {
             $order_subtotal      = $this->order->get_subtotal();
             $discount_percentage = ($total_discount / $order_subtotal) * 100;
+            $product_item['discounts']  = array(
+                array(
+                    'discount_type' => 'percentage',
+                    'percentage'    => $discount_percentage,
+                    'cycles'        => $discount_cycles
+                )
+            );
 
-            $product_items[] = array(
-                'product_id'      => $order_item['vindi_id'],
-                'quantity'        => $order_item['qty'],
-                'cycles'          => $this->return_cycle_from_product_type($order_item),
-                'pricing_schema'  => array(
-                    'price'       => $order_item['price'],
-                    'schema_type' => 'per_unit'
-                ),
-                'discounts' => array(
-                    array(
-                        'discount_type' => 'percentage',
-                        'percentage'    => $discount_percentage,
-                        'cycles'        => $discount_cycles
-                    )
-                )
-            );
-        } else {
-            $product_items[] = array(
-                'product_id' => $order_item['vindi_id'],
-                'quantity'   => $order_item['qty'],
-                'cycles'     => $this->return_cycle_from_product_type($order_item),
-                'pricing_schema' => array(
-                    'price'         => $order_item['price'],
-                    'schema_type'   => 'per_unit'
-                )
-            );
         }
-
-        return $product_items;
+        
+        return [$product_item];
     }
     /**
      * @param $customer_id
