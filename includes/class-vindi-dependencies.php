@@ -33,10 +33,11 @@ class Vindi_Dependencies
         $required_plugins = [
             'woocommerce/woocommerce.php' => [
                 'WooCommerce' => 'https://wordpress.org/extend/plugins/woocommerce/',
-                'version'     => ['>=', '2.2']
+                'version'     => ['>=', '3.0']
             ],
             'woocommerce-subscriptions/woocommerce-subscriptions.php' => [
-                'WooCommerce Subscriptions' => 'http://www.woothemes.com/products/woocommerce-subscriptions/'
+                'WooCommerce Subscriptions' => 'http://www.woothemes.com/products/woocommerce-subscriptions/',
+                'version'     => ['>=', '2.2']
             ],
             'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php' => [
                 'WooCommerce Extra Checkout Fields for Brazil' => 'https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/'
@@ -55,9 +56,9 @@ class Vindi_Dependencies
     *
     * @return  string
     */
-    public static function missing_notice($name, $link)
+    public static function missing_notice($name, $version, $link)
     {
-        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Subscriptions depende da última versão do %s para funcionar!', VINDI_IDENTIFIER), "<a href=\"{$link}\">" . __($name, VINDI_IDENTIFIER) . '</a>') . '</p></div>';
+        echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Subscriptions depende da versão %s do %s para funcionar!', VINDI_IDENTIFIER), $version, "<a href=\"{$link}\">" . __($name, VINDI_IDENTIFIER) . '</a>') . '</p></div>';
     }
 
     /**
@@ -68,8 +69,11 @@ class Vindi_Dependencies
     public static function plugins_are_activated($plugins)
     {
         foreach($plugins as $path => $plugin) {
+            $plugin_data   = get_plugin_data(ABSPATH . "wp-content/plugins/" . $path);
+            $version_match = $plugin['version'];
+
             if(!in_array($path, self::$active_plugins ) || array_key_exists($path, self::$active_plugins)) {
-                add_action('admin_notices', self::missing_notice(key($plugin), current($plugin)));
+                add_action('admin_notices', self::missing_notice(key($plugin), $version_match[1], current($plugin)));
                 return false;
             }
 
@@ -77,11 +81,8 @@ class Vindi_Dependencies
               return true;
             }
 
-            $plugin_data   = get_plugin_data(ABSPATH . "wp-content/plugins/" . $path);
-            $version_match = $plugin['version'];
-
             if(!version_compare( $plugin_data['Version'], $version_match[1], $version_match[0] )) {
-                add_action('admin_notices', self::missing_notice(key($plugin), current($plugin)));
+                add_action('admin_notices', self::missing_notice(key($plugin), $version_match[1], current($plugin)));
                 return false;
             }
         }
