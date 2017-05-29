@@ -412,12 +412,29 @@ class Vindi_Payment
 
     protected function build_product_items_for_bill($order_item)
     {
-        $product_items  = [];
+        $product_items             = [];
+        $bank_slip_discount        = 0;
+        $payment_discount_settings = get_option( 'woocommerce_payment_discounts' );
 
-        for($i=0 ; $i < $order_item['qty'] ; $i++) {
+        if ( ! isset( $order_item['qty'] ) ) {
+            return $product_items;
+        }
+
+        if ( $this->payment_method_code() == 'bank_slip' && class_exists( 'WC_Payment_Discounts' ) ) {
+            if ( isset( $payment_discount_settings['vindi-bank-slip'] ) ) {
+                $discount           = $payment_discount_settings['vindi-bank-slip']['amount'];
+                $bank_slip_discount = $this->_calculate_discount(
+                    $discount,
+                    $order_item['price'],
+                    $order_item['qty']
+                );
+            }
+        }
+
+        for( $i = 0 ; $i < $order_item['qty'] ; $i++ ) {
             $product_items[] = array(
                 'product_id' => $order_item['vindi_id'],
-                'amount'     => $order_item['price'],
+                'amount'     => $order_item['price'] - $bank_slip_discount,
             );
         }
 
@@ -663,5 +680,24 @@ class Vindi_Payment
     protected function is_subscription_type(WC_Product $product)
     {
         return (boolean) preg_match('/subscription/', $product->get_type());
+    }
+
+    /**
+     * Calcule the discount amount.
+     *
+     * @param  string|int|float $amount Discount value.
+     * @param  float            $price Item price.
+     * @param  int              $qty Items quantity.
+     *
+     * @return float            Discount amount.
+     */
+    private function _calculate_discount( $amount, $price, $qty = 1 )
+    {
+        if ( strstr( $amount, '%' ) ) {
+            $sanitized = str_replace( '%', '', $amount );
+            $amount    = ( $price / 100 ) * ( $sanitized / $qty );
+        }
+
+        return $amount;
     }
 }
