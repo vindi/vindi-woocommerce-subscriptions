@@ -40,7 +40,8 @@ class Vindi_Dependencies
                 'version'     => ['>=', '2.2']
             ],
             'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php' => [
-                'WooCommerce Extra Checkout Fields for Brazil' => 'https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/'
+                'WooCommerce Extra Checkout Fields for Brazil' => 'https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/',
+                'version'     => ['>=', '3.5']
             ]
         ];
 
