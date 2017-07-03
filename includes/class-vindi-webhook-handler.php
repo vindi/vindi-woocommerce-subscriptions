@@ -185,6 +185,33 @@ class Vindi_Webhook_Handler
             throw new Exception('Erro ao trocar status da fatura para "failed" pois a fatura #' . $data->charge->bill->id . ' não está mais pendente!');
         }
     }
+	
+    /**
+     * Process charge_canceled event from webhook
+     * @param $data array
+     **/
+    private function charge_canceled($data)
+    {
+        $order = $this->find_order_by_bill_id($data->charge->bill->id);
+
+        $order->update_status('cancelled', 'Pagamento cancelado!');
+
+    }
+	
+    /**
+     * Process charge_refunded event from webhook
+     * @param $data array
+     **/
+    private function charge_refunded($data)
+    {
+        $order = $this->find_order_by_bill_id($data->charge->bill->id);
+
+        if($order->get_status() == 'processing'){
+            $order->update_status('refunded', 'Pagamento reembolsado!');
+        }else{
+            throw new Exception('Erro ao trocar status da fatura para reembolsado pois a fatura #' . $data->charge->bill->id . ' ainda está pendente!');
+        }
+    }
 
     /**
      * Process subscription_canceled event from webhook
