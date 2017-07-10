@@ -414,20 +414,19 @@ class Vindi_Payment
     {
         $product_items  = [];
 
-        if(empty($order_item)){
+        if(!empty($order_item)){
+            $product_items[] = array(
+                'product_id'        => $order_item['vindi_id'],
+                'quantity'          => $order_item['qty'],
+                'pricing_schema'    => [
+                    'price'            => $order_item['price'],
+                    'schema_type'       => 'per_unit'
+                ]
+            );
             return $product_items;
         } else {
-        $product_items[] = array(
-            'product_id'        => $order_item['vindi_id'],
-            'quantity'          => $order_item['qty'],
-            'pricing_schema'    => [
-                'price'            => $order_item['price'],
-                'schema_type'       => 'per_unit'
-            ]
-            );
+            return $product_items;
         }
-
-        return $product_items;
     }
 
     protected function build_product_items_for_subscription($order_item)
