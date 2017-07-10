@@ -414,10 +414,16 @@ class Vindi_Payment
     {
         $product_items  = [];
 
-        for($i=0 ; $i < $order_item['qty'] ; $i++) {
-            $product_items[] = array(
-                'product_id' => $order_item['vindi_id'],
-                'amount'     => $order_item['price'],
+        if(empty($order_item)){
+            return $product_items;
+        } else {
+        $product_items[] = array(
+            'product_id'        => $order_item['vindi_id'],
+            'quantity'          => $order_item['qty'],
+            'pricing_schema'    => [
+                'price'            => $order_item['price'],
+                'schema_type'       => 'per_unit'
+            ]
             );
         }
 
