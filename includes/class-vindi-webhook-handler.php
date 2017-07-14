@@ -81,7 +81,7 @@ class Vindi_Webhook_Handler
     }
 
     /**
-     * Process period_created event from webhook
+     * Process bill_created or bill_paid event from webhook
      * @param $data array
      **/
     private function subscription_renew($data)
@@ -104,12 +104,12 @@ class Vindi_Webhook_Handler
     }
 
     /**
-     * Process bill_paid event from webhook
+     * Process bill_created event from webhook
      * @param $data array
      **/
     private function bill_created($data)
     {
-        if($data->bill->subscription) {
+        if(!empty($data->bill->subscription)) {
             $this->subscription_renew($data);
 
             $wc_subscription_id    = $data->bill->subscription->code;
@@ -128,6 +128,8 @@ class Vindi_Webhook_Handler
         if(empty($data->bill->subscription)) {
             $order = $this->find_order_by_id($data->bill->code);
         } else {
+            $this->subscription_renew($data);
+
             $wc_subscription_id    = $data->bill->subscription->code;
             $vindi_subscription_id = $data->bill->subscription->id;
             $cycle                 = $data->bill->period->cycle;
