@@ -91,7 +91,7 @@ class Vindi_Webhook_Handler
         $vindi_subscription_id = $data->bill->subscription->id;
 
         if($this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
-            throw new Exception('Já existe o ciclo $cycle para a assinatura ' . $vindi_subscription_id . ' pedido ' . $subscription->id);
+            throw new Exception('Já existe o ciclo ' . $cycle . ' para a assinatura ' . $vindi_subscription_id . ' pedido ' . $subscription->id);
         }
 
         WC_Subscriptions_Manager::prepare_renewal($subscription->id);
@@ -110,11 +110,15 @@ class Vindi_Webhook_Handler
     private function bill_created($data)
     {
         if(!empty($data->bill->subscription)) {
-            $this->subscription_renew($data);
 
             $wc_subscription_id    = $data->bill->subscription->code;
             $vindi_subscription_id = $data->bill->subscription->id;
             $cycle                 = $data->bill->period->cycle;
+            
+            if(!$this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
+                $this->subscription_renew($data);
+            }
+            
             $order                 = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
         }
     }
@@ -128,13 +132,16 @@ class Vindi_Webhook_Handler
         if(empty($data->bill->subscription)) {
             $order = $this->find_order_by_id($data->bill->code);
         } else {
-            $this->subscription_renew($data);
-
             $wc_subscription_id    = $data->bill->subscription->code;
             $vindi_subscription_id = $data->bill->subscription->id;
             $cycle                 = $data->bill->period->cycle;
-            $subscription          = $this->find_subscription_by_id($wc_subscription_id);
-            $order                 = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
+            
+            if(!$this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
+                http_response_code(422);
+            }
+            
+            $subscription   = $this->find_subscription_by_id($wc_subscription_id);
+            $order          = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
         }
 
         $new_status = $this->container->get_return_status();
@@ -295,7 +302,7 @@ class Vindi_Webhook_Handler
 
         return wc_get_order($query->post->ID);
 	}
-
+    
     /**
 	 * @param int $subscription_id
 	 * @param int $cycle
