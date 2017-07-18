@@ -110,7 +110,6 @@ class Vindi_Webhook_Handler
     private function bill_created($data)
     {
         if(!empty($data->bill->subscription)) {
-
             $wc_subscription_id    = $data->bill->subscription->code;
             $vindi_subscription_id = $data->bill->subscription->id;
             $cycle                 = $data->bill->period->cycle;
@@ -302,7 +301,7 @@ class Vindi_Webhook_Handler
 
         return wc_get_order($query->post->ID);
 	}
-    
+
     /**
 	 * @param int $subscription_id
 	 * @param int $cycle
