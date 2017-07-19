@@ -81,14 +81,12 @@ class Vindi_Webhook_Handler
     }
 
     /**
-     * Process bill_created or bill_paid event from webhook
+     * Process bill_created event from webhook
      * @param $data array
      **/
-    private function subscription_renew($data)
+    private function subscription_renew($vindi_subscription_id, $wc_subscription_id, $cycle)
     {
-        $cycle                 = $data->bill->period->cycle;
-        $subscription          = $this->find_subscription_by_id($data->bill->subscription->code);
-        $vindi_subscription_id = $data->bill->subscription->id;
+        $subscription          = $this->find_subscription_by_id($wc_subscription_id);
 
         if($this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
             throw new Exception('Já existe o ciclo ' . $cycle . ' para a assinatura ' . $vindi_subscription_id . ' pedido ' . $subscription->id);
@@ -109,16 +107,16 @@ class Vindi_Webhook_Handler
      **/
     private function bill_created($data)
     {
-        if(!empty($data->bill->subscription)) {
-            $wc_subscription_id    = $data->bill->subscription->code;
-            $vindi_subscription_id = $data->bill->subscription->id;
-            $cycle                 = $data->bill->period->cycle;
+        if(empty($data->bill->subscription)) {
+            return;
+        }
+        
+        $wc_subscription_id    = $data->bill->subscription->code;
+        $vindi_subscription_id = $data->bill->subscription->id;
+        $cycle                 = $data->bill->period->cycle;
             
-            if(!$this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
-                $this->subscription_renew($data);
-            }
-            
-            $order                 = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
+        if(!$this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
+            $this->subscription_renew($vindi_subscription_id, $wc_subscription_id, $cycle);
         }
     }
 
