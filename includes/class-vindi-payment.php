@@ -346,8 +346,11 @@ class Vindi_Payment
             $order_items[] = $this->build_discount_item_for_bill();
         }
 
+
         foreach ($order_items as $order_item) {
-            $product_items = array_merge($product_items, $this->$call_build_items($order_item));
+            if($item = $this->$call_build_items($order_item)) {
+                $product_items[] = $item;
+            }
         }
 
         if (empty($product_items)) {
@@ -412,27 +415,24 @@ class Vindi_Payment
 
     protected function build_product_items_for_bill($order_item)
     {
-        $product_items  = [];
-
-        if(!empty($order_item)){
-            $product_items[] = array(
-                'product_id'        => $order_item['vindi_id'],
-                'quantity'          => $order_item['qty'],
-                'pricing_schema'    => [
-                    'price'            => $order_item['price'],
-                    'schema_type'       => 'per_unit'
-                ]
-            );
-            return $product_items;
-        } else {
-            return $product_items;
+        if(empty($order_item)) {
+            return false;
         }
+
+        return [
+            'product_id'        => $order_item['vindi_id'],
+            'quantity'          => $order_item['qty'],
+            'pricing_schema'    => [
+                'price'             => $order_item['price'],
+                'schema_type'       => 'per_unit'
+            ]
+        ];
     }
 
     protected function build_product_items_for_subscription($order_item)
     {
         if(empty($order_item)) {
-            return [];
+            return false;
         }
 
 
@@ -476,7 +476,7 @@ class Vindi_Payment
 
         }
         
-        return [$product_item];
+        return $product_item;
     }
     /**
      * @param $customer_id
