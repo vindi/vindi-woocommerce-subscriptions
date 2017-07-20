@@ -82,13 +82,13 @@ class Vindi_Webhook_Handler
 
     /**
      * Process bill_created event from webhook
-     * @param $data array
+     * @param $renew_infos array
      **/
     private function subscription_renew($renew_infos)
     {
         $subscription          = $this->find_subscription_by_id($renew_infos['wc_subscription_id']);
 
-        if($this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
+        if($this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id'], $renew_infos['cycle'])) {
             throw new Exception('Já existe o ciclo ' . $renew_infos['cycle'] . ' para a assinatura ' . $renew_infos['vindi_subscription_id'] . ' pedido ' . $subscription->id);
         }
 
