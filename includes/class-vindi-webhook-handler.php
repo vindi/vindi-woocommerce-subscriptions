@@ -84,20 +84,20 @@ class Vindi_Webhook_Handler
      * Process bill_created event from webhook
      * @param $data array
      **/
-    private function subscription_renew($vindi_subscription_id, $wc_subscription_id, $cycle)
+    private function subscription_renew($renew_infos)
     {
-        $subscription          = $this->find_subscription_by_id($wc_subscription_id);
+        $subscription          = $this->find_subscription_by_id($renew_infos['wc_subscription_id']);
 
         if($this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
-            throw new Exception('Já existe o ciclo ' . $cycle . ' para a assinatura ' . $vindi_subscription_id . ' pedido ' . $subscription->id);
+            throw new Exception('Já existe o ciclo ' . $renew_infos['cycle'] . ' para a assinatura ' . $renew_infos['vindi_subscription_id'] . ' pedido ' . $subscription->id);
         }
 
         WC_Subscriptions_Manager::prepare_renewal($subscription->id);
         $order_id = $subscription->get_last_order();
         $order    = $this->find_order_by_id($order_id);
-        add_post_meta($order->id, 'vindi_wc_cycle', $cycle);
-        add_post_meta($order->id, 'vindi_wc_bill_id', $data->bill->id);
-        add_post_meta($order->id, 'vindi_wc_subscription_id', $data->bill->subscription->id);
+        add_post_meta($order->id, 'vindi_wc_cycle', $renew_infos['cycle']);
+        add_post_meta($order->id, 'vindi_wc_bill_id', $renew_infos['bill_id']);
+        add_post_meta($order->id, 'vindi_wc_subscription_id', $renew_infos['vindi_subscription_id']);
         $this->container->logger->log('Novo Período criado: Pedido #'.$order->id);
     }
 
@@ -111,12 +111,15 @@ class Vindi_Webhook_Handler
             return;
         }
         
-        $wc_subscription_id    = $data->bill->subscription->code;
-        $vindi_subscription_id = $data->bill->subscription->id;
-        $cycle                 = $data->bill->period->cycle;
-            
-        if(!$this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
-            $this->subscription_renew($vindi_subscription_id, $wc_subscription_id, $cycle);
+        $renew_infos = [
+            'wc_subscription_id'     => $data->bill->subscription->code,
+            'vindi_subscription_id'  => $data->bill->subscription->id,
+            'cycle'                  => $data->bill->period->cycle,
+            'bill_id'                => $data->bill->id
+        ];
+
+        if(!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id'], $renew_infos['cycle'])) {
+            $this->subscription_renew($renew_infos);
         }
     }
 
