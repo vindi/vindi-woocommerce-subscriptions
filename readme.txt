@@ -61,6 +61,10 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+= 3.0.1 - 20/07/2017 =
+- Ajustes na renovação de pedidos.
+- Melhoria no registro de itens em compras avulsas.
+
 = 3.0.0 - 16/05/2017 =
 - Ajustes de compatibilidade com o WooCommerce 3.0 ou superior.
 - Melhorias na renovação das assinaturas.
