@@ -37,7 +37,7 @@ class Vindi_Webhook_Handler
             $this->container->logger->log($e->getMessage());
 
             if(2 === $e->getCode()) {
-                http_response_code(422);
+                header("HTTP/1.0 422 Unprocessable Entity");
                 die($e->getMessage());
             }
         }
@@ -132,15 +132,9 @@ class Vindi_Webhook_Handler
         if(empty($data->bill->subscription)) {
             $order = $this->find_order_by_id($data->bill->code);
         } else {
-            $wc_subscription_id    = $data->bill->subscription->code;
             $vindi_subscription_id = $data->bill->subscription->id;
             $cycle                 = $data->bill->period->cycle;
             
-            if(!$this->subscription_has_order_in_cycle($vindi_subscription_id, $cycle)) {
-                http_response_code(422);
-            }
-            
-            $subscription   = $this->find_subscription_by_id($wc_subscription_id);
             $order          = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
         }
 
