@@ -1,3 +1,6 @@
+# 3.0.2 - 26/07/2017
+- Correções no tratamento de webhooks.
+
 # 3.0.1 - 20/07/2017
 - Ajustes na renovação de pedidos.
 - Melhoria no registro de itens em compras avulsas.
