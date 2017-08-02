@@ -73,7 +73,7 @@ class Vindi_Dependencies
             $plugin_data   = get_plugin_data(ABSPATH . "wp-content/plugins/" . $path);
             $version_match = $plugin['version'];
 
-            if(!in_array($path, self::$active_plugins ) || array_key_exists($path, self::$active_plugins)) {
+            if(!in_array($path, self::$active_plugins ) && !array_key_exists($path, self::$active_plugins)) {
                 add_action('admin_notices', self::missing_notice(key($plugin), $version_match[1], current($plugin)));
                 return false;
             }
