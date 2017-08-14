@@ -419,7 +419,7 @@ class Vindi_Payment
             return false;
         }
 
-        return [
+        $item = [
             'product_id'        => $order_item['vindi_id'],
             'quantity'          => $order_item['qty'],
             'pricing_schema'    => [
@@ -427,6 +427,15 @@ class Vindi_Payment
                 'schema_type'       => 'per_unit'
             ]
         ];
+
+        if($order_item['type'] == 'discount') {
+            $item = [
+                'product_id'        => $order_item['vindi_id'],
+                'amount'            => $order_item['price']
+            ];
+        }
+
+        return $item;
     }
 
     protected function build_product_items_for_subscription($order_item)
