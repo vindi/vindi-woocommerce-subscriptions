@@ -1,3 +1,6 @@
+# 3.0.3 - 14/08/2017
+- Ajustes no desconto de faturas avulsas.
+
 # 3.0.2 - 26/07/2017
 - Correções no tratamento de webhooks.
 
