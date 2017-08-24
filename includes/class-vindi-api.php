@@ -568,6 +568,20 @@ class Vindi_API
     }
 
     /**
+     * @return int|bool|mixed
+     */
+    public function get_plan_installments($plan_id)
+    {
+        $plan = $this->get_plan($plan_id);
+
+        if(empty($plan)) {
+            return false;
+        }
+
+        return (int) $plan['installments'];
+    }
+
+    /**
      * @param array $body (name, code, status, pricing_schema (price))
      *
      * @return array|bool|mixed
