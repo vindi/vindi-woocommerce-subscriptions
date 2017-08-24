@@ -489,7 +489,7 @@ class Vindi_Payment
     }
 
     /**
-     * @return array
+     * @return int
      */
     protected function installments()
     {
