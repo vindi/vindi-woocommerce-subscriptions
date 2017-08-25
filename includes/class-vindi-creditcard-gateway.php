@@ -128,11 +128,10 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
      */
     public function payment_fields()
     {
-        if ($this->is_single_order() && $this->installments > 1) {
-            $total        = $this->container->woocommerce->cart->total;
-            $max_times    = $this->get_order_max_installments($total);
-            $installments = array();
+        $total      = $this->container->woocommerce->cart->total;
+        $max_times  = $this->get_order_max_installments($total);
 
+        if ($max_times > 1) {
             for ($times = 1; $times <= $max_times; $times++) {
                 $installments[$times] = ceil($total / $times * 100) / 100;
             }
@@ -182,15 +181,46 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
             'user_payment_profile',
             'payment_methods'
         ));
-
     }
 
+    /**
+     * get installments on bills and subscriptions
+     */
+    protected function get_installments()
+    {
+        if($this->is_single_order())
+            return $this->installments;
+        
+        foreach($this->container->woocommerce->cart->cart_contents as $item) {
+            $plan_id[] = $item['data']->get_meta('vindi_subscription_plan');
+        }
+        
+        foreach($plan_id as $id) {
+            $response = $this->container->api->get_plan_installments($id);
+
+            if($response > 1)
+                $installments = $response;               
+        }
+
+        if(empty($installments))
+            return 1;
+                
+        return $installments;
+    }
+
+    /**
+     * get max installments on order
+     */
     protected function get_order_max_installments($order_total)
     {
-        $order_max_times = floor($order_total / $this->smallest_installment);
-        $max_times       = empty($order_max_times) ? 1 : $order_max_times;
+        if($this->is_single_order()) {
+            $order_max_times = floor($order_total / $this->smallest_installment);
+            $max_times       = empty($order_max_times) ? 1 : $order_max_times;
 
-        return min($this->max_installments, $max_times, $this->installments);
+            return min($this->max_installments, $max_times, $this->get_installments());
+        } else {
+            return $this->get_installments();
+        }
     }
 
     /**

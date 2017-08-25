@@ -487,6 +487,18 @@ class Vindi_Payment
         
         return $product_item;
     }
+
+    /**
+     * @return int
+     */
+    protected function installments()
+    {
+        if('credit_card' == $this->payment_method_code())
+            return $_POST['vindi_cc_installments'];
+
+        return 1;
+    }
+
     /**
      * @param $customer_id
      *
@@ -505,6 +517,7 @@ class Vindi_Payment
             'plan_id'             => $vindi_plan,
             'product_items'       => $this->build_product_items('subscription'),
             'code'                => $wc_subscription->id,
+            'installments'        => $this->installments()
         );
 
         $subscription = $this->container->api->create_subscription($body);
@@ -534,10 +547,8 @@ class Vindi_Payment
             'payment_method_code' => $this->payment_method_code(),
             'bill_items'          => $this->build_product_items('bill'),
             'code'                => $this->order->id,
+            'installments'        => $this->installments()
         );
-
-        if ('credit_card' === $this->payment_method_code() && isset($_POST['vindi_cc_installments']))
-            $body['installments'] = (int) $_POST['vindi_cc_installments'];
 
         $bill_id = $this->container->api->create_bill($body);
 
