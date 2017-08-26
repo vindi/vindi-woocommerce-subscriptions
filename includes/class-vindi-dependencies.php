@@ -70,7 +70,7 @@ class Vindi_Dependencies
     public static function plugins_are_activated($plugins)
     {
         foreach($plugins as $path => $plugin) {
-            $plugin_data   = get_plugin_data(ABSPATH . "wp-content/plugins/" . $path);
+            $plugin_data   = get_plugin_data(WP_PLUGIN_DIR . "/" . $path);
             $version_match = $plugin['version'];
 
             if(!in_array($path, self::$active_plugins ) || array_key_exists($path, self::$active_plugins)) {
