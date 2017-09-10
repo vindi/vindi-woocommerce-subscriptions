@@ -32,9 +32,18 @@ class Vindi_API
     );
 
     /**
-     * @var string API base path.
+     * API Base path
+     *
+     * @return string
      */
-    const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
+    protected function base_path()
+    {
+        if(true == $this->container->settings->get_is_active_sand_box()) {
+            return 'https://sandbox-app.vindi.com.br/api/v1;';
+        }
+
+        return 'https://staging-app.vindi.com.br/api/v1/';
+    }
 
     /**
      * @param string $key
@@ -126,7 +135,7 @@ class Vindi_API
      */
     private function request($endpoint, $method = 'POST', $data = array(), $data_to_log = null)
     {
-        $url  = sprintf('%s%s', self::BASE_PATH, $endpoint);
+        $url  = sprintf('%s%s', $this->base_path(), $endpoint);
         $body = $this->build_body($data);
 
         $request_id = rand();
@@ -701,7 +710,7 @@ class Vindi_API
     {
         delete_transient('vindi_merchant');
 
-        $url         = static::BASE_PATH . 'merchant';
+        $url         = $this->base_path() . 'merchant';
         $method      = 'GET';
 		$request_id  = rand();
         $data_to_log = 'API Authorization Test';

@@ -87,6 +87,8 @@ class Vindi_Settings extends WC_Settings_API
 
 		$prospects_url = '<a href="https://app.vindi.com.br/prospects/new" target="_blank">' . __('Não possui uma conta?', VINDI_IDENTIFIER) . '</a>';
 
+        $sand_box_article = '<a href="https://atendimento.vindi.com.br/hc/pt-br/articles/115012242388-Sandbox" target="_blank">' . __('Dúvidas?', VINDI_IDENTIFIER) . '</a>';
+
 		$this->form_fields = array(
 			'api_key'              => array(
 				'title'            => __('Chave da API Vindi', VINDI_IDENTIFIER),
@@ -137,6 +139,19 @@ class Vindi_Settings extends WC_Settings_API
 				'title'            => __('Testes', 'vindi-woocommerce'),
 				'type'             => 'title',
 			),
+            'sand_box'             => array(
+                'title'            => __('Ambiente Sandbox', VINDI_IDENTIFIER),
+                'label'            => __('Ativar Sandbox', VINDI_IDENTIFIER),
+                'type'             => 'checkbox',
+                'description'      => __('Ative esta opção para habilitar a comunicação com o ambiente Sandbox da Vindi.', VINDI_IDENTIFIER),
+                'default'          => 'no',
+            ),
+            'api_key_sand_box'     => array(
+                'title'            => __('Chave da API Sandbox Vindi', VINDI_IDENTIFIER),
+                'type'             => 'text',
+                'description'      => __('A Chave da API Sandbox de sua conta na Vindi (só preencha se a opção anterior estiver habilitada). ' . $sand_box_article, VINDI_IDENTIFIER),
+                'default'          => '',
+            ),
 			'debug'                => array(
 				'title'            => __('Log de Depuração', VINDI_IDENTIFIER),
 				'label'            => __('Ativar Logs', VINDI_IDENTIFIER),
@@ -163,6 +178,10 @@ class Vindi_Settings extends WC_Settings_API
      **/
     public function get_api_key()
     {
+        if('yes' == $this->get_is_active_sand_box()){
+            return $this->settings['api_key_sand_box'];
+        }
+
         return $this->settings['api_key'];
     }
 
@@ -198,6 +217,15 @@ class Vindi_Settings extends WC_Settings_API
         }
 
         return null;
+    }
+
+    /**
+     * Return
+     * @return boolean
+     **/
+    public function get_is_active_sand_box()
+    {
+        return 'yes' === $this->settings['sand_box'];
     }
 
     /**
