@@ -47,7 +47,7 @@ class Vindi_API
             return 'https://sandbox-app.vindi.com.br/api/v1/';
         }
 
-        return 'https://staging-app.vindi.com.br/api/v1/';
+        return 'https://app.vindi.com.br/api/v1/';
     }
 
     /**
