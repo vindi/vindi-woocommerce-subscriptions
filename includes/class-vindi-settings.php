@@ -329,7 +329,7 @@ class Vindi_Settings extends WC_Settings_API
 
     /**
      * Validate API key field
-     * @param $text highlight_string(str)
+     * @param $text string
      * @return $text string
      */
     public function validate_api_key_field($key)

@@ -23,7 +23,7 @@ class Vindi_API
     private $logger;
 
     /**
-     * @var Yes/no
+     * @var String 'Yes' or 'no'
      */
     private $sandbox;
 
@@ -51,8 +51,9 @@ class Vindi_API
     }
 
     /**
-     * @param Vindi_Settings $container
      * @param string $key
+     * @param Vindi_Logger $logger
+     * @param string $sandbox
      */
     public function __construct($key, Vindi_Logger $logger, $sandbox)
     {
@@ -696,15 +697,15 @@ class Vindi_API
     }
 
     /**
-     * Check to see if Merchant Status is Trial.
+     * Check to see if a sandbox Merchant.
      * @return boolean
      */
     public function is_sandbox_merchant()
     {
         if('yes' === $this->sandbox)
-            return 'sandbox';
+            return 'true';
 
-        return $this->get_merchant()['status'];
+        return [];
     }
 
     /**
