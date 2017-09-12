@@ -44,7 +44,7 @@ class Vindi_Settings extends WC_Settings_API
 
         $this->debug       = $this->get_option('debug') == 'yes' ? true : false;
         $this->logger      = new Vindi_Logger(VINDI_IDENTIFIER, $this->debug);
-        $this->api         = new Vindi_API($this->get_api_key(), $this->logger);
+        $this->api         = new Vindi_API($this->get_api_key(), $this->logger, $this->get_is_active_sandbox());
         $this->woocommerce = $woocommerce;
 
         add_filter('woocommerce_payment_gateways', array(&$this, 'add_gateway'));
@@ -139,14 +139,14 @@ class Vindi_Settings extends WC_Settings_API
 				'title'            => __('Testes', 'vindi-woocommerce'),
 				'type'             => 'title',
 			),
-            'sand_box'             => array(
+            'sandbox'             => array(
                 'title'            => __('Ambiente Sandbox', VINDI_IDENTIFIER),
                 'label'            => __('Ativar Sandbox', VINDI_IDENTIFIER),
                 'type'             => 'checkbox',
                 'description'      => __('Ative esta opção para habilitar a comunicação com o ambiente Sandbox da Vindi.', VINDI_IDENTIFIER),
                 'default'          => 'no',
             ),
-            'api_key_sand_box'     => array(
+            'api_key_sandbox'     => array(
                 'title'            => __('Chave da API Sandbox Vindi', VINDI_IDENTIFIER),
                 'type'             => 'text',
                 'description'      => __('A Chave da API Sandbox de sua conta na Vindi (só preencha se a opção anterior estiver habilitada). ' . $sand_box_article, VINDI_IDENTIFIER),
@@ -178,8 +178,8 @@ class Vindi_Settings extends WC_Settings_API
      **/
     public function get_api_key()
     {
-        if('yes' == $this->get_is_active_sand_box()){
-            return $this->settings['api_key_sand_box'];
+        if('yes' === $this->get_is_active_sandbox()) {
+            return $this->settings['api_key_sandbox'];
         }
 
         return $this->settings['api_key'];
@@ -223,9 +223,9 @@ class Vindi_Settings extends WC_Settings_API
      * Return
      * @return boolean
      **/
-    public function get_is_active_sand_box()
+    public function get_is_active_sandbox()
     {
-        return 'yes' === $this->settings['sand_box'];
+        return $this->settings['sandbox'];
     }
 
     /**
@@ -246,7 +246,7 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function check_ssl()
     {
-        return $this->api->is_merchant_status_trial()
+        return $this->api->is_sandbox_merchant()
             || $this->check_woocommerce_force_ssl_checkout();
     }
 
@@ -329,11 +329,11 @@ class Vindi_Settings extends WC_Settings_API
 
     /**
      * Validate API key field
-     * @param $text string
+     * @param $text highlight_string(str)
      * @return $text string
      */
-    public function validate_api_key_field($key) {
-
+    public function validate_api_key_field($key)
+    {
         $api_key = $this->get_option($key);
 
         if (isset($_POST[$this->plugin_id . $this->id . '_' . $key]) AND !empty($_POST[$this->plugin_id . $this->id . '_' . $key])) {

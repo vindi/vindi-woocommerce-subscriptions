@@ -22,6 +22,11 @@ class Vindi_API
      */
     private $logger;
 
+    /**
+     * @var Yes/no
+     */
+    private $sandbox;
+
     private $errors_list = array(
         'invalid_parameter|card_number'          => 'Número do cartão inválido.',
         'invalid_parameter|registry_code'        => 'CPF ou CNPJ Invalidos',
@@ -36,22 +41,24 @@ class Vindi_API
      *
      * @return string
      */
-    protected function base_path()
+    public function base_path()
     {
-        if(true == $this->container->settings->get_is_active_sand_box()) {
-            return 'https://sandbox-app.vindi.com.br/api/v1;';
+        if('yes' === $this->sandbox) {
+            return 'https://sandbox-app.vindi.com.br/api/v1/';
         }
 
         return 'https://staging-app.vindi.com.br/api/v1/';
     }
 
     /**
+     * @param Vindi_Settings $container
      * @param string $key
      */
-    public function __construct($key, Vindi_Logger $logger)
+    public function __construct($key, Vindi_Logger $logger, $sandbox)
     {
-        $this->key    = $key;
-        $this->logger = $logger;
+        $this->key          = $key;
+        $this->logger       = $logger;
+        $this->sandbox      = $sandbox;
     }
 
     /**
@@ -692,12 +699,12 @@ class Vindi_API
      * Check to see if Merchant Status is Trial.
      * @return boolean
      */
-    public function is_merchant_status_trial()
+    public function is_sandbox_merchant()
     {
-        if ($merchant = $this->get_merchant())
-            return 'trial' === $merchant['status'];
+        if('yes' === $this->sandbox)
+            return 'sandbox';
 
-        return false;
+        return $this->get_merchant()['status'];
     }
 
     /**
