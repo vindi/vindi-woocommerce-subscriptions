@@ -329,8 +329,8 @@ class Vindi_Settings extends WC_Settings_API
 
     /**
      * Validate API key field
-     * @param $text string
-     * @return $text string
+     * @param string $text
+     * @return string $text
      */
     public function validate_api_key_field($key)
     {
