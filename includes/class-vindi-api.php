@@ -697,15 +697,17 @@ class Vindi_API
     }
 
     /**
-     * Check to see if a sandbox Merchant.
+     * Check to see if Merchant Status is Trial or Sandbox Merchant.
      * @return boolean
      */
-    public function is_sandbox_merchant()
+    public function is_merchant_status_trial_or_sandbox()
     {
-        if('yes' === $this->sandbox)
-            return 'true';
-
-        return [];
+        $merchant = $this->get_merchant();
+        
+        if ('trial' === $merchant['status'] || 'yes' === $this->sandbox)
+            return true;
+        
+        return false;
     }
 
     /**
