@@ -44,7 +44,7 @@ class Vindi_Settings extends WC_Settings_API
 
         $this->debug       = $this->get_option('debug') == 'yes' ? true : false;
         $this->logger      = new Vindi_Logger(VINDI_IDENTIFIER, $this->debug);
-        $this->api         = new Vindi_API($this->get_api_key(), $this->logger);
+        $this->api         = new Vindi_API($this->get_api_key(), $this->logger, $this->get_is_active_sandbox());
         $this->woocommerce = $woocommerce;
 
         add_filter('woocommerce_payment_gateways', array(&$this, 'add_gateway'));
@@ -86,6 +86,8 @@ class Vindi_Settings extends WC_Settings_API
 		$nfe_know_more = '<a href="http://atendimento.vindi.com.br/hc/pt-br/articles/204450944-Notas-fiscais" target="_blank">' . __('Saiba mais', VINDI_IDENTIFIER) . '</a>';
 
 		$prospects_url = '<a href="https://app.vindi.com.br/prospects/new" target="_blank">' . __('Não possui uma conta?', VINDI_IDENTIFIER) . '</a>';
+
+        $sand_box_article = '<a href="https://atendimento.vindi.com.br/hc/pt-br/articles/115012242388-Sandbox" target="_blank">' . __('Dúvidas?', VINDI_IDENTIFIER) . '</a>';
 
 		$this->form_fields = array(
 			'api_key'              => array(
@@ -137,6 +139,19 @@ class Vindi_Settings extends WC_Settings_API
 				'title'            => __('Testes', 'vindi-woocommerce'),
 				'type'             => 'title',
 			),
+            'sandbox'             => array(
+                'title'            => __('Ambiente Sandbox', VINDI_IDENTIFIER),
+                'label'            => __('Ativar Sandbox', VINDI_IDENTIFIER),
+                'type'             => 'checkbox',
+                'description'      => __('Ative esta opção para habilitar a comunicação com o ambiente Sandbox da Vindi.', VINDI_IDENTIFIER),
+                'default'          => 'no',
+            ),
+            'api_key_sandbox'     => array(
+                'title'            => __('Chave da API Sandbox Vindi', VINDI_IDENTIFIER),
+                'type'             => 'text',
+                'description'      => __('A Chave da API Sandbox de sua conta na Vindi (só preencha se a opção anterior estiver habilitada). ' . $sand_box_article, VINDI_IDENTIFIER),
+                'default'          => '',
+            ),
 			'debug'                => array(
 				'title'            => __('Log de Depuração', VINDI_IDENTIFIER),
 				'label'            => __('Ativar Logs', VINDI_IDENTIFIER),
@@ -163,6 +178,10 @@ class Vindi_Settings extends WC_Settings_API
      **/
     public function get_api_key()
     {
+        if('yes' === $this->get_is_active_sandbox()) {
+            return $this->settings['api_key_sandbox'];
+        }
+
         return $this->settings['api_key'];
     }
 
@@ -201,6 +220,15 @@ class Vindi_Settings extends WC_Settings_API
     }
 
     /**
+     * Return
+     * @return boolean
+     **/
+    public function get_is_active_sandbox()
+    {
+        return $this->settings['sandbox'];
+    }
+
+    /**
 	 * Return the URL that will receive the webhooks.
 	 * @return string
 	 */
@@ -218,7 +246,7 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function check_ssl()
     {
-        return $this->api->is_merchant_status_trial()
+        return $this->api->is_merchant_status_trial_or_sandbox()
             || $this->check_woocommerce_force_ssl_checkout();
     }
 
@@ -301,11 +329,11 @@ class Vindi_Settings extends WC_Settings_API
 
     /**
      * Validate API key field
-     * @param $text string
-     * @return $text string
+     * @param string $text
+     * @return string $text
      */
-    public function validate_api_key_field($key) {
-
+    public function validate_api_key_field($key)
+    {
         $api_key = $this->get_option($key);
 
         if (isset($_POST[$this->plugin_id . $this->id . '_' . $key]) AND !empty($_POST[$this->plugin_id . $this->id . '_' . $key])) {

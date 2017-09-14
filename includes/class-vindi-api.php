@@ -22,6 +22,11 @@ class Vindi_API
      */
     private $logger;
 
+    /**
+     * @var String 'Yes' or 'no'
+     */
+    private $sandbox;
+
     private $errors_list = array(
         'invalid_parameter|card_number'          => 'Número do cartão inválido.',
         'invalid_parameter|registry_code'        => 'CPF ou CNPJ Invalidos',
@@ -32,17 +37,29 @@ class Vindi_API
     );
 
     /**
-     * @var string API base path.
+     * API Base path
+     *
+     * @return string
      */
-    const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
+    public function base_path()
+    {
+        if('yes' === $this->sandbox) {
+            return 'https://sandbox-app.vindi.com.br/api/v1/';
+        }
+
+        return 'https://app.vindi.com.br/api/v1/';
+    }
 
     /**
      * @param string $key
+     * @param Vindi_Logger $logger
+     * @param string $sandbox
      */
-    public function __construct($key, Vindi_Logger $logger)
+    public function __construct($key, Vindi_Logger $logger, $sandbox)
     {
-        $this->key    = $key;
-        $this->logger = $logger;
+        $this->key          = $key;
+        $this->logger       = $logger;
+        $this->sandbox      = $sandbox;
     }
 
     /**
@@ -126,7 +143,7 @@ class Vindi_API
      */
     private function request($endpoint, $method = 'POST', $data = array(), $data_to_log = null)
     {
-        $url  = sprintf('%s%s', self::BASE_PATH, $endpoint);
+        $url  = sprintf('%s%s', $this->base_path(), $endpoint);
         $body = $this->build_body($data);
 
         $request_id = rand();
@@ -680,14 +697,16 @@ class Vindi_API
     }
 
     /**
-     * Check to see if Merchant Status is Trial.
+     * Check to see if Merchant Status is Trial or Sandbox Merchant.
      * @return boolean
      */
-    public function is_merchant_status_trial()
+    public function is_merchant_status_trial_or_sandbox()
     {
-        if ($merchant = $this->get_merchant())
-            return 'trial' === $merchant['status'];
-
+        $merchant = $this->get_merchant();
+        
+        if ('trial' === $merchant['status'] || 'yes' === $this->sandbox)
+            return true;
+        
         return false;
     }
 
@@ -701,7 +720,7 @@ class Vindi_API
     {
         delete_transient('vindi_merchant');
 
-        $url         = static::BASE_PATH . 'merchant';
+        $url         = $this->base_path() . 'merchant';
         $method      = 'GET';
 		$request_id  = rand();
         $data_to_log = 'API Authorization Test';
