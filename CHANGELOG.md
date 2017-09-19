@@ -1,3 +1,9 @@
+# 3.0.4 - 19/09/2017
+- Adicionado parcelamento de assinaturas (deve ser configurado no painel da Vindi).
+- Adicionado suporte a multilojas.
+- Adicionada integração com o ambiente Sandbox da Vindi.
+- Correção na renovação de pedidos em integrações com o WC Memberships.
+
 # 3.0.3 - 14/08/2017
 - Ajustes no desconto de faturas avulsas.
 
