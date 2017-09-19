@@ -270,6 +270,8 @@ class Vindi_Payment
 
         $this->add_download_url_meta_for_subscription($subscription);
 
+        remove_action( 'woocommerce_scheduled_subscription_payment', 'WC_Subscriptions_Manager::prepare_renewal' );
+
         return $this->finish_payment($subscription['bill']);
     }
 
