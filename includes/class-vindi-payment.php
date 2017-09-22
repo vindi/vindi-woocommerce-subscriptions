@@ -496,8 +496,14 @@ class Vindi_Payment
     protected function installments()
     {
         if('credit_card' == $this->payment_method_code())
-            return $_POST['vindi_cc_installments'];
-
+        	if($_POST['vindi_cc_installments'] == null)
+		    {
+			    return 1;
+		    }
+		    else
+		    {
+		    	return $_POST['vindi_cc_installments'];
+		    }
         return 1;
     }
 
