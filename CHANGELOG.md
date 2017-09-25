@@ -1,3 +1,6 @@
+# 3.0.5 - 25/09/2017
+- Ajuste no parcelamento de fatura avulsa.
+
 # 3.0.4 - 19/09/2017
 - Adicionado parcelamento de assinaturas (deve ser configurado no painel da Vindi).
 - Adicionado suporte a multilojas.
