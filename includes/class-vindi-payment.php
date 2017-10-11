@@ -125,7 +125,34 @@ class Vindi_Payment
                 $metadata['carteira_de_identidade'] = $this->order->get_meta( '_billing_rg' );
         }
 
-        $phone_number = preg_replace('/\D+/', '', '55' . $this->order->get_billing_phone());
+        $phone_number       = preg_replace('/\D+/', '', '55' . $this->order->get_billing_phone());
+        $cellphone_number   = preg_replace('/\D+/', '', '55' . $this->order->get_meta( '_billing_cellphone' ));
+
+        $phone_numbers = [
+            $phone_number,
+            $cellphone_number
+        ];
+
+        foreach($phone_numbers as $phone) {
+            switch($phone) {
+                case strlen($phone) == 12:
+                    $phone_type = 'landline';
+                    break;
+                case strlen($phone) == 13:
+                    $phone_type = 'mobile';
+                    break;
+                default:
+                    unset($phone);
+                    break;
+            }
+
+            if (isset($phone)) {
+                $phones[] = [
+                    'phone_type' => $phone_type,
+                    'number'     => $phone
+                ];
+            }
+        }
 
         $customer = array(
             'name'          => $name,
@@ -134,12 +161,7 @@ class Vindi_Payment
             'code'          => $user_code,
             'address'       => $address,
             'notes'         => $notes,
-            'phones'        => [
-                [
-                    'phone_type' => 'landline',
-                    'number'     => $phone_number,
-                ]
-            ],
+            'phones'        => $phones,
             'metadata' => $metadata,
         );
 
