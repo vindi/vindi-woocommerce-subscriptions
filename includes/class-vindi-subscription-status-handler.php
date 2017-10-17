@@ -25,7 +25,7 @@ class Vindi_Subscription_Status_Handler
      **/
     public function cancelled_subscription($wc_subscription)
     {
-        $this->container->api->delete_subscription($this->get_vindi_subscription_id($wc_subscription), true);
+        $this->container->api->delete_subscription($this->get_vindi_subscription_id($wc_subscription->id), true);
     }
 
     /**
@@ -40,7 +40,7 @@ class Vindi_Subscription_Status_Handler
             if(false == $memberships) {
                 $wc_subscription->update_status('cancelled');
             } else {
-                $this->container->api->delete_subscription($this->get_vindi_subscription_id($wc_subscription), true);
+                $this->container->api->delete_subscription($this->get_vindi_subscription_id($wc_subscription->id), true);
             }
         }
     }
@@ -48,9 +48,9 @@ class Vindi_Subscription_Status_Handler
     /**
      * @param WC_Subscription $wc_subscription
      **/
-    public function get_vindi_subscription_id($wc_subscription)
+    public function get_vindi_subscription_id($wc_subscription_id)
     {
-        $vindi_subscription_id_meta = get_post_meta($wc_subscription->id, 'vindi_wc_subscription_id');
+        $vindi_subscription_id_meta = get_post_meta($wc_subscription_id, 'vindi_wc_subscription_id');
         return end($vindi_subscription_id_meta);
     }
 }
