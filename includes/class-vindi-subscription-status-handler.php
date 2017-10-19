@@ -50,7 +50,6 @@ class Vindi_Subscription_Status_Handler
      **/
     public function get_vindi_subscription_id($wc_subscription_id)
     {
-        $vindi_subscription_id_meta = get_post_meta($wc_subscription_id, 'vindi_wc_subscription_id');
-        return end($vindi_subscription_id_meta);
+        return end(get_post_meta($wc_subscription_id, 'vindi_wc_subscription_id'));
     }
 }
