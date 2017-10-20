@@ -77,27 +77,6 @@ class Vindi_Payment
         $this->abort(__('O produto selecionado não é uma assinatura.', VINDI_IDENTIFIER), true);
     }
 
-    public function format_phone($phone)
-    {
-        $phone = preg_replace('/\D+/', '', '55'. $phone);
-
-        switch(strlen($phone)) {
-            case 12:
-                $phone_type = 'landline';
-                break;
-            case 13:
-                $phone_type = 'mobile';
-                break;
-        }
-
-        if (isset($phone_type)) {
-            return [
-                'phone_type' => $phone_type,
-                'number'     => $phone
-            ];
-        }
-    }
-
     /**
      * Find or Create a Customer at Vindi for the given credentials.
      * @return array|bool
@@ -181,6 +160,31 @@ class Vindi_Payment
             $this->create_payment_profile($customer_id);
 
         return $customer_id;
+    }
+
+    /**
+     * @param array Customer phones $phone
+     * @return array
+     */
+    public function format_phone($phone)
+    {
+        $phone = preg_replace('/\D+/', '', '55'. $phone);
+
+        switch(strlen($phone)) {
+            case 12:
+                $phone_type = 'landline';
+                break;
+            case 13:
+                $phone_type = 'mobile';
+                break;
+        }
+
+        if (isset($phone_type)) {
+            return [
+                'phone_type' => $phone_type,
+                'number'     => $phone
+            ];
+        }
     }
 
     /**
