@@ -341,7 +341,6 @@ class Vindi_Payment
         }
 
         $product_items  = [];
-        $order_items    = $this->build_product_order_items();
         $order_items[]  = $this->build_shipping_item();
 
         if('bill' === $order_type) {
@@ -360,20 +359,6 @@ class Vindi_Payment
         }
 
         return $product_items;
-    }
-
-    protected function build_product_order_items()
-    {
-        $order_items = $this->order->get_items();
-
-        foreach ($order_items as $key => $order_item) {
-            $product                       = $this->get_product($order_item);
-            $order_items[$key]['type']     = 'product';
-            $order_items[$key]['vindi_id'] = $product->vindi_id;
-            $order_items[$key]['price']    = (float) $product->get_price();
-        }
-
-        return $order_items;
     }
 
     protected function build_shipping_item()
