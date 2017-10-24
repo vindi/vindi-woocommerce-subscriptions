@@ -341,6 +341,7 @@ class Vindi_Payment
         }
 
         $product_items  = [];
+        $order_items = [];
         $order_items[]  = $this->build_shipping_item();
 
         if('bill' === $order_type) {
