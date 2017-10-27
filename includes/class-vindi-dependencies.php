@@ -63,6 +63,24 @@ class Vindi_Dependencies
     }
 
     /**
+    * @return  boolean
+    */
+    public function memberships_are_activated()
+    {
+        $memberships = [
+            'woocommerce-memberships/woocommerce-memberships.php' => [
+                'WooCommerce Memberships' => 'http://www.woothemes.com/products/woocommerce-memberships/'
+            ]
+        ];
+
+        if(self::plugins_are_activated($memberships)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
     * @param array $plugin
     *
     * @return boolean
