@@ -125,34 +125,13 @@ class Vindi_Payment
                 $metadata['carteira_de_identidade'] = $this->order->get_meta( '_billing_rg' );
         }
 
-        $phone_number       = preg_replace('/\D+/', '', '55' . $this->order->get_billing_phone());
-        $cellphone_number   = preg_replace('/\D+/', '', '55' . $this->order->get_meta( '_billing_cellphone' ));
-
-        $phone_numbers = [
-            $phone_number,
-            $cellphone_number
-        ];
-
-        foreach($phone_numbers as $phone) {
-            switch($phone) {
-                case strlen($phone) == 12:
-                    $phone_type = 'landline';
-                    break;
-                case strlen($phone) == 13:
-                    $phone_type = 'mobile';
-                    break;
-                default:
-                    unset($phone);
-                    break;
-            }
-
-            if (isset($phone)) {
-                $phones[] = [
-                    'phone_type' => $phone_type,
-                    'number'     => $phone
-                ];
-            }
-        }
+        $phones = array_filter(array_map(
+            [$this, 'format_phone'],
+            [
+                $this->order->get_billing_phone(),
+                $this->order->get_meta( '_billing_cellphone' ),
+            ]
+        ));
 
         $customer = array(
             'name'          => $name,
@@ -181,6 +160,31 @@ class Vindi_Payment
             $this->create_payment_profile($customer_id);
 
         return $customer_id;
+    }
+
+    /**
+     * @param array Customer phones $phone
+     * @return array
+     */
+    public function format_phone($phone)
+    {
+        $phone = preg_replace('/\D+/', '', '55'. $phone);
+
+        switch(strlen($phone)) {
+            case 12:
+                $phone_type = 'landline';
+                break;
+            case 13:
+                $phone_type = 'mobile';
+                break;
+        }
+
+        if (isset($phone_type)) {
+            return [
+                'phone_type' => $phone_type,
+                'number'     => $phone
+            ];
+        }
     }
 
     /**
