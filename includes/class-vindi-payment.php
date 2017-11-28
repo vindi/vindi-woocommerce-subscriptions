@@ -396,7 +396,7 @@ class Vindi_Payment
             $product                       = $this->get_product($order_item);
             $order_items[$key]['type']     = 'product';
             $order_items[$key]['vindi_id'] = $product->vindi_id;
-            $order_items[$key]['price']    = (float) $product->get_price();
+            $order_items[$key]['price']    = $order_item['total'];
         }
 
         return $order_items;
