@@ -35,10 +35,10 @@ class Vindi_Dependencies
                 'WooCommerce' => 'https://wordpress.org/extend/plugins/woocommerce/',
                 'version'     => ['>=', '3.0']
             ],
-            'woocommerce-subscriptions/woocommerce-subscriptions.php' => [
-                'WooCommerce Subscriptions' => 'http://www.woothemes.com/products/woocommerce-subscriptions/',
-                'version'     => ['>=', '2.2']
-            ],
+            // 'woocommerce-subscriptions/woocommerce-subscriptions.php' => [
+            //     'WooCommerce Subscriptions' => 'http://www.woothemes.com/products/woocommerce-subscriptions/',
+            //     'version'     => ['>=', '2.2']
+            // ],
             'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php' => [
                 'WooCommerce Extra Checkout Fields for Brazil' => 'https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/',
                 'version'     => ['>=', '3.5']
