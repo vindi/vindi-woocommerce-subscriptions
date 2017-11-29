@@ -228,7 +228,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
      */
     public function validate_fields()
     {
-        if ($this->is_single_order() && $this->installments < 1) {
+        if ($this->is_single_order() && $this->installments > 1) {
             if (! isset($_POST['vindi_cc_installments']) || empty($_POST['vindi_cc_installments'])) {
                 wc_add_notice(__('Quantidade de Parcelas requerido.', VINDI_IDENTIFIER ), 'error');
             }
