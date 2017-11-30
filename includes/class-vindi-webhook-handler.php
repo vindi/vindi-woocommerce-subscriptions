@@ -124,6 +124,7 @@ class Vindi_Webhook_Handler
 
         if(!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id'], $renew_infos['cycle'])) {
             $this->subscription_renew($renew_infos);
+            $this->update_next_payment($data);
         }
     }
 
@@ -338,4 +339,17 @@ class Vindi_Webhook_Handler
 
         return new WP_Query($args);
 	}
+
+    /**
+     * Update next payment schedule of subscription
+     * @param $next_payment string
+     * @param $subscription_id int wc subscription id
+     **/
+    private function update_next_payment($data)
+    {
+        $subscription = $this->find_subscription_by_id($data->bill->subscription->code);
+        $next_payment = date('Y-m-d H:i:s', strtotime($data->bill->period->end_at . ' + 3 days'));
+
+        $subscription->update_dates(array('next_payment' => $next_payment));
+    }
 }
