@@ -35,9 +35,9 @@ class Vindi_Subscription_Status_Handler
     public function filter_pre_cancelled_status($wc_subscription, $new_status)
     {
         if('pending-cancel' === $new_status) {
-            $memberships = Vindi_Dependencies::memberships_are_activated();
+            $wc_memberships = Vindi_Dependencies::wc_memberships_is_activated();
 
-            if(false == $memberships) {
+            if($wc_memberships == false) {
                 $wc_subscription->update_status('cancelled');
             } else {
                 $this->container->api->delete_subscription($this->get_vindi_subscription_id($wc_subscription), true);

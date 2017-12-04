@@ -61,6 +61,11 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+= 3.0.6 - 03/12/2017 =
+- Correção de duplicidade de pedidos em utilização com o WooCommerce Memberships.
+- Ajustes no cadastro de telefones.
+- Ajuste no cancelamento de assinaturas com WooCommerce Memberships.
+
 = 3.0.5 - 25/09/2017 =
 - Ajuste no parcelamento de fatura avulsa
 

@@ -65,7 +65,7 @@ class Vindi_Dependencies
     /**
     * @return  boolean
     */
-    public function memberships_are_activated()
+    public function wc_memberships_is_activated()
     {
         $memberships = [
             'woocommerce-memberships/woocommerce-memberships.php' => [
