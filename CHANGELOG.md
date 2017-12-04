@@ -1,3 +1,8 @@
+# 3.0.6 - 03/12/2017
+- Correção de duplicidade de pedidos em utilização com o WooCommerce Memberships.
+- Melhorias no cadastro de telefones(dentro da Vindi).
+- Ajuste no cancelamento de assinaturas com WooCommerce Memberships.
+
 # 3.0.5 - 25/09/2017
 - Ajuste no parcelamento de fatura avulsa.
 

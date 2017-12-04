@@ -202,7 +202,14 @@ class Vindi_Webhook_Handler
     {
         $subscription_id = $data->subscription->code;
         $subscription    = $this->find_subscription_by_id($subscription_id);
-        $subscription->cancel_order();
+
+        $memberships = Vindi_Dependencies::memberships_are_activated();
+
+        if(false == $memberships){
+            $subscription->update_status('cancelled');
+        } else{
+            $subscription->update_status('pending-cancel');
+        }
     }
 
     /**
