@@ -167,7 +167,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
             foreach ( $address_fields as $key => $field ) {
                 if ( isset( $_POST[ $key ] ) ) {
-                    $address[ str_replace( $address_type . '_', '', $key ) ] = woocommerce_clean( $_POST[ $key ] );
+                    $address[ str_replace( $address_type . '_', '', $key ) ] = wc_clean( $_POST[ $key ] );
                 }
             }
 
@@ -207,10 +207,10 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             }
 
             $wc_product                   = wc_get_product($post_id);
-            $subscription_plan            = woocommerce_clean($_POST['vindi_subscription_plan']);
-            $subscription_period_interval = woocommerce_clean($_POST['_subscription_period_interval']);
-            $subscription_period          = woocommerce_clean($_POST['_subscription_period']);
-            $subscription_length          = woocommerce_clean($_POST['_subscription_length']);
+            $subscription_plan            = wc_clean($_POST['vindi_subscription_plan']);
+            $subscription_period_interval = wc_clean($_POST['_subscription_period_interval']);
+            $subscription_period          = wc_clean($_POST['_subscription_period']);
+            $subscription_length          = wc_clean($_POST['_subscription_length']);
 
             if(empty($subscription_period_interval)) {
                 return;
@@ -272,7 +272,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         private function is_product_type_from_post($allow_types)
         {
             return in_array(
-                woocommerce_clean($_POST['product-type']),
+                wc_clean($_POST['product-type']),
                 $allow_types
             );
         }
