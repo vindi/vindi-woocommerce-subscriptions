@@ -1,3 +1,6 @@
+# 3.0.7 - 06/12/2017
+- Ajuste no valor de produto por quantidade
+
 # 3.0.6 - 03/12/2017
 - Correção de duplicidade de pedidos em utilização com o WooCommerce Memberships.
 - Melhorias no cadastro de telefones(dentro da Vindi).
