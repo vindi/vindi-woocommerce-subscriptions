@@ -44,7 +44,7 @@ class Vindi_Dependencies
                 'plugin'    => [
                     'name'      => 'WooCommerce Extra Checkout Fields for Brazil',
                     'url'       => 'https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/',
-                    'version'   => ['>=', '3.7']
+                    'version'   => ['>=', '3.5']
                 ]
             ]
         ];
@@ -129,7 +129,7 @@ class Vindi_Dependencies
             'plugin'    => [
                'name'       => 'WooCommerce Subscriptions',
                'url'        => 'http://www.woothemes.com/products/woocommerce-subscriptions/',
-               'version'    => ['>=', '2.2.14']
+               'version'    => ['>=', '2.2']
             ],
         ];
 
