@@ -29,28 +29,33 @@ class Vindi_Dependencies
     {
         if (! self::$active_plugins)
             self::init();
-
         $required_plugins = [
-            'woocommerce/woocommerce.php' => [
-                'WooCommerce' => 'https://wordpress.org/extend/plugins/woocommerce/',
-                'version'     => ['>=', '3.0']
+            [
+                'path'      => 'woocommerce/woocommerce.php',
+                'plugin'    => [
+                    'name'      => 'WooCommerce',
+                    'url'       => 'https://wordpress.org/extend/plugins/woocommerce/',
+                    'version'   => ['>=', '3.0']
+                ]
             ],
-            'woocommerce-subscriptions/woocommerce-subscriptions.php' => [
-                'WooCommerce Subscriptions' => 'http://www.woothemes.com/products/woocommerce-subscriptions/',
-                'version'     => ['>=', '2.2']
-            ],
-            'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php' => [
-                'WooCommerce Extra Checkout Fields for Brazil' => 'https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/',
-                'version'     => ['>=', '3.5']
+            [
+                'path'      => 'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php',
+                'plugin'    => [
+                    'name'      => 'WooCommerce Extra Checkout Fields for Brazil',
+                    'url'       => 'https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/',
+                    'version'   => ['>=', '3.5']
+                ]
             ]
         ];
-
-        if (! self::plugins_are_activated($required_plugins))
-            return false;
-
+        self::wc_subscriptions_are_activated();
+        foreach($required_plugins as $plugin) {
+            if(self::plugin_are_active($plugin) == false)
+                return false;
+            if(self::verify_version_of_plugin($plugin) == false)
+                return false;
+        }
         return true;
     }
-
     /**
     * @param string $name
     * @param string $link
@@ -61,51 +66,76 @@ class Vindi_Dependencies
     {
         echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Subscriptions depende da versão %s do %s para funcionar!', VINDI_IDENTIFIER), $version, "<a href=\"{$link}\">" . __($name, VINDI_IDENTIFIER) . '</a>') . '</p></div>';
     }
-
     /**
-    * @return  boolean
-    */
-    public function wc_memberships_is_activated()
-    {
-        $memberships = [
-            'woocommerce-memberships/woocommerce-memberships.php' => [
-                'WooCommerce Memberships' => 'http://www.woothemes.com/products/woocommerce-memberships/'
-            ]
-        ];
-
-        if(self::plugins_are_activated($memberships)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-    * @param array $plugin
+    * @param array plugin
     *
     * @return boolean
     **/
-    public static function plugins_are_activated($plugins)
+    public static function plugin_are_active($plugin)
     {
-        foreach($plugins as $path => $plugin) {
-            $plugin_data   = get_plugin_data(ABSPATH . "wp-content/plugins/" . $path);
-            $version_match = $plugin['version'];
-
-            if(!in_array($path, self::$active_plugins ) && !array_key_exists($path, self::$active_plugins)) {
-                add_action('admin_notices', self::missing_notice(key($plugin), $version_match[1], current($plugin)));
-                return false;
-            }
-
-            if(empty($plugin['version'])) {
-              return true;
-            }
-
-            if(!version_compare( $plugin_data['Version'], $version_match[1], $version_match[0] )) {
-                add_action('admin_notices', self::missing_notice(key($plugin), $version_match[1], current($plugin)));
-                return false;
-            }
+        if(in_array($plugin['path'], self::$active_plugins))
+            return true;
+        return  false;
+    }
+    /**
+    * @param array plugins
+    *
+    * @return boolean
+    **/
+    public static function verify_version_of_plugin($plugin)
+    {
+        $plugin_data = get_plugin_data(ABSPATH . "wp-content/plugins/" . $plugin['path']);
+        $version_match = $plugin['plugin']['version'];
+        $version_compare = version_compare(
+                $plugin_data['Version'],
+                $version_match[1],
+                $version_match[0]
+            );
+        if($version_compare == false){
+            add_action(
+                'admin_notices',
+                self::missing_notice($plugin['plugin']['name'],
+                    $version_match[1],
+                    $plugin['plugin']['url'])
+            );
+            return false;
         }
-
         return true;
+    }
+    /**
+    * @return boolean
+    **/
+    public static function wc_subscriptions_are_activated()
+    {
+        $wc_subscriptions = [
+            'path'      => 'woocommerce-subscriptions/woocommerce-subscriptions.php',
+            'plugin'    => [
+               'name'       => 'WooCommerce Subscriptions',
+               'url'        => 'http://www.woothemes.com/products/woocommerce-subscriptions/',
+               'version'    => ['>=', '2.2']
+            ],
+        ];
+        if(self::plugin_are_active($wc_subscriptions)){
+            if(self::verify_version_of_plugin($wc_subscriptions))
+                return true;
+        }
+        return false;
+    }
+    /**
+    * @return  boolean
+    */
+    public function wc_memberships_are_activated()
+    {
+        $wc_memberships = [
+            'path'      => 'woocommerce-memberships/woocommerce-memberships.php',
+            'plugin'    => [
+                'name'  => 'WooCommerce Memberships',
+                'url'   => 'http://www.woothemes.com/products/woocommerce-memberships/'
+            ]
+        ];
+        if(self::plugin_are_active($wc_memberships)) {
+            return true;
+        }
+        return false;
     }
 }
