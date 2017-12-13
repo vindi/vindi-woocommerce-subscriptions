@@ -35,7 +35,10 @@ class Vindi_Dependencies
                 'plugin'    => [
                     'name'      => 'WooCommerce',
                     'url'       => 'https://wordpress.org/extend/plugins/woocommerce/',
-                    'version'   => ['>=', '3.0']
+                    'version'   => [
+                        'validation'    => '>=',
+                        'number'        => '3.0'
+                    ]
                 ]
             ],
             [
@@ -43,7 +46,10 @@ class Vindi_Dependencies
                 'plugin'    => [
                     'name'      => 'WooCommerce Extra Checkout Fields for Brazil',
                     'url'       => 'https://wordpress.org/extend/plugins/woocommerce-extra-checkout-fields-for-brazil/',
-                    'version'   => ['>=', '3.5']
+                    'version'   => [
+                        'validation'    => '>=',
+                        'number'        => '3.5'
+                    ]
                 ]
             ]
         ];
@@ -88,9 +94,10 @@ class Vindi_Dependencies
         $version_match = $plugin['plugin']['version'];
         $version_compare = version_compare(
                 $plugin_data['Version'],
-                $version_match[1],
-                $version_match[0]
+                $version_match['number'],
+                $version_match['validation']
             );
+
         if($version_compare == false){
             add_action(
                 'admin_notices',
@@ -98,8 +105,10 @@ class Vindi_Dependencies
                     $version_match[1],
                     $plugin['plugin']['url'])
             );
+
             return false;
         }
+
         return true;
     }
     /**
@@ -112,7 +121,10 @@ class Vindi_Dependencies
             'plugin'    => [
                'name'       => 'WooCommerce Subscriptions',
                'url'        => 'http://www.woothemes.com/products/woocommerce-subscriptions/',
-               'version'    => ['>=', '2.2']
+               'version'    => [
+                    'validation'    => '>=',
+                    'number'        => '2.2'
+                ]
             ],
         ];
         if(self::plugin_are_active($wc_subscriptions)){
