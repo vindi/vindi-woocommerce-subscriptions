@@ -53,15 +53,24 @@ class Vindi_Dependencies
                 ]
             ]
         ];
+
         self::wc_subscriptions_are_activated();
+
         foreach($required_plugins as $plugin) {
-            if(self::plugin_are_active($plugin) == false)
+            if(self::plugin_are_active($plugin) == false) {
+                self::missing_notice($plugin['plugin']['name'],
+                    $plugin['plugin']['version']['number'],
+                    $plugin['plugin']['url']);
                 return false;
+            }
+
             if(self::verify_version_of_plugin($plugin) == false)
                 return false;
         }
+
         return true;
     }
+
     /**
     * @param string $name
     * @param string $link
@@ -72,6 +81,7 @@ class Vindi_Dependencies
     {
         echo '<div class="error"><p>' . sprintf(__('WooCommerce Vindi Subscriptions depende da versão %s do %s para funcionar!', VINDI_IDENTIFIER), $version, "<a href=\"{$link}\">" . __($name, VINDI_IDENTIFIER) . '</a>') . '</p></div>';
     }
+
     /**
     * @param array plugin
     *
@@ -81,8 +91,10 @@ class Vindi_Dependencies
     {
         if(in_array($plugin['path'], self::$active_plugins))
             return true;
+
         return  false;
     }
+
     /**
     * @param array plugins
     *
@@ -102,7 +114,7 @@ class Vindi_Dependencies
             add_action(
                 'admin_notices',
                 self::missing_notice($plugin['plugin']['name'],
-                    $version_match[1],
+                    $version_match['number'],
                     $plugin['plugin']['url'])
             );
 
@@ -111,6 +123,7 @@ class Vindi_Dependencies
 
         return true;
     }
+
     /**
     * @return boolean
     **/
@@ -127,12 +140,16 @@ class Vindi_Dependencies
                 ]
             ],
         ];
+
         if(self::plugin_are_active($wc_subscriptions)){
-            if(self::verify_version_of_plugin($wc_subscriptions))
+            if(self::verify_version_of_plugin($wc_subscriptions)){
                 return true;
+            }
         }
+
         return false;
     }
+
     /**
     * @return  boolean
     */
