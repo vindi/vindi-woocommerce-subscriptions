@@ -19,7 +19,7 @@
                 </label>
                 <br>
                 <?php echo $user_payment_profile['holder_name']; ?><br>
-                <div style="background: url('https://s3.amazonaws.com/recurrent/payment_companies/<?php echo $user_payment_profile['payment_company']?>.png') no-repeat center right; background-size: auto 90%;">
+                <div class="vindi-old-paymentcompany" style="background: url('https://s3.amazonaws.com/recurrent/payment_companies/<?php echo $user_payment_profile['payment_company']?>.png') no-repeat center right; background-size: auto 90%;">
                     <?php echo $user_payment_profile['card_number']; ?>
                 </div>
                 <input class="vindi-old-cc-data-check" type="hidden" value='1' name="vindi-old-cc-data-check">
