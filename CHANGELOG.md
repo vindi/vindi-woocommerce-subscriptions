@@ -1,3 +1,6 @@
+# 4.0.0 - 22/12/2017
+- Removida a dependência do WooCommerce Subscriptions, com isso o plugin passa a trabalhar com assinaturas (usando o WooCommerce Subscriptions) e também com faturas avulsas (usando apenas o WooCommerce)
+
 # 3.0.7 - 06/12/2017
 - Ajuste no valor de produto por quantidade
 
