@@ -134,16 +134,16 @@ class Vindi_Settings extends WC_Settings_API
 					'on-hold'      => 'Aguardando',
 					'completed'    => 'Concluído',
 				),
-      ),
-      'item_quantity'     => array(
-        'title'       => __('Envio de items personalidado', VINDI_IDENTIFIER),
-        'label'       => __('Enviar para a Vindi apenas um item por pedido', VINDI_IDENTIFIER),
-        'type'        => 'checkbox',
-        'description' => __('Envia apenas um item por pedido para a Vindi com o valor total da compra.
-                            Consulte a equipe de suporte antes de habilitar essa opção.',
-                            VINDI_IDENTIFIER),
-        'default'     => 'no',
-      ),
+            ),
+            'item_quantity'     => array(
+                'title'       => __('Envio de items personalidado', VINDI_IDENTIFIER),
+                'label'       => __('Enviar para a Vindi apenas um item por pedido. *(Somente para faturas avulsas)', VINDI_IDENTIFIER),
+                'type'        => 'checkbox',
+                'description' => __('Envia apenas um item por pedido para a Vindi com o valor total da compra.
+                                    Consulte a equipe de suporte antes de habilitar esta opção.',
+                                    VINDI_IDENTIFIER),
+                'default'     => 'no',
+            ),
 			'testing'              => array(
 				'title'            => __('Testes', 'vindi-woocommerce'),
 				'type'             => 'title',
