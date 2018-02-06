@@ -439,7 +439,7 @@ class Vindi_Payment
                 $subscription_order_item    = $this->order_item(
                     $order_item,
                     $product,
-                    $total_subscription
+                    $total_subscription_item
                 );
                 continue;
             }
