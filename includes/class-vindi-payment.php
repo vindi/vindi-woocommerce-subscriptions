@@ -367,18 +367,43 @@ class Vindi_Payment
         }
 
         $product_items  = [];
-        $order_items    = $this->build_product_order_items();
-        $order_items[]  = $this->build_shipping_item();
+
+        $custom_items_are_active = $this->container->custom_items_are_active();
+
+        switch ($order_type) {
+            case 'subscription' && $custom_items_are_active ==='yes':
+                $order_items    = $this->build_product_order_custom_items();
+                break;
+            case 'bill' && $custom_items_are_active === 'yes':
+                $order_items    = $this->build_product_order_custom_items();
+                break;
+            default:
+                $order_items = $this->build_product_order_items();
+                break;
+        }
+
+        $order_items[] = $this->build_shipping_item();
 
         if('bill' === $order_type) {
             $order_items[] = $this->build_discount_item_for_bill();
         }
 
-
         foreach ($order_items as $order_item) {
             if($item = $this->$call_build_items($order_item)) {
                 $product_items[] = $item;
             }
+        }
+
+        if($custom_items_are_active === 'yes') {
+            foreach ($product_items as $item) {
+                if(empty($item['product_id'])){
+                    unset($item);        
+                }
+
+                (empty($item)) ? : $items[] = $item;
+            }
+
+            $product_items = $items;
         }
 
         if (empty($product_items)) {
@@ -400,6 +425,44 @@ class Vindi_Payment
         }
 
         return $order_items;
+    }
+
+    protected function build_product_order_custom_items()
+    {
+        $order_items = $this->order->get_items();
+
+        foreach ($order_items as $key => $order_item) {
+            $product    = $this->get_product($order_item);
+
+            if($product->get_type() == 'subscription') {
+                $total_subscription_item    = (float) $order_item['total'];
+                $subscription_order_item    = $this->order_item(
+                    $order_item,
+                    $product,
+                    $total_subscription_item
+                );
+                continue;
+            }
+
+            $total += (float) $order_item['total'];
+        }
+
+        $order_items[$key]['type']      = 'product';
+        $order_items[$key]['vindi_id']  = $product->vindi_id;
+        $order_items[$key]['price']     = $total;
+        $order_items[$key]['qty']       = 1;
+
+        return $order_items;
+    }
+
+    protected function order_item($order_item, $product, $total)
+    {
+        $order_item['type']      = 'product';
+        $order_item['vindi_id']  = $product->vindi_id;
+        $order_item['price']     = $total;
+        $order_item['qty']       = 1;
+
+        return $order_item;
     }
 
     protected function build_shipping_item()
@@ -684,16 +747,30 @@ class Vindi_Payment
             $product_title = sprintf("%s (%s)", $product_title, $variations);
         }
 
-        $item = $this->container->api->find_or_create_product(
-            $product_title, sanitize_title($product_title)
-        );
+        if($this->container->custom_items_are_active() === 'yes') {
+          $item = $this->product_generic();
+        } else {
+          $item = $this->container->api->find_or_create_product(
+            $product_title,
+            sanitize_title($product_title)
+          );
+        }
 
         $product->vindi_id = (int) $item['id'];
 
         return $product;
-
     }
 
+    /**
+     * find or create an product generic
+     *
+     * @return array vindi product-generic
+     */
+    protected function product_generic()
+    {
+      return $this->container->api->find_or_create_product('Produto Genérico', 'product_generic');
+    }
+    
     protected function parse_variation_name($attributes, $order_item)
     {
         $keys  = array_keys($attributes);
