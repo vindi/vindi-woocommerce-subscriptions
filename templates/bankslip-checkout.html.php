@@ -15,7 +15,7 @@
 		if ($is_single_order){
 			_e('Um Boleto Bancário será enviado para o seu endereço de e-mail.', VINDI_IDENTIFIER);
 		} else {
-			_e('Um Boleto Bancário será enviado mensalmente para o seu endereço de e-mail.', VINDI_IDENTIFIER);
+			_e('Um boleto bancário será enviado para o seu e-mail de acordo com a sua assinatura. ', VINDI_IDENTIFIER);
 		}
 		?>
 	</div>
