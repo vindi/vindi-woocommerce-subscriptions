@@ -146,7 +146,7 @@ class Vindi_Payment
 
         $customer_id = $this->container->api->find_or_create_customer($customer);
 
-        if(!$this->container->api->update_customer_phone($customer_id, $phone_number)) {
+        if(!$this->container->api->update_customer_phone($customer_id, $phones)) {
             $this->abort(__('Falha ao registrar o usuário. Verifique os dados e tente novamente.', VINDI_IDENTIFIER ), true);
         }
 
