@@ -378,15 +378,11 @@ class Vindi_API
             return false;
         }
 
-        $phone_data = [
-            'phones' => []
-        ];
-
         if(empty($response['customer']['phones'])) {
-            array_push($phone_data['phones'], [
-                'phone_type' => 'landline',
-                'number'     => $phone_number,
-            ]);
+            $phone_data = [
+                'phones' => $phone_number
+            ];
+
             return (boolean) $this->request(sprintf('customers/%s', $id_customer),'PUT', $phone_data);
         }
 

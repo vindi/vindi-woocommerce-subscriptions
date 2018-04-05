@@ -1,5 +1,8 @@
+# 4.0.1 - 05/04/2018
+- Ajuste na atualização de telefones.
+
 # 3.0.7 - 06/12/2017
-- Ajuste no valor de produto por quantidade
+- Ajuste no valor de produto por quantidade.
 
 # 3.0.6 - 03/12/2017
 - Correção de duplicidade de pedidos em utilização com o WooCommerce Memberships.
