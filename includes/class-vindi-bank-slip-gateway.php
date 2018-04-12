@@ -35,7 +35,6 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
             return false;
 
         return 'yes' === $this->enabled
-            && 'BR' === $this->get_country_code()
             && $this->container->api->accept_bank_slip()
             && $this->container->check_ssl();
     }
@@ -49,11 +48,6 @@ class Vindi_BankSlip_Gateway extends Vindi_Base_Gateway
 
         if (empty($user_country)) {
             _e('Selecione o País para visualizar as formas de pagamento.', VINDI_IDENTIFIER);
-            return;
-        }
-
-        if ($user_country != 'BR') {
-            _e('Vindi não está disponível no seu País.', VINDI_IDENTIFIER);
             return;
         }
 
