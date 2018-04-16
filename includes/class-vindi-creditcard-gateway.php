@@ -97,7 +97,6 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         $cc_methods = $methods['credit_card'];
 
         return 'yes' === $this->enabled
-            && 'BR' === $this->get_country_code()
             && count($cc_methods)
             && $this->container->check_ssl();
     }
@@ -141,11 +140,6 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
 
         if (empty($user_country)) {
             _e( 'Selecione o País para visualizar as formas de pagamento.', VINDI_IDENTIFIER);
-            return;
-        }
-
-        if ($user_country != 'BR') {
-            _e('Vindi não está disponível no seu País.', VINDI_IDENTIFIER);
             return;
         }
 
