@@ -86,7 +86,7 @@
                 <span class="required">*</span>
             </label>
 
-            <input type="text" class="input-text wc-credit-card-form-card-cvc" name="vindi_cc_cvc" placeholder="CCV" autocomplete="off" maxlength="4" style="width: 3em;"/>
+            <input type="text" class="input-text wc-credit-card-form-card-cvc" name="vindi_cc_cvc" placeholder="CCV" autocomplete="off" maxlength="4" style="width: 4em;"/>
 
             <span class="help vindi_card_csc_description">
                 <?php _e('3 ou 4 dígitos localizados do verso do cartão.', VINDI_IDENTIFIER); ?>
