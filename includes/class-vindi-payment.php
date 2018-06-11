@@ -390,15 +390,17 @@ class Vindi_Payment
 
     protected function build_product_order_items()
     {
+        global $woocommerce;
         $order_items = $this->order->get_items();
+        $items = $woocommerce->cart->get_cart();
 
         foreach ($order_items as $key => $order_item) {
             $product                       = $this->get_product($order_item);
             $order_items[$key]['type']     = 'product';
             $order_items[$key]['vindi_id'] = $product->vindi_id;
-            $order_items[$key]['price']    = (float) $product->get_price();
+            $order_items[$key]['price']    = $order_items[$key]->get_total() / $order_items[$key]->get_quantity();
         }
-
+        
         return $order_items;
     }
 
