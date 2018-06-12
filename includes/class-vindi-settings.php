@@ -158,7 +158,18 @@ class Vindi_Settings extends WC_Settings_API
 				'type'             => 'checkbox',
 				'description'      => sprintf(__('Ative esta opção para habilitar logs de depuração do servidor. %s', VINDI_IDENTIFIER), $logs_url),
 				'default'          => 'no',
+            ),
+            'checkout_options'      => array(
+				'title'            => __('Cobrança', 'vindi-woocommerce'),
+				'type'             => 'title',
 			),
+            'single_checkout'      => array(
+                'title'            => __('Checkout unificado', VINDI_IDENTIFIER),
+                'label'            => __('Checkout unificado', VINDI_IDENTIFIER),
+                'type'             => 'checkbox',
+                'description'      => __('Ative esta opção para enviar apenas um item no checkout.', VINDI_IDENTIFIER),
+                'default'          => 'no',
+            ),
 		);
 	}
 
@@ -257,6 +268,10 @@ class Vindi_Settings extends WC_Settings_API
     {
         return 'yes' === get_option('woocommerce_force_ssl_checkout')
             && is_ssl();
+    }
+
+    public function is_single_checkout() {
+        return $this->settings['single_checkout'];
     }
 
     /**
