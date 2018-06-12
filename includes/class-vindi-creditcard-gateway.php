@@ -80,7 +80,13 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
                     '11' => '11x',
                     '12' => '12x',
                 ),
-            )
+            ),
+            'single_prodcut' => array(
+                'title'   => __('Produto Único', VINDI_IDENTIFIER),
+                'label'   => __('Enviar cobrança como produto único', VINDI_IDENTIFIER),
+                'type'    => 'checkbox',
+                'default' => 'no',
+            ),
         );
     }
 
@@ -173,7 +179,8 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
             'installments',
             'is_trial',
             'user_payment_profile',
-            'payment_methods'
+            'payment_methods',
+            'single_prodduct'
         ));
     }
 
