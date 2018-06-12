@@ -167,7 +167,7 @@ class Vindi_Settings extends WC_Settings_API
                 'title'            => __('Checkout unificado', VINDI_IDENTIFIER),
                 'label'            => __('Checkout unificado', VINDI_IDENTIFIER),
                 'type'             => 'checkbox',
-                'description'      => __('Ative esta opção para enviar apenas um item no checkout.', VINDI_IDENTIFIER),
+                'description'      => __('Ative esta opção se tiver problema de divergência de valores no checkout.', VINDI_IDENTIFIER),
                 'default'          => 'no',
             ),
 		);
