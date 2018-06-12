@@ -393,14 +393,32 @@ class Vindi_Payment
         global $woocommerce;
         $order_items = $this->order->get_items();
         $items = $woocommerce->cart->get_cart();
-
-        foreach ($order_items as $key => $order_item) {
-            $product                       = $this->get_product($order_item);
-            $order_items[$key]['type']     = 'product';
-            $order_items[$key]['vindi_id'] = $product->vindi_id;
-            $order_items[$key]['price']    = $order_items[$key]->get_total() / $order_items[$key]->get_quantity();
-        }
         
+
+        if( 'yes' === $this->container->settings['single_checkout'] ) :
+            
+            foreach ($order_items as $key => $order_item) {
+                $product                       = $this->get_product($order_item);
+                $order_items[$key]['type']     = 'product';
+                $order_items[$key]['vindi_id'] = $product->vindi_id;
+                $order_items[$key]['price']    = 0;
+                
+            }
+            $first = key($order_items);
+            $order_items[$first]['price']   = $woocommerce->cart->get_subtotal();
+            $order_items[$first]['qty']     = 1;
+            
+            else :
+                foreach ($order_items as $key => $order_item) {
+                    $product                       = $this->get_product($order_item);
+                    $order_items[$key]['type']     = 'product';
+                    $order_items[$key]['vindi_id'] = $product->vindi_id;
+                    $order_items[$key]['price']    = $order_items[$key]->get_total() / $order_items[$key]->get_quantity();
+                }
+        endif;
+
+        
+      
         return $order_items;
     }
 
