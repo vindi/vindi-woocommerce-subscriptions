@@ -1,6 +1,6 @@
 ![alt text align:center](https://www.vindi.com.br/image/vindi-logo-transparente.png "Vindi")
 
-# Vindi - WooCommerce Subscriptions
+# Vindi - WooCommerce
 
 [![Última Versão no WordPress][ico-version]][link-version]
 [![Licença do Software][ico-license]](license.txt)
@@ -8,7 +8,7 @@
 [![Downloads no Total][ico-downloads]][link-downloads]
 
 ## Descrição
-O **Vindi WooCommerce Subscriptions** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
+O **Vindi WooCommerce** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
 
 # Observações
 - Ainda não são suportados Upgrades ou Downgrades de assinaturas.
@@ -34,9 +34,9 @@ A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil.
     - Cobrança rejeitada
     - Fatura emitida
     - Fatura paga
-1. Copie a Chave API que está localizada na Vindi em Configurações->Dados da empresa->API & Webhooks.
+1. Copie a Chave API que está localizada na Vindi em Configurações -> Chaves de acesso API.
 1. De volta no WooCommerce Cole a Chave API na página administrativa do plugin WooCommerce -> Configurações -> Vindi:
-1. Após salvar a Chave API o Woocommerce Subscriptions vai preencher o campo com sua URL de retorno + um token de segurança, copie essa URL e cole na Vindi em Configurações -> Dados da empresa -> API & Webhooks -> URL
+1. Após salvar a Chave API o Woocommerce Subscriptions vai preencher o campo com sua URL de retorno + um token de segurança, copie essa URL e cole na Vindi em Configurações -> Webhooks -> URL
 1. De volta no WooCommerce -> Configurações -> Finalizar Compra -> Cartão de crédito / Boleto Bancário.
 1. Em WooCommerce -> Campos do Checkout, ative Tipo de Pessoa Física e Jurídica, RG e Inscrição estadual.
 1. Em WooCommerce -> Configurações -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"

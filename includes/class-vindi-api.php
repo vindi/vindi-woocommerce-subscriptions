@@ -156,7 +156,7 @@ class Vindi_API
             'headers' => array(
                 'Authorization' => $this->get_auth_header(),
                 'Content-Type'  => 'application/json',
-                'User-Agent'    => sprintf('Vindi-WooCommerce-Subscriptions/%s; %s', Vindi_WooCommerce_Subscriptions::VERSION, get_bloginfo( 'url' )),
+                'User-Agent'    => sprintf('Vindi-WooCommerce/%s; %s', Vindi_WooCommerce_Subscriptions::VERSION, get_bloginfo( 'url' )),
             ),
             'method'    => $method,
             'timeout'   => 60,
@@ -727,7 +727,7 @@ class Vindi_API
 			'headers' => [
 				'Authorization' => 'Basic ' . base64_encode($api_key . ':'),
 				'Content-Type'  => 'application/json',
-			    'User-Agent'    => sprintf('Vindi-WooCommerce-Subscriptions/%s; %s', Vindi_WooCommerce_Subscriptions::VERSION, get_bloginfo( 'url' )),
+			    'User-Agent'    => sprintf('Vindi-WooCommerce/%s; %s', Vindi_WooCommerce_Subscriptions::VERSION, get_bloginfo( 'url' )),
 			],
 			'method'    => $method,
 			'timeout'   => 60,
