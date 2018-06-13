@@ -394,9 +394,7 @@ class Vindi_Payment
         $order_items = $this->order->get_items();
         $items = $woocommerce->cart->get_cart();
         
-
-        if( 'yes' === $this->container->settings['single_checkout'] ) :
-            
+        if( 'yes' === $this->container->settings['single_checkout'] ) :    
             foreach ($order_items as $key => $order_item) {
                 $product                       = $this->get_product($order_item);
                 $order_items[$key]['type']     = 'product';
@@ -405,25 +403,23 @@ class Vindi_Payment
                 
             }
             
-            $item          = $this->container->api->find_or_create_product("Preço Final", "preco-final");
-            $order_items[] = array(
-            'type'     => 'product',
-            'vindi_id' => $item['id'],
-            'price'    => $woocommerce->cart->get_subtotal(),
-            'qty'      => 1,
-        );
+            $item           = $this->container->api->find_or_create_product("Subtotal", "subtotal");
+            $order_items[]  = array(
+                'type'      => 'product',
+                'vindi_id'  => $item['id'],
+                'price'     => $woocommerce->cart->get_subtotal(),
+                'qty'       => 1,
+            );
 
-            else :
-                foreach ($order_items as $key => $order_item) {
-                    $product                       = $this->get_product($order_item);
-                    $order_items[$key]['type']     = 'product';
-                    $order_items[$key]['vindi_id'] = $product->vindi_id;
-                    $order_items[$key]['price']    = $order_items[$key]->get_total() / $order_items[$key]->get_quantity();
-                }
+        else :
+            foreach ($order_items as $key => $order_item) {
+                $product                       = $this->get_product($order_item);
+                $order_items[$key]['type']     = 'product';
+                $order_items[$key]['vindi_id'] = $product->vindi_id;
+                $order_items[$key]['price']    = $order_items[$key]->get_total() / $order_items[$key]->get_quantity();
+            }
         endif;
 
-        
-      
         return $order_items;
     }
 
