@@ -106,10 +106,6 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 &$this, 'action_links'
             ));
 
-            add_filter('wcs_view_subscription_actions', array(
-                &$this, 'user_subscriptions_actions'
-            ), 100, 2);
-
             add_filter('woocommerce_my_account_my_orders_actions', array(
                 &$this, 'user_related_orders_actions'
             ), 100, 2);
@@ -358,23 +354,6 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
 			return $valid;
 		}
-
-        /**
-         * @param array           $actions
-         * @param WC_Subscription $subscription
-         **/
-        public function user_subscriptions_actions($actions, $subscription)
-        {
-            // remove from second array to allow action
-            $filtred_actions = $this->filter_actions($actions, array(
-                'resubscribe',
-                'suspend',
-                'reactivate',
-                //'cancel',
-            ));
-
-            return $filtred_actions;
-        }
 
         /**
          * @param array    $actions
