@@ -3,6 +3,11 @@
 class Vindi_Settings extends WC_Settings_API
 {
     /**
+     * @var Vindi_Dependencies
+     **/
+    private $dependency;
+
+    /**
      * @var Vindi_WooCommerce_Subscriptions
      **/
     private $plugin;
@@ -45,12 +50,15 @@ class Vindi_Settings extends WC_Settings_API
         $this->debug       = $this->get_option('debug') == 'yes' ? true : false;
         $this->logger      = new Vindi_Logger(VINDI_IDENTIFIER, $this->debug);
         $this->api         = new Vindi_API($this->get_api_key(), $this->logger, $this->get_is_active_sandbox());
+        $this->dependency  = new Vindi_Dependencies;
         $this->woocommerce = $woocommerce;
 
         add_filter('woocommerce_payment_gateways', array(&$this, 'add_gateway'));
 
-        add_action('admin_notices', array(&$this, 'manual_renew_is_deactivated'));
-        add_action('admin_notices', array(&$this, 'allow_switching_is_activated'));
+        if ($this->dependency->wc_subscriptions_are_activated()){
+            add_action('admin_notices', array(&$this, 'manual_renew_is_deactivated'));
+            add_action('admin_notices', array(&$this, 'allow_switching_is_activated'));
+        }
 
         if(is_admin()) {
             add_filter('woocommerce_settings_tabs_array', array(&$this, 'add_settings_tab'), 50);
