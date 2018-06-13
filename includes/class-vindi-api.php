@@ -209,14 +209,27 @@ class Vindi_API
      *
      * @return array|bool|mixed
      */
-    public function delete_subscription($subscription_id, $cancel_bills = false)
+    public function suspend_subscription($subscription_id, $cancel_bills = false)
     {
         $query = '';
 
-        if($cancel_bills)
-            $query = '?cancel_bills=true';
+        if(!$cancel_bills)
+            $query = '?cancel_bills=false';
 
         if ($response = $this->request('subscriptions/' . $subscription_id . $query, 'DELETE'))
+            return $response;
+
+        return false;
+    }
+
+    /**
+     * @param int   $subscription_id
+     *
+     * @return array|bool|mixed
+     */
+    public function activate_subscription($subscription_id)
+    {
+        if ($response = $this->request('subscriptions/' . $subscription_id . '/reactivate', 'POST'))
             return $response;
 
         return false;
