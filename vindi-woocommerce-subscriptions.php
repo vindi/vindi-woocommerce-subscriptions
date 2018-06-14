@@ -153,10 +153,16 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
          */
         public function maybe_update_user_informations($user_id, $address_type)
         {
-            if ( ! wcs_user_has_subscription( $user_id ) || wc_notice_count( 'error' ) > 0 || empty( $_POST['_wcsnonce'] ) || ! wp_verify_nonce( $_POST['_wcsnonce'], 'wcs_edit_address' ) ) {
-                return;
+            if( class_exists( 'WC_Subscriptions' ) ){
+                if ( ! wcs_user_has_subscription( $user_id ) || wc_notice_count( 'error' ) > 0 || empty( $_POST['_wcsnonce'] ) || ! wp_verify_nonce( $_POST['_wcsnonce'], 'wcs_edit_address' ) ) {
+                    return;
+                }
+            } else {
+                if ( wc_notice_count( 'error' ) > 0 || empty( $_POST['_wcsnonce'] ) || ! wp_verify_nonce( $_POST['_wcsnonce'], 'wcs_edit_address' ) ) {
+                    return;
+                }
             }
-
+            
             if('billing' !== $address_type) {
                 return;
             }
