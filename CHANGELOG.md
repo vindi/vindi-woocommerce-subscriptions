@@ -1,3 +1,6 @@
+# 4.0.2 - 15/06/2018
+- Ajuste na verificação do certificado SSL.
+
 # 4.0.1 - 05/04/2018
 - Ajuste na atualização de telefones.
 

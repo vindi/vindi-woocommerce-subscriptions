@@ -61,6 +61,9 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+= 4.0.2 - 15/06/2018
+- Ajuste na verificação do certificado SSL.
+
 = 4.0.1 - 05/04/2018 =
 - Ajuste na atualização de telefones.
 
