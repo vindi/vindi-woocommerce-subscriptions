@@ -3,8 +3,8 @@
 <?php if (! $gateway->container->check_ssl()): ?>
     <div class="error">
         <p>
-            <strong><?php _e('Vindi WooCommerce Assinaturas Desativado', VINDI_IDENTIFIER); ?></strong>:
-            <?php printf(__('Um certificado SSL é necessário para ativar este método de pagamento em modo de produção. Por favor, verifique se um certificado SSL está instalado em seu servidor e ative a opção %s.', VINDI_IDENTIFIER), '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section')) . '">' . __('Forçar finalização segura', VINDI_IDENTIFIER) . '</a>'); ?>
+            <strong><?php _e('Vindi WooCommerce ', VINDI_IDENTIFIER); ?></strong>:
+            <?php printf(__('requer um certificado SSL para ativar este método de pagamento em modo de produção. Por favor, verifique se um certificado SSL está instalado em seu servidor !')); ?>
         </p>
     </div>
 <?php endif; ?>
