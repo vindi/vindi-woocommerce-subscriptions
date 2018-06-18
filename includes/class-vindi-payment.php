@@ -425,7 +425,7 @@ class Vindi_Payment
     protected function build_tax_item()
     {
         $taxItem  = [];
-        $taxTotal = $this->order->get_total_tax();
+        $taxTotal = $this->container->woocommerce->cart->get_total_tax();
         if(empty($taxTotal)) {
             return $taxItem;
         }
