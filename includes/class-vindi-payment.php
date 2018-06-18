@@ -367,8 +367,12 @@ class Vindi_Payment
         }
 
         $product_items  = [];
-        $order_items    = $this->build_product_order_items();
-        $order_items[]  = $this->build_shipping_item();
+        if( 'yes' === $this->container->settings['single_checkout'] ) :
+            $order_items    = $this->build_single_checkout();
+        else :
+            $order_items    = $this->build_product_order_items();
+        endif;
+        $order_items[]      = $this->build_shipping_item();
 
         if('bill' === $order_type) {
             $order_items[] = $this->build_discount_item_for_bill();
@@ -390,18 +394,65 @@ class Vindi_Payment
 
     protected function build_product_order_items()
     {
+        global $woocommerce;
         $order_items = $this->order->get_items();
-
+        $items = $woocommerce->cart->get_cart();
+        
         foreach ($order_items as $key => $order_item) {
             $product                       = $this->get_product($order_item);
             $order_items[$key]['type']     = 'product';
             $order_items[$key]['vindi_id'] = $product->vindi_id;
-            $order_items[$key]['price']    = (float) $product->get_price();
+            $order_items[$key]['price']    = $order_items[$key]->get_total() / $order_items[$key]->get_quantity();
         }
+        
 
         return $order_items;
     }
 
+    /**
+     * Generates Subtotal item on Vindi Checkout that contains WooCommerce subtotal before discounts
+     * @return {array} order_items
+    */
+    protected function build_single_checkout()
+    {
+        global $woocommerce;
+        $order_items    = $this->order->get_items();
+        $item           = $this->container->api->find_or_create_product("Subtotal", "subtotal");
+        $items          = $woocommerce->cart->get_cart();
+        
+        /**
+         * Option 1: This will add a Subtotal line on Vindi and show all products quantity like 0
+        */
+        // foreach ($order_items as $key => $order_item) {
+        //      $product                       = $this->get_product($order_item);
+        //      $order_items[$key]['type']     = 'product';
+        //      $order_items[$key]['vindi_id'] = $product->vindi_id;
+        //      $order_items[$key]['price']    = 0;
+        //  }
+        
+        // $order_items[]  = array(
+        //     'type'      => 'product',
+        //     'vindi_id'  => $item['id'],
+        //     'price'     => $woocommerce->cart->get_subtotal(),
+        //     'qty'       => 1,
+        // );
+    
+        /**
+         * Option 2: This will remove all products and add just Subtotal line on Vindi
+        */
+        $product_key    =   key($order_items);
+        foreach ($order_items as $key => $order_item) {
+            unset($order_items);
+            $product                                = $this->get_product($order_item);
+            $order_items[$product_key]['type']      = 'product';
+            $order_items[$product_key]['vindi_id']  = $item['id'];
+            $order_items[$product_key]['price']     = $woocommerce->cart->get_subtotal();
+            $order_items[$product_key]['qty']       = 1;
+        }
+            
+        return $order_items;
+    }
+    
     protected function build_shipping_item()
     {
         $shipping_item   = [];
