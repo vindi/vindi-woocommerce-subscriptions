@@ -369,6 +369,7 @@ class Vindi_Payment
         $product_items  = [];
         $order_items    = $this->build_product_order_items();
         $order_items[]  = $this->build_shipping_item();
+        $order_items[]  = $this->build_tax_item();
 
         if('bill' === $order_type) {
             $order_items[] = $this->build_discount_item_for_bill();
@@ -419,6 +420,25 @@ class Vindi_Payment
         );
 
         return $shipping_item;
+    }
+
+    protected function build_tax_item()
+    {
+        $taxItem  = [];
+        $taxTotal = $this->order->get_total_tax();
+        if(empty($taxTotal)) {
+            return $taxItem;
+        }
+
+        $item          = $this->container->api->find_or_create_product("Taxa", 'wc-tax');
+        $taxItem = array(
+            'type'     => 'tax',
+            'vindi_id' => $item['id'],
+            'price'    => (float) $taxTotal,
+            'qty'      => 1
+        );
+
+        return $taxItem;
     }
 
     protected function build_discount_item_for_bill()
