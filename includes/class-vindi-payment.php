@@ -344,7 +344,7 @@ class Vindi_Payment
      **/
   private function return_cycle_from_product_type($item)
     {
-        if ($item['type'] == 'shipping')
+        if ($item['type'] == 'shipping' || $item['type'] == 'tax')
             return null;
         
         if(!$this->is_subscription_type($item->get_product())) {
