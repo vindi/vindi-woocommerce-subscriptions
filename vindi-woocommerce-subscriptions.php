@@ -7,7 +7,7 @@
 * Author: Vindi
 * Author URI: https://www.vindi.com.br
 * Requires at least: 4.4
-* Tested up to: 4.9.5
+* Tested up to: 4.9.6
 *
 * Text Domain: vindi-woocommerce-subscriptions
 * Domain Path: /languages/
