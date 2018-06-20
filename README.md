@@ -29,7 +29,8 @@ A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil.
 1. Ative o plugin.
 
 # Configuração
-1. Ative os Webhooks abaixo na Vindi em Configurações -> Dados da empresa -> API & Webhooks:
+1. Ative os Webhooks abaixo na Vindi em Configurações -> Dados da empresa -> Webhooks:
+    - Assinatura cancelada
     - Assinatura efetuada
     - Cobrança rejeitada
     - Fatura emitida
