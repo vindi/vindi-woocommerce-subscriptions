@@ -218,9 +218,11 @@ class Vindi_Webhook_Handler
      **/
     private function subscription_reactivated($data)
     {
-        $subscription_id = $data->subscription->code;
-        $subscription    = $this->find_subscription_by_id($subscription_id);
-        $subscription->update_status('active','Assinatura ' . $subscription_id . ' reativada pela Vindi.');
+        if ($this->container->get_synchronism_status()){
+            $subscription_id = $data->subscription->code;
+            $subscription    = $this->find_subscription_by_id($subscription_id);
+            $subscription->update_status('active','Assinatura ' . $subscription_id . ' reativada pela Vindi.');
+        }
     }
 
     /**
