@@ -7,7 +7,7 @@ class Vindi_Subscription_Status_Handler
      **/
     private $container;
 
-    private $vindi_subscription_id
+    private $vindi_subscription_id;
 
     public function __construct(Vindi_Settings $container)
     {
