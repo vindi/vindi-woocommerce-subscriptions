@@ -205,10 +205,10 @@ class Vindi_Webhook_Handler
 
         $wc_memberships = Vindi_Dependencies::wc_memberships_are_activated();
 
-        if($wc_memberships == false || $subscription->has_status('on-hold')){
-            $subscription->update_status('cancelled');
-        } else{
+        if($wc_memberships || $this->container->get_synchronism_status()){
             $subscription->update_status('pending-cancel');
+        } else{
+            $subscription->update_status('cancelled');
         }
     }
 
