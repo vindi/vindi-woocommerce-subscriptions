@@ -1,4 +1,4 @@
-=== Vindi WooCommerce Subscriptions ===
+=== Vindi WooCommerce ===
 Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar
 Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
@@ -8,15 +8,13 @@ Stable Tag: 4.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Venda de assinaturas de produtos e serviços pelo plugin de cobrança recorrente para o WooCommerce Subscriptions.
+Venda de assinaturas de produtos e serviços pelo plugin de cobrança recorrente para o WooCommerce.
 
 == Description ==
-O **Vindi WooCommerce Subscriptions** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
+O **Vindi WooCommerce** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
 
 **Observações**
 - Ainda não são suportados Upgrades ou Downgrades de assinaturas.
-
-Veja também o nosso plugin [Vindi WooCommerce](https://wordpress.org/plugins/vindi-assinaturas-e-cobranca-recorrente/) que oferece uma gestão mais simples e leia [nosso artigo](http://atendimento.vindi.com.br/hc/pt-br/articles/217612217) com um comparativo de recursos entre os dois plugins.
 
 A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil. Com centenas de clientes usando soluções como pagamento online, soluções de notas fiscais integradas, emissão de boletos por email e PDF, integrações com ERPs e diversos relatórios, a Vindi possibilita um sistema online completo para negócios de venda recorrente. Além disso, empresas podem usar o gateway de pagamento integrado ao billing recorrente ou para faturas avulsas.
 
@@ -36,14 +34,15 @@ A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil.
 1. Ative o plugin.
 
 = Configuração =
-1. Ative os Webhooks abaixo na Vindi em Configurações -> Dados da empresa -> API & Webhooks:
+1. Ative os Webhooks abaixo na Vindi em Configurações -> Webhooks:
+    - Assinatura cancelada
     - Assinatura efetuada
     - Cobrança rejeitada
     - Fatura emitida
     - Fatura paga
-1. Copie a Chave API que está localizada na Vindi em Configurações->Dados da empresa->API & Webhooks.
+1. Copie a Chave API que está localizada na Vindi em Configurações -> Chaves de acesso API.
 1. De volta no WooCommerce Cole a Chave API na página administrativa do plugin WooCommerce -> Configurações -> Vindi:
-1. Após salvar a Chave API o Woocommerce Subscriptions vai preencher o campo com sua URL de retorno + um token de segurança, copie essa URL e cole na Vindi em Configurações -> Dados da empresa -> API & Webhooks -> URL
+1. Após salvar a Chave API o Woocommerce Subscriptions vai preencher o campo com sua URL de retorno + um token de segurança, copie essa URL e cole na Vindi em Configurações -> Webhooks -> URL
 1. De volta no WooCommerce -> Configurações -> Finalizar Compra -> Cartão de crédito / Boleto Bancário.
 1. Em WooCommerce -> Campos do Checkout, ative Tipo de Pessoa Física e Jurídica, RG e Inscrição estadual.
 1. Em WooCOmmerce -> Configurações -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"
@@ -55,7 +54,7 @@ Para mais detalhes sobre a instalação de plugins no WordPress leia o tutorial 
 
 Para suporte ou dúvidas relacionadas ao Plugin você pode seguir pelos canais:
 - [Github](https://github.com/vindi/vindi-woocommerce/issues)
-- [Fórum do Plugin](https://wordpress.org/plugins/vindi-woocommerce-assinaturas) (apenas em inglês)
+- [Fórum do Plugin](https://wordpress.org/plugins/vindi-woocommerce-subscriptions/) (apenas em inglês)
 
 Caso necessite de informações sobre a plataforma ou API por favor siga através do canal
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
@@ -180,8 +179,8 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 
 == License ==
 
-Vindi WooCommerce Subscriptions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Vindi WooCommerce is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-Vindi WooCommerce Subscriptions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+Vindi WooCommerce is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with Vindi WooCommerce Subscriptions. If not, see http://www.gnu.org/licenses/.
+You should have received a copy of the GNU General Public License along with Vindi WooCommerce. If not, see http://www.gnu.org/licenses/.

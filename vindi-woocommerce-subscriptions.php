@@ -1,8 +1,8 @@
 <?php
 /**
-* Plugin Name: Vindi Woocommerce Subscriptions
+* Plugin Name: Vindi Woocommerce
 * Plugin URI:
-* Description: Adiciona o gateway de pagamentos da Vindi para o WooCommerce Subscriptions.
+* Description: Adiciona o gateway de pagamentos da Vindi para o WooCommerce.
 * Version: 4.0.2
 * Author: Vindi
 * Author URI: https://www.vindi.com.br
