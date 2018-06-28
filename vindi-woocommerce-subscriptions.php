@@ -125,7 +125,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             );
 
             add_action('woocommerce_customer_save_address', array(
-                &$this, 'maybe_update_user_informations'
+                &$this, 'sync_vindi_user_information'
             ), 1, 2 );
 
             if(is_admin()) {
@@ -151,7 +151,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         /**
          * Update user informations from My Account form
          */
-        public function maybe_update_user_informations($user_id, $address_type)
+        public function sync_vindi_user_information($user_id, $address_type)
         {
             if (wc_notice_count( 'error' ) > 0 
                 || empty( $_POST['_wcsnonce'] ) 
