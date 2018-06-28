@@ -10,6 +10,7 @@
  * Tested up to: 4.9.6
  * WC requires at least: 3.0.0
  * WC tested up to: 3.4.3
+ *
  * Text Domain: vindi-woocommerce-subscriptions
  * Domain Path: /languages/
  *
