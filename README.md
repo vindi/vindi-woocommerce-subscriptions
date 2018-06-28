@@ -1,4 +1,4 @@
-![alt text align:center](https://www.vindi.com.br/image/vindi-logo-transparente.png "Vindi")
+![alt text align:center](https://vindi-blog.s3.amazonaws.com/wp-content/uploads/2017/10/logo-vindi-1.png "Vindi")
 
 # Vindi - WooCommerce
 

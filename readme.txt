@@ -1,10 +1,12 @@
 === Vindi WooCommerce ===
-Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar
+Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar, laertejr, rtakauti
 Website Link: https://www.vindi.com.br
-Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
+Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions, vindi-woocommerce
 Requires at least: 4.4
-Tested up to: 4.9.5
-Stable Tag: 4.0.2
+Tested up to: 4.9.6
+WC requires at least: 3.0.0
+WC tested up to: 3.4.3
+Stable Tag: 5.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -60,11 +62,21 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
-= 4.0.2 - 15/06/2018
+= 5.0.0 - 28/06/2018 =
+- Adiciona envio das taxas do WooCommerce.
+- Adiciona envio dos valores atuais do carrinho para os produtos.
+- Adiciona compatibilidade com Suspensão e Reativação de assinaturas.
+- Remove métodos depreciados do WooCommerce 2.x.
+- Remove menções ao termo 'Subscriptions'.
+
+= 4.0.2 - 15/06/2018 =
 - Ajuste na verificação do certificado SSL.
 
 = 4.0.1 - 05/04/2018 =
 - Ajuste na atualização de telefones.
+
+= 4.0.0 - 22/12/2017 =
+- Remove a dependência do WooCommerce Subscriptions.
 
 = 3.0.7 - 06/12/2017 =
 - Ajuste no valor de produto por quantidade.

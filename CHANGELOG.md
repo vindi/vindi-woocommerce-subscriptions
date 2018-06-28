@@ -1,8 +1,18 @@
+# 5.0.0 - 28/06/2018
+- Adiciona envio das taxas do WooCommerce.
+- Adiciona envio dos valores atuais do carrinho para os produtos.
+- Adiciona compatibilidade com Suspensão e Reativação de assinaturas.
+- Remove métodos depreciados do WooCommerce 2.x.
+- Remove menções ao termo 'Subscriptions'.
+
 # 4.0.2 - 15/06/2018
 - Ajuste na verificação do certificado SSL.
 
 # 4.0.1 - 05/04/2018
 - Ajuste na atualização de telefones.
+
+# 4.0.0 - 22/12/2017
+- Remove a dependência do WooCommerce Subscriptions.
 
 # 3.0.7 - 06/12/2017
 - Ajuste no valor de produto por quantidade.
