@@ -426,7 +426,7 @@ class Vindi_Payment
     {
         $taxItem  = [];
         $taxTotal = $this->container->woocommerce->cart->get_total_tax();
-        if(empty($taxTotal)) {
+        if (empty($taxTotal)) {
             return $taxItem;
         }
 
