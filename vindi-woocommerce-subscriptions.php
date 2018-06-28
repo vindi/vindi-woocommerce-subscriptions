@@ -170,7 +170,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 }
             }
 
-            $this->settings->api->update_user_billing_informations($user_code, $address));
+            $this->settings->api->update_user_billing_informations($user_code, $address);
         }
 
         /**
