@@ -205,10 +205,23 @@ class Vindi_Webhook_Handler
 
         $wc_memberships = Vindi_Dependencies::wc_memberships_are_activated();
 
-        if($wc_memberships == false || $subscription->has_status('on-hold')){
-            $subscription->update_status('cancelled');
-        } else{
+        if($wc_memberships || $this->container->get_synchronism_status()){
             $subscription->update_status('pending-cancel');
+        } else{
+            $subscription->update_status('cancelled');
+        }
+    }
+
+    /**
+     * Process subscription_reactivated event from webhook
+     * @param $data array
+     **/
+    private function subscription_reactivated($data)
+    {
+        if ($this->container->get_synchronism_status()){
+            $subscription_id = $data->subscription->code;
+            $subscription    = $this->find_subscription_by_id($subscription_id);
+            $subscription->update_status('active','Assinatura ' . $subscription_id . ' reativada pela Vindi.');
         }
     }
 

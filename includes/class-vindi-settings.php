@@ -143,6 +143,13 @@ class Vindi_Settings extends WC_Settings_API
 					'completed'    => 'Concluído',
 				),
 			),
+            'vindi_synchronism'        => array(
+                'title'            => __('Sincronismo de Status das Assinaturas', VINDI_IDENTIFIER),
+                'type'             => 'checkbox',
+                'label'      => __('Enviar alterações de status nas assinaturas do WooCommerce', VINDI_IDENTIFIER),
+                'description'      => __('Envia as alterações de status nas assinaturas do WooCommerce para Vindi.', VINDI_IDENTIFIER),
+                'default'          => 'no',
+            ),
 			'testing'              => array(
 				'title'            => __('Testes', 'vindi-woocommerce'),
 				'type'             => 'title',
@@ -213,6 +220,15 @@ class Vindi_Settings extends WC_Settings_API
     public function send_nfe_information()
     {
         return 'yes' === $this->settings['send_nfe_information'];
+    }
+
+    /**
+     * Get Vindi Synchronism status
+     * @return string
+     **/
+    public function get_synchronism_status()
+    {
+        return 'yes' === $this->settings['vindi_synchronism'];
     }
 
     /**
