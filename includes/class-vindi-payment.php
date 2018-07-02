@@ -337,6 +337,20 @@ class Vindi_Payment
         $payment_profile_id = $this->container->api->create_customer_payment_profile($cc_info);
         if (false === $payment_profile_id)
             $this->abort(__('Falha ao registrar o método de pagamento. Verifique os dados e tente novamente.', VINDI_IDENTIFIER), true);
+
+        if ($this->gateway->verify_method())
+            $this->verify_payment_profile($payment_profile_id);
+    }
+
+    /**
+     * @param int $payment_profile_id
+     *
+     * @throws Exception
+     */
+    protected function verify_payment_profile($payment_profile_id)
+    {
+        if (!$this->container->api->verify_customer_payment_profile($payment_profile_id))
+            $this->abort(__('Não foi possível realizar a verificação do seu cartão de crédito!', VINDI_IDENTIFIER), true);
     }
 
     /**

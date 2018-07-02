@@ -51,6 +51,12 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
                 'description' => __('Título que o cliente verá durante o processo de pagamento.', VINDI_IDENTIFIER),
                 'default'     => __('Cartão de Crédito', VINDI_IDENTIFIER),
             ),
+            'verify_method' => array(
+                'title'       => __('Transação de Verificação', VINDI_IDENTIFIER),
+                'type'        => 'checkbox',
+                'description' => __(' Realiza a transação de verificação em todos os novos pedidos. (Taxas adicionais por verificação poderão ser cobradas).', VINDI_IDENTIFIER),
+                'default'     => 'no',
+            ),
             'single_charge' => array(
                 'title' => __('Vendas Avulsas', VINDI_IDENTIFIER),
                 'type'  => 'title',
@@ -99,6 +105,15 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         return 'yes' === $this->enabled
             && count($cc_methods)
             && $this->container->check_ssl();
+    }
+
+    /**
+     * Check if this gateway verify method is enabled
+     * @return bool
+    */
+    public function verify_method()
+    {
+        return 'yes' === $this->verify_method;
     }
 
     /**

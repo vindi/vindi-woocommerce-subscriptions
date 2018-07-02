@@ -316,7 +316,12 @@ class Vindi_API
         $log['card_number'] = '**** *' . substr($log['card_number'], -3);
         $log['card_cvv']    = '***';
 
-        return $this->request('payment_profiles', 'POST', $body, $log);
+        return $this->request('payment_profiles', 'POST', $body, $log)['id'];
+    }
+
+    public function verify_customer_payment_profile($payment_profile_id)
+    {
+        return 'success' === $this->request('payment_profiles/' . $payment_profile_id . '/verify', 'POST', $body, $log)['transaction']['status'];
     }
 
     /**
