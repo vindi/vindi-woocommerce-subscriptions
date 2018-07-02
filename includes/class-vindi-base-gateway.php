@@ -23,6 +23,7 @@ abstract class Vindi_Base_Gateway extends WC_Payment_Gateway
         $this->container = $container;
         $this->title     = $this->get_option('title');
         $this->enabled   = $this->get_option('enabled');
+        $this->verify_method = $this->get_option('verify_method');
 
         if (is_admin()) {
             add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(&$this, 'process_admin_options'));
