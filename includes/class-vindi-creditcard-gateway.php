@@ -18,6 +18,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
 
         $this->smallest_installment = $this->get_option('smallest_installment');
         $this->installments         = $this->get_option('installments');
+        $this->verify_method        = $this->get_option('verify_method');
 
         parent::__construct($container);
 
