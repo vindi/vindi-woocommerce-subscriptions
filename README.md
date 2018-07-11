@@ -16,7 +16,7 @@ O **Vindi WooCommerce** oferece uma solução completa para pagamentos únicos e
 A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil. Com centenas de clientes usando soluções como pagamento online, soluções de notas fiscais integradas, emissão de boletos por email e PDF, integrações com ERPs e diversos relatórios, a Vindi possibilita um sistema online completo para negócios de venda recorrente. Além disso, empresas podem usar o gateway de pagamento integrado ao billing recorrente ou para faturas avulsas.
 
 # Requisitos
-- PHP versão **5.5.19** ou superior.
+- PHP versão **5.6.x** ou superior.
 - Um site com o WordPress instalado.
 - Plugin [WooCommerce](https://wordpress.org/plugins/woocommerce/ "Plugin WooCommerce") instalado e habilitado.
 - Plugin [WooCommerce Extra Checkout](https://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/ "WooCommerce Extra Checkout") Fields for Brazil instalado e habilitado.
@@ -57,6 +57,14 @@ Por favor, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md).
 Caso tenha alguma sugestão ou bug para reportar por favor nos comunique através das [issues](./issues).
 
 # Changelog
+Tipos de mudanças
+- **Adicionado** para novos recursos
+- **Ajustado** para mudanças em recursos existentes
+- **Depreciado** para recursos que serão removidos em breve
+- **Removido** para recursos removidos
+- **Corrigido** para correção de falhas
+- **Segurança** em caso de vulnerabilidades
+
 Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md).
 
 # Créditos
