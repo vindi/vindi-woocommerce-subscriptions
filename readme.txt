@@ -1,5 +1,5 @@
 === Vindi WooCommerce ===
-Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar
+Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar, rtakauti
 Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
 Requires at least: 4.4
@@ -20,7 +20,7 @@ A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil.
 
 = Requisitos =
 
-- PHP versão 5.5.19 ou superior.
+- PHP versão 5.6.x ou superior.
 - Um site com o WordPress instalado.
 - Plugin [WooCommerce](https://wordpress.org/plugins/woocommerce/ "Plugin WooCommerce") instalado e habilitado.
 - Plugin [WooCommerce Extra Checkout](https://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/ "WooCommerce Extra Checkout") Fields for Brazil instalado e habilitado.
