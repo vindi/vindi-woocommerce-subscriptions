@@ -1,5 +1,5 @@
 === Vindi WooCommerce ===
-Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar
+Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar, rtakauti
 Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions
 Requires at least: 4.4
