@@ -93,7 +93,8 @@
 - Corrige erro na atualização do perfil de pagamento
 
 
-## 1.1.0 - 18/07/2016
+## [1.1.0 - 18/07/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/1.1.0)
+
 ### Adicionado
 - Adiciona seleção de status para orders com pagamento confirmado
 
@@ -103,22 +104,26 @@
 - Corrige o problema de cancelamento de assinaturas e faturas em caso de falha no checkout
 
 
-## 1.0.4 - 22/06/2016
+## [1.0.4 - 22/06/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/1.0.4)
+
 ### Adicionado
 - Adiciona envio de telefone no checkout para a Vindi
 
 
-## 1.0.3 - 21/06/2016
+## [1.0.3 - 21/06/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/1.0.3)
+
 ### Adicionado
 - Adiciona suporte a configuração de ciclos para cupons de desconto
 
 
-## 1.0.2 - 08/06/2016
+## [1.0.2 - 09/06/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/1.0.2)
+
 ### Corrigido
 - Corrige bug de parcelamento para faturas avulsas
 
 
-## 1.0.1 - 12/05/2016
+## [1.0.1 - 13/05/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/1.0.1)
+
 ### Corrigido
 - Corrige bug `not_found` para assinaturas com frete desabilitado
 
@@ -126,7 +131,8 @@
 - Ajusta informações do usuário na Vindi pela área do cliente no WooCommerce Subscriptions
 
 
-## 1.0.0 - 27/04/2016
+## [1.0.0 - 05/05/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/1.0.0)
+
 ### Adicionado
 - Adiciona suporte a produtos e assinaturas variáveis
 
@@ -134,17 +140,23 @@
 - Corrige exibição de planos anuais
 
 
-## 0.2.7 - 14/03/2016
+## [0.2.7 - 14/03/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/0.2.7)
+
 ### Ajustado
-- Ajusta webhook 'http_api_curl' para manipular somente request do plugin
+- Ajusta webhook `http_api_curl` para manipular somente request do plugin
 
 
-## 0.2.6 - 25/02/2016
+## [0.2.6 - 25/02/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/0.2.6)
+
 ### Corrigido
 - Corrige bug ao atualizar as informações dos produtos
 
 
-## 0.2.5 - 02/02/2016
+## [0.2.5 - 02/02/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/0.2.5)
+
+### Adicionado
+- Adiciona suporte para TLS 1.2 e aumentando versão mínima do PHP para 5.6.x
+
 ### Ajustado
 - Ajusta listagem dos planos para criação dos produtos
 - Ajusta exibição do método de pagemento atual do cliente na tela de checkout
@@ -153,12 +165,8 @@
 - Corrige bug de cancelamento da assinatura pela área do cliente
 
 
-## 0.2.4 - 02/02/2016
-### Adicionado
-- Adiciona suporte para tls 1.2 e aumentando versão mínima do PHP para 5.6.x
+## [0.2.3 - 18/01/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/0.2.3)
 
-
-## 0.2.3 - 18/01/2016
 ### Adicionado
 - Adiciona WooCommerce Extra Checkout Fields for Brazil como dependência
 
@@ -169,15 +177,18 @@
 - Corrige bug do aviso de conexão com a Vindi
 
 
-## 0.2.2 - 05/01/2016
+## [0.2.2 - 05/01/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/0.2.2)
+
 ### Corrigido
 - Corrige bug de renderização das views na configuração dos produtos
 
 
-## 0.2.1 - 21/12/2015
+## [0.2.1 - 21/12/2015](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/0.2.1)
+
 ### Adicionado
 - Adiciona suporte a múltiplos produtos na mesma assinatura
 
 
-## 0.0.1 - 14/12/2015
+## [0.0.1 - 14/12/2015](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/0.0.1)
+
 - Versão beta
