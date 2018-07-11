@@ -1,22 +1,32 @@
 # Notas das versões
 
 
-## 4.0.2 - 15/06/2018
+## [4.0.2 - 15/06/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/4.0.2)
+
 ### Ajustado
 - Ajusta verificação do certificado SSL
 
 
-## 4.0.1 - 05/04/2018
+## [4.0.1 - 16/04/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/4.0.1)
+
 ### Ajustado
 - Ajusta atualização de telefones
 
 
-## 3.0.7 - 06/12/2017
+## [4.0.0 - 21/12/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/4.0.0)
+
+### Removido
+- Remove dependência do WCS
+
+
+## [3.0.7 - 06/12/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/3.0.7)
+
 ### Ajustado
 - Ajusta valor de produto por quantidade
 
 
-## 3.0.6 - 03/12/2017
+## [3.0.6 - 03/12/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/3.0.6)
+
 ### Ajustado
 - Ajusta cadastro de telefones(dentro da Vindi)
 - Ajusta cancelamento de assinaturas com WooCommerce Memberships
@@ -25,12 +35,14 @@
 - Corrige duplicidade de pedidos em utilização com o WooCommerce Memberships
 
 
-# 3.0.5 - 25/09/2017
+## [3.0.5 - 25/09/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/3.0.5)
+
 ### Ajustado
 - Ajusta parcelamento de fatura avulsa
 
 
-## 3.0.4 - 19/09/2017
+## [3.0.4 - 19/09/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/3.0.4)
+
 ### Adicionado
 - Adiciona parcelamento de assinaturas (deve ser configurado no painel da Vindi)
 - Adiciona suporte a multilojas
@@ -41,30 +53,35 @@
 - Ajusta renovação de pedidos do WC Subscriptions
 
 
-## 3.0.3 - 14/08/2017
+## [3.0.3 - 16/08/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/3.0.3)
+
 ### Ajustado
 - Ajusta desconto de faturas avulsas
 
 
-## 3.0.2 - 26/07/2017
+## [3.0.2 - 27/07/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/3.0.2)
+
 ### Corrigido
 - Corrige tratamento de webhooks
 
 
-## 3.0.1 - 20/07/2017
+## [3.0.1 - 21/07/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/3.0.1)
+
 ### Ajustado
 - Ajusta renovação de pedidos
 - Ajusta registro de itens em compras avulsas
 
 
-## 3.0.0 - 16/05/2017
+## [3.0.0 - 29/05/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/3.0.0)
+
 ### Ajustado
 - Ajusta compatibilidade com o WooCommerce 3.0 ou superior
 - Ajusta renovação das assinaturas
 - Ajusta compatibilidade para frete
 
 
-## 1.2.2 - 06/03/2017
+## [1.2.2 - 07/03/2017](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/1.2.2)
+
 ### Adicionado
 - Adiciona combo_box no checkout para atender vendas com a bandeira Elo
 
@@ -74,18 +91,16 @@
 - Ajusta exibição de periodicidade da assinatura
 
 
-## 1.2.1 - 10/10/2016
+## [1.2.1 - 11/10/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/1.2.1)
+
 ### Ajustado
 - Ajusta no problema de comunicação com a API da Vindi
 - Ajusta o tempo de cache dos métodos de pagamento para 1 hora
-
-
-## 1.2.0 - 05/10/2016
-### Ajustado
 - Ajusta forma de renovação dos pedidos se baseando no evento `bill_created` da Vindi
 
 
-## 1.1.1 - 08/08/2016
+## [1.1.1 - 09/08/2016](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/1.1.1)
+
 ### Removido
 - Remove a opção de parcelamento em assinaturas variáveis
 
