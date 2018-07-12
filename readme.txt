@@ -66,6 +66,7 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - Adiciona envio das taxas do WooCommerce.
 - Adiciona envio dos valores atuais do carrinho para os produtos.
 - Adiciona compatibilidade com Suspensão e Reativação de assinaturas.
+- Adiciona transação de verificação.
 - Remove métodos depreciados do WooCommerce 2.x.
 - Remove menções ao termo 'Subscriptions'.
 
