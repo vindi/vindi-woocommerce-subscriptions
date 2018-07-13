@@ -8,7 +8,7 @@
 [![Avaliação do Plugin][badge-rates]][link-rates]
 [![Downloads no Total][badge-downloads]][link-downloads]
 
-## Descrição
+# Descrição
 O **Vindi WooCommerce** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
 
 # Observações
