@@ -1,11 +1,12 @@
-![alt text align:center](https://vindi-blog.s3.amazonaws.com/wp-content/uploads/2017/10/logo-vindi-1.png "Vindi") 
+<p align="center"><img src ="https://vindi-blog.s3.amazonaws.com/wp-content/uploads/2017/10/logo-vindi-1.png" /></p>
 
+##
 # Vindi - WooCommerce
 
-[![Última Versão no WordPress][ico-version]][link-version]
-[![Licença do Software][ico-license]](license.txt)
-[![Avaliação do Plugin][ico-rates]][link-rates]
-[![Downloads no Total][ico-downloads]][link-downloads]
+[![Licença do Software][badge-license]](LICENSE)
+[![Última Versão no WordPress][badge-version]][link-version]
+[![Avaliação do Plugin][badge-rates]][link-rates]
+[![Downloads no Total][badge-downloads]][link-downloads]
 
 ## Descrição
 O **Vindi WooCommerce** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
@@ -74,10 +75,12 @@ Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md)
 # Licença
 GNU GPLv3. Por favor, veja o [Arquivo de Licença](LICENSE) para mais informações.
 
-[ico-version]: https://img.shields.io/wordpress/plugin/v/vindi-woocommerce-subscriptions.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat-square
-[ico-rates]: https://img.shields.io/wordpress/plugin/r/vindi-woocommerce-subscriptions.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/wordpress/plugin/dt/vindi-woocommerce-subscriptions.svg?style=flat-square
+[badge-license]: https://img.shields.io/badge/license-GPLv3-blue.svg
+[badge-version]: https://img.shields.io/wordpress/plugin/v/vindi-woocommerce-subscriptions.svg
+[badge-rates]: https://img.shields.io/wordpress/plugin/r/vindi-woocommerce-subscriptions.svg
+[badge-downloads]: https://img.shields.io/wordpress/plugin/dt/vindi-woocommerce-subscriptions.svg
+
+
 [link-version]: https://wordpress.org/plugins/vindi-woocommerce-subscriptions/
 [link-rates]: https://wordpress.org/support/view/plugin-reviews/vindi-woocommerce-subscriptions
 [link-downloads]: https://wordpress.org/plugins/vindi-woocommerce-subscriptions/stats/
