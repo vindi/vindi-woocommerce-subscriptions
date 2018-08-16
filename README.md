@@ -1,13 +1,14 @@
-![alt text align:center](https://vindi-blog.s3.amazonaws.com/wp-content/uploads/2017/10/logo-vindi-1.png "Vindi")
+<p align="center"><img src ="https://theme.zdassets.com/theme_assets/494154/baff07fc755fee5daf2e4a0f42b4552cad1ed68e.png" width="30%" height="30%" /></p>
 
+##
 # Vindi - WooCommerce
 
-[![Última Versão no WordPress][ico-version]][link-version]
-[![Licença do Software][ico-license]](license.txt)
-[![Avaliação do Plugin][ico-rates]][link-rates]
-[![Downloads no Total][ico-downloads]][link-downloads]
+[![Licença do Software][badge-license]](LICENSE)
+[![Última Versão no WordPress][badge-version]][link-version]
+[![Avaliação do Plugin][badge-rates]][link-rates]
+[![Downloads no Total][badge-downloads]][link-downloads]
 
-## Descrição
+# Descrição
 O **Vindi WooCommerce** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
 
 # Observações
@@ -16,7 +17,7 @@ O **Vindi WooCommerce** oferece uma solução completa para pagamentos únicos e
 A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil. Com centenas de clientes usando soluções como pagamento online, soluções de notas fiscais integradas, emissão de boletos por email e PDF, integrações com ERPs e diversos relatórios, a Vindi possibilita um sistema online completo para negócios de venda recorrente. Além disso, empresas podem usar o gateway de pagamento integrado ao billing recorrente ou para faturas avulsas.
 
 # Requisitos
-- PHP versão **5.5.19** ou superior.
+- PHP versão **5.6.x** ou superior.
 - Um site com o WordPress instalado.
 - Plugin [WooCommerce](https://wordpress.org/plugins/woocommerce/ "Plugin WooCommerce") instalado e habilitado.
 - Plugin [WooCommerce Extra Checkout](https://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/ "WooCommerce Extra Checkout") Fields for Brazil instalado e habilitado.
@@ -57,6 +58,14 @@ Por favor, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md).
 Caso tenha alguma sugestão ou bug para reportar por favor nos comunique através das [issues](./issues).
 
 # Changelog
+Tipos de mudanças
+- **Adicionado** para novos recursos
+- **Ajustado** para mudanças em recursos existentes
+- **Depreciado** para recursos que serão removidos em breve
+- **Removido** para recursos removidos
+- **Corrigido** para correção de falhas
+- **Segurança** em caso de vulnerabilidades
+
 Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md).
 
 # Créditos
@@ -66,10 +75,12 @@ Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md)
 # Licença
 GNU GPLv3. Por favor, veja o [Arquivo de Licença](LICENSE) para mais informações.
 
-[ico-version]: https://img.shields.io/wordpress/plugin/v/vindi-woocommerce-subscriptions.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat-square
-[ico-rates]: https://img.shields.io/wordpress/plugin/r/vindi-woocommerce-subscriptions.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/wordpress/plugin/dt/vindi-woocommerce-subscriptions.svg?style=flat-square
+[badge-license]: https://img.shields.io/badge/license-GPLv3-blue.svg
+[badge-version]: https://img.shields.io/wordpress/plugin/v/vindi-woocommerce-subscriptions.svg
+[badge-rates]: https://img.shields.io/wordpress/plugin/r/vindi-woocommerce-subscriptions.svg
+[badge-downloads]: https://img.shields.io/wordpress/plugin/dt/vindi-woocommerce-subscriptions.svg
+
+
 [link-version]: https://wordpress.org/plugins/vindi-woocommerce-subscriptions/
 [link-rates]: https://wordpress.org/support/view/plugin-reviews/vindi-woocommerce-subscriptions
 [link-downloads]: https://wordpress.org/plugins/vindi-woocommerce-subscriptions/stats/
