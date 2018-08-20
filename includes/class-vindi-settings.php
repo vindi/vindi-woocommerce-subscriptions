@@ -117,6 +117,7 @@ class Vindi_Settings extends WC_Settings_API
                 'description' => __('Número de ciclos que os cupons de desconto serão aplicados nas assinaturas.', VINDI_IDENTIFIER),
                 'default'     => '0',
                 'options'     => array(
+                    '-1' => 'Ciclos do cupom',
                     '0'  => 'Todos os ciclos',
                     '1'  => '1 ciclo',
                     '2'  => '2 ciclos',

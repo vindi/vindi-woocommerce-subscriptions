@@ -503,26 +503,8 @@ class Vindi_Payment
 
     protected function build_product_items_for_subscription($order_item)
     {
-        if(empty($order_item)) {
+        if (empty($order_item)) {
             return false;
-        }
-
-
-        $total_discount = $this->order->get_total_discount();
-        $coupons_cycles  = $this->container->cycles_to_discount();
-       
-
-        if(empty($coupons_cycles)) {
-            $discount_cycles = $coupons_cycles;
-        } else {
-            $vindi_plan_id   = $this->get_plan();
-            $plan_cycles     = $this->container->api->get_plan_billing_cycles($vindi_plan_id);
-
-            if ($plan_cycles == 0) {
-                $discount_cycles = $coupons_cycles;
-            } else {
-                $discount_cycles = min($plan_cycles, $coupons_cycles);
-            }
         }
         
         $product_item =  array(
@@ -535,19 +517,29 @@ class Vindi_Payment
             )
         );
         
-        if(!empty($total_discount) && $order_item['type'] == 'line_item') {
-            $order_subtotal      = $this->order->get_subtotal();
-            $discount_percentage = ($total_discount / $order_subtotal) * 100;
+        if (!empty($this->order->get_total_discount()) && $order_item['type'] == 'line_item') {
+           
+            if (empty($coupons_cycles = $this->container->cycles_to_discount()) 
+                || $coupons_cycles == 0 
+                || $plan_cycles = $this->container->api->get_plan_billing_cycles($this->get_plan()) == 0) {
+                $discount_cycles = null;
+            } 
+
+            if ($coupons_cycles == -1) {
+                $coupons_cycles = array_values($this->container->woocommerce->cart->get_coupons())[0]->get_usage_limit();
+            }
+
+            $discount_cycles = min($plan_cycles, $coupons_cycles);
+
             $product_item['discounts']  = array(
                 array(
                     'discount_type' => 'percentage',
-                    'percentage'    => $discount_percentage,
+                    'percentage'    => ($this->order->get_total_discount() / $this->order->get_subtotal()) * 100,
                     'cycles'        => $discount_cycles
                 )
             );
-
         }
-        
+
         return $product_item;
     }
 
