@@ -392,9 +392,10 @@ class Vindi_Payment
 
 
         foreach ($order_items as $order_item) {
-            if($item = $this->$call_build_items($order_item)) {
-                $product_items[] = $item;
+            if (empty($order_item)) {
+                continue;
             }
+            $product_items[] = $this->$call_build_items($order_item);
         }
 
         if (empty($product_items)) {
@@ -478,35 +479,27 @@ class Vindi_Payment
 
     protected function build_product_items_for_bill($order_item)
     {
-        if(empty($order_item)) {
-            return false;
-        }
-
-        $item = [
+        $item = array(
             'product_id'        => $order_item['vindi_id'],
             'quantity'          => $order_item['qty'],
-            'pricing_schema'    => [
+            'pricing_schema'    => array(
                 'price'             => $order_item['price'],
                 'schema_type'       => 'per_unit'
-            ]
-        ];
+            )
+        );
 
-        if($order_item['type'] == 'discount') {
-            $item = [
+        if('discount' == $order_item['type']) {
+            $item = array(
                 'product_id'        => $order_item['vindi_id'],
                 'amount'            => $order_item['price']
-            ];
+            );
         }
 
         return $item;
     }
 
     protected function build_product_items_for_subscription($order_item)
-    {
-        if (empty($order_item)) {
-            return false;
-        }
-        
+    {        
         $product_item =  array(
             'product_id'      => $order_item['vindi_id'],
             'quantity'        => $order_item['qty'],
@@ -516,31 +509,41 @@ class Vindi_Payment
                 'schema_type' => 'per_unit'
             )
         );
-        
         if (!empty($this->order->get_total_discount()) && $order_item['type'] == 'line_item') {
-           
-            if (empty($coupons_cycles = $this->container->cycles_to_discount()) 
-                || $coupons_cycles == 0 
-                || $plan_cycles = $this->container->api->get_plan_billing_cycles($this->get_plan()) == 0) {
+            return $this->build_discount_item_for_subscription($order_item, $product_item);
+        }
+        return $product_item;
+    }
+
+    protected function build_discount_item_for_subscription($order_item, $product_item)
+    {            
+        switch ($cycles_to_discount = $this->container->cycles_to_discount()) {
+            case '0':
                 $discount_cycles = null;
-            } 
+                break;
+            case '-1':
+                $cycles_to_discount = array_values(
+                    $this->container->woocommerce->cart->get_coupons())[0]->get_usage_limit();
 
-            if ($coupons_cycles == -1) {
-                $coupons_cycles = array_values($this->container->woocommerce->cart->get_coupons())[0]->get_usage_limit();
-            }
-
-            $discount_cycles = min($plan_cycles, $coupons_cycles);
-
-            $product_item['discounts']  = array(
-                array(
-                    'discount_type' => 'percentage',
-                    'percentage'    => ($this->order->get_total_discount() / $this->order->get_subtotal()) * 100,
-                    'cycles'        => $discount_cycles
-                )
-            );
+                if (($plan_cycles = $this->container->api->get_plan_billing_cycles($this->get_plan())) != 0) {
+                    $discount_cycles = min($plan_cycles, $cycles_to_discount);
+                    break;
+                }
+                $discount_cycles = $cycles_to_discount;
+                break;                
+            default:
+                $discount_cycles = min(
+                    $this->container->api->get_plan_billing_cycles($this->get_plan()), $cycles_to_discount);
+                break;
         }
 
-        return $product_item;
+        return $product_item['discounts']  = array(
+            array(
+                'discount_type' => 'percentage',
+                'percentage'    => ($this->order->get_total_discount() / $this->order->get_subtotal()) * 100,
+                'cycles'        => $discount_cycles
+            )
+        );
     }
 
     /**
