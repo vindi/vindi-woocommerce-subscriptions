@@ -510,7 +510,7 @@ class Vindi_Payment
             )
         );
         if (!empty($this->order->get_total_discount()) && $order_item['type'] == 'line_item') {
-            return $this->build_discount_item_for_subscription($order_item, $product_item);
+            $product_item['discounts'] = $this->build_discount_item_for_subscription($order_item, $product_item);
         }
         return $product_item;
     }
@@ -537,13 +537,11 @@ class Vindi_Payment
                 break;
         }
 
-        return $product_item['discounts']  = array(
-            array(
+        return  array(array(
                 'discount_type' => 'percentage',
                 'percentage'    => ($this->order->get_total_discount() / $this->order->get_subtotal()) * 100,
                 'cycles'        => $discount_cycles
-            )
-        );
+            ));
     }
 
     /**
