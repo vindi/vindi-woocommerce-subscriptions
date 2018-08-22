@@ -515,7 +515,7 @@ class Vindi_Payment
         return $product_item;
     }
 
-    protected function build_discount_item_for_subscription($product_item)
+    protected function build_discount_item_for_subscription()
     {            
         switch ($cycles_to_discount = $this->container->cycles_to_discount()) {
             case '0':
