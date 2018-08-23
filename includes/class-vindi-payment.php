@@ -540,7 +540,7 @@ class Vindi_Payment
         return  array(array(
                 'discount_type' => 'percentage',
                 'percentage'    => ($this->order->get_total_discount() / $this->order->get_subtotal()) * 100,
-                'cycles'        => $discount_cycles
+                'cycles'        => $discount_cycles ?: null;
             ));
     }
 
