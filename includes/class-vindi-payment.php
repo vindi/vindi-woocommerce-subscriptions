@@ -519,22 +519,32 @@ class Vindi_Payment
         return $product_item;
     }
 
-    protected function config_discount_cycles()
+    protected function config_discount_cycles ()
     {
-        $discount_cycles = null;
-        $cycles_to_discount = $this->container->cycles_to_discount();
+        $get_plan_lenght = 
+        function ($cycles_to_discount) 
+        {   
+            if (!$cycles_to_discount) {
+                return  null;
+            }
+            
+            $plan_cycles = $this->container->api->get_plan_billing_cycles($this->get_plan());
 
-        if ($cycles_to_discount && $custom_cycle = array_values(
-            $this->container->woocommerce->cart->get_coupons())[0]->get_usage_limit()) {
-                if ($cycles_to_discount == -1) {
-                    $cycles_to_discount = $custom_cycle;
-                }
-                if ($plan_cycles = $this->container->api->get_plan_billing_cycles($this->get_plan())) {
-                    return min($plan_cycles, $cycles_to_discount);
-                }
-            $discount_cycles = $cycles_to_discount;
+            if ($plan_cycles) { 
+                return min($plan_cycles, $cycles_to_discount);
+            }
+            return $cycles_to_discount;
+        };
+        
+        switch ($cycles_to_discount = $this->container->cycles_to_discount()) { 
+            case '0': 
+                return null;
+            case '-1':
+                return $get_plan_lenght (array_values(
+            $this->container->woocommerce->cart->get_coupons())[0]->get_usage_limit());                         
+            default: 
+                return $get_plan_lenght ($cycles_to_discount);
         }
-        return $discount_cycles;
     }
 
     /**
