@@ -541,7 +541,7 @@ class Vindi_Payment
                 return null;
             case '-1':
                 return $get_plan_length (array_values(
-            $this->container->woocommerce->cart->get_coupons())[0]->get_usage_limit());                         
+            $this->container->woocommerce->cart->get_coupons())[0]->get_usage_limit_per_user());                         
             default: 
                 return $get_plan_length ($cycles_to_discount);
         }
