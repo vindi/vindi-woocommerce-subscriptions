@@ -527,7 +527,6 @@ class Vindi_Payment
             if (!$cycles_to_discount) {
                 return  null;
             }
-            
             $plan_cycles = $this->container->api->get_plan_billing_cycles($this->get_plan());
 
             if ($plan_cycles) { 
@@ -540,8 +539,10 @@ class Vindi_Payment
             case '0': 
                 return null;
             case '-1':
-                return $get_plan_lenght (array_values(
-            $this->container->woocommerce->cart->get_coupons())[0]->get_usage_limit());                         
+                $customCoupon = get_post_meta(array_values(
+                    $this->container->woocommerce->cart->get_coupons())[0]->id,
+                    '_wcs_number_payments', true);
+                return $get_plan_lenght ($customCoupon);      
             default: 
                 return $get_plan_lenght ($cycles_to_discount);
         }
