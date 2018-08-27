@@ -521,7 +521,7 @@ class Vindi_Payment
 
     protected function config_discount_cycles ()
     {
-        $get_plan_lenght = 
+        $get_plan_length = 
         function ($cycles_to_discount) 
         {   
             if (!$cycles_to_discount) {
@@ -544,7 +544,7 @@ class Vindi_Payment
                     '_wcs_number_payments', true);
                 return $get_plan_lenght ($customCoupon);      
             default: 
-                return $get_plan_lenght ($cycles_to_discount);
+                return $get_plan_length ($cycles_to_discount);
         }
     }
 
