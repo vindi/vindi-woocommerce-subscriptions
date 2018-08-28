@@ -1,12 +1,13 @@
 # Notas das versões
 
-## 5.0.0 - 28/06/2018
+## 5.0.0 - 28/08/2018
 
 ### Adicionado
 - Adiciona envio das taxas do WooCommerce
 - Adiciona envio dos valores atuais do carrinho para os produtos
 - Adiciona compatibilidade com Suspensão e Reativação de assinaturas
 - Adiciona transação de verificação
+- Adiciona opção de duração personalizada para cupons de desconto
 
 ### Removido
 - Remove métodos depreciados do WooCommerce 2.x
