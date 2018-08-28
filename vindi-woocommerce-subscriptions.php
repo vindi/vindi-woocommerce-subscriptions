@@ -1,21 +1,23 @@
 <?php
 /**
-* Plugin Name: Vindi Woocommerce
-* Plugin URI:
-* Description: Adiciona o gateway de pagamentos da Vindi para o WooCommerce.
-* Version: 4.0.2
-* Author: Vindi
-* Author URI: https://www.vindi.com.br
-* Requires at least: 4.4
-* Tested up to: 4.9.6
-*
-* Text Domain: vindi-woocommerce-subscriptions
-* Domain Path: /languages/
-*
-* Copyright: © 2014-2018 Vindi Tecnologia e Marketing LTDA
-* License: GPLv3 or later
-* License URI: http://www.gnu.org/licenses/gpl-3.0.html
-*/
+ * Plugin Name: Vindi Woocommerce
+ * Plugin URI:
+ * Description: Adiciona o gateway de pagamentos da Vindi para o WooCommerce.
+ * Version: 5.0.0
+ * Author: Vindi
+ * Author URI: https://www.vindi.com.br
+ * Requires at least: 4.4
+ * Tested up to: 4.9.6
+ * WC requires at least: 3.0.0
+ * WC tested up to: 3.4.3
+ *
+ * Text Domain: vindi-woocommerce-subscriptions
+ * Domain Path: /languages/
+ *
+ * Copyright: © 2014-2018 Vindi Tecnologia e Marketing LTDA
+ * License: GPLv3 or later
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ */
 
 if (! defined('ABSPATH')) die('No script kiddies please!');
 
@@ -37,7 +39,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 	    /**
 		 * @var string
 		 */
-		const VERSION = '4.0.2';
+        const VERSION = '5.0.0';
 
         /**
 		 * @var string

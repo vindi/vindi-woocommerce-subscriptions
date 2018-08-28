@@ -1,4 +1,4 @@
-<p align="center"><img src ="https://vindi-blog.s3.amazonaws.com/wp-content/uploads/2017/10/logo-vindi-1.png" /></p>
+<p align="center"><img src ="https://theme.zdassets.com/theme_assets/494154/baff07fc755fee5daf2e4a0f42b4552cad1ed68e.png" width="30%" height="30%" /></p>
 
 ##
 # Vindi - WooCommerce
