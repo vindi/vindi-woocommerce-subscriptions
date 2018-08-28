@@ -1,6 +1,6 @@
 # Notas das versões
 
-## 5.0.0 - 28/08/2018
+## [5.0.0 - 28/08/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.0.0)
 
 ### Adicionado
 - Adiciona envio das taxas do WooCommerce
