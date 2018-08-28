@@ -392,9 +392,10 @@ class Vindi_Payment
 
 
         foreach ($order_items as $order_item) {
-            if($item = $this->$call_build_items($order_item)) {
-                $product_items[] = $item;
+            if (empty($order_item)) {
+                continue;
             }
+            $product_items[] = $this->$call_build_items($order_item);
         }
 
         if (empty($product_items)) {
@@ -478,53 +479,27 @@ class Vindi_Payment
 
     protected function build_product_items_for_bill($order_item)
     {
-        if(empty($order_item)) {
-            return false;
-        }
-
-        $item = [
+        $item = array(
             'product_id'        => $order_item['vindi_id'],
             'quantity'          => $order_item['qty'],
-            'pricing_schema'    => [
+            'pricing_schema'    => array(
                 'price'             => $order_item['price'],
                 'schema_type'       => 'per_unit'
-            ]
-        ];
+            )
+        );
 
-        if($order_item['type'] == 'discount') {
-            $item = [
+        if('discount' == $order_item['type']) {
+            $item = array(
                 'product_id'        => $order_item['vindi_id'],
                 'amount'            => $order_item['price']
-            ];
+            );
         }
 
         return $item;
     }
 
     protected function build_product_items_for_subscription($order_item)
-    {
-        if(empty($order_item)) {
-            return false;
-        }
-
-
-        $total_discount = $this->order->get_total_discount();
-        $coupons_cycles  = $this->container->cycles_to_discount();
-       
-
-        if(empty($coupons_cycles)) {
-            $discount_cycles = $coupons_cycles;
-        } else {
-            $vindi_plan_id   = $this->get_plan();
-            $plan_cycles     = $this->container->api->get_plan_billing_cycles($vindi_plan_id);
-
-            if ($plan_cycles == 0) {
-                $discount_cycles = $coupons_cycles;
-            } else {
-                $discount_cycles = min($plan_cycles, $coupons_cycles);
-            }
-        }
-        
+    {        
         $product_item =  array(
             'product_id'      => $order_item['vindi_id'],
             'quantity'        => $order_item['qty'],
@@ -534,21 +509,43 @@ class Vindi_Payment
                 'schema_type' => 'per_unit'
             )
         );
-        
-        if(!empty($total_discount) && $order_item['type'] == 'line_item') {
-            $order_subtotal      = $this->order->get_subtotal();
-            $discount_percentage = ($total_discount / $order_subtotal) * 100;
-            $product_item['discounts']  = array(
-                array(
-                    'discount_type' => 'percentage',
-                    'percentage'    => $discount_percentage,
-                    'cycles'        => $discount_cycles
-                )
-            );
-
+        if (!empty($this->order->get_total_discount()) && $order_item['type'] == 'line_item') {
+            $product_item['discounts'] = array(array(
+                'discount_type' => 'percentage',
+                'percentage'    => ($this->order->get_total_discount() / $this->order->get_subtotal()) * 100,
+                'cycles'        => $this->config_discount_cycles()
+            ));
         }
-        
         return $product_item;
+    }
+
+    protected function config_discount_cycles ()
+    {
+        $get_plan_length = 
+        function ($cycles_to_discount) 
+        {   
+            if (!$cycles_to_discount) {
+                return  null;
+            }
+            $plan_cycles = $this->container->api->get_plan_billing_cycles($this->get_plan());
+
+            if ($plan_cycles) { 
+                return min($plan_cycles, $cycles_to_discount);
+            }
+            return $cycles_to_discount;
+        };
+        
+        switch ($cycles_to_discount = $this->container->cycles_to_discount()) { 
+            case '0': 
+                return null;
+            case '-1':
+                $customCoupon = get_post_meta(array_values(
+                    $this->container->woocommerce->cart->get_coupons())[0]->id,
+                    '_wcs_number_payments', true);
+                return $get_plan_length ($customCoupon);      
+            default: 
+                return $get_plan_length ($cycles_to_discount);
+        }
     }
 
     /**
