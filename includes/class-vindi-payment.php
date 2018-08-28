@@ -542,7 +542,7 @@ class Vindi_Payment
                 $customCoupon = get_post_meta(array_values(
                     $this->container->woocommerce->cart->get_coupons())[0]->id,
                     '_wcs_number_payments', true);
-                return $get_plan_lenght ($customCoupon);      
+                return $get_plan_length ($customCoupon);      
             default: 
                 return $get_plan_length ($cycles_to_discount);
         }
