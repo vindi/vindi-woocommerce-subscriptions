@@ -153,7 +153,7 @@ class Vindi_Dependencies
     /**
     * @return  boolean
     */
-    public function wc_memberships_are_activated()
+    public static function wc_memberships_are_activated()
     {
         $wc_memberships = [
             'path'      => 'woocommerce-memberships/woocommerce-memberships.php',
