@@ -23,6 +23,11 @@ class Vindi_API
     private $logger;
 
     /**
+     * @var Vindi_Logger
+     */
+    private $recentRequest;
+
+    /**
      * @var String 'Yes' or 'no'
      */
     private $sandbox;
@@ -249,10 +254,27 @@ class Vindi_API
     }
 
     /**
-     * @param string $code
+     * @param string $subscription_id
      *
-     * @return array|bool|mixed
+     * @return bool
      */
+    public function get_subscription_status($subscription_id)
+    {
+        if (isset($this->recentRequest)) {
+            unset($this->recentRequest);
+            return false;
+        }
+
+        $response = $this->request(sprintf('subscriptions/%s', $subscription_id),'GET')['subscription'];
+        
+        if (array_key_exists('status', $response)) {
+            if ($response['status'] != 'canceled') {
+                $this->recentRequest = $subscription_id;
+                return true;
+            }
+        }
+    }
+
     public function find_customer_by_code($code)
     {
         $response = $this->request(sprintf(

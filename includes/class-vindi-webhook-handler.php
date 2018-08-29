@@ -200,16 +200,20 @@ class Vindi_Webhook_Handler
      **/
     private function subscription_canceled($data)
     {
-        $subscription_id = $data->subscription->code;
-        $subscription    = $this->find_subscription_by_id($subscription_id);
-
-        $wc_memberships = Vindi_Dependencies::wc_memberships_are_activated();
-
-        if($wc_memberships || $this->container->get_synchronism_status()){
-            $subscription->update_status('pending-cancel');
-        } else{
-            $subscription->update_status('cancelled');
+        $subscription    = $this->find_subscription_by_id($data->subscription->code);
+        
+        if($this->container->get_synchronism_status()
+            && ($subscription->has_status('cancelled')
+            || $subscription->has_status('pending-cancel')
+            || $subscription->has_status('on-hold'))) {
+            return;
         }
+
+        if (Vindi_Dependencies::wc_memberships_are_activated()) {
+            $subscription->update_status('pending-cancel');
+            return;
+        }
+        $subscription->update_status('cancelled');
     }
 
     /**
