@@ -7,8 +7,6 @@ class Vindi_Subscription_Status_Handler
      **/
     private $container;
 
-    private $vindi_subscription_id;
-
     public function __construct(Vindi_Settings $container)
     {
         $this->container = $container;
@@ -27,13 +25,10 @@ class Vindi_Subscription_Status_Handler
      * @param string          $new_status
      **/
     public function filter_pre_status($wc_subscription, $new_status)
-    {
-
-        $this->vindi_subscription_id = $this->get_vindi_subscription_id($wc_subscription);
-
+    {   
         switch ($new_status) {
             case 'on-hold':
-                $this->suspend_status();
+                $this->suspend_status($this->get_vindi_subscription_id($wc_subscription));
                 break;
             case 'active':
                 $this->active_status($wc_subscription);
@@ -44,10 +39,10 @@ class Vindi_Subscription_Status_Handler
         }
     }
 
-    public function suspend_status()
+    public function suspend_status($vindi_subscription_id)
     {
         if($this->container->get_synchronism_status()){
-            $this->container->api->suspend_subscription($this->vindi_subscription_id);
+            $this->container->api->suspend_subscription($vindi_subscription_id);
         }
     }
 

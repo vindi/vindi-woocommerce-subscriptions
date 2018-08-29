@@ -3,10 +3,10 @@ Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar, laertejr, rt
 Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions, vindi-woocommerce
 Requires at least: 4.4
-Tested up to: 4.9.6
+Tested up to: 4.9.8
 WC requires at least: 3.0.0
-WC tested up to: 3.4.3
-Stable Tag: 5.0.0
+WC tested up to: 3.4.4
+Stable Tag: 5.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -62,6 +62,9 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+= 5.0.1 - 29/08/2018 =
+- Corrige erro no cancelamento de assinaturas em algumas versões do PHP.
+
 = 5.0.0 - 28/08/2018 =
 - Adiciona envio das taxas do WooCommerce.
 - Adiciona envio dos valores atuais do carrinho para os produtos.
