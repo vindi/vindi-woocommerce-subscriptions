@@ -258,7 +258,7 @@ class Vindi_API
      *
      * @return bool
      */
-    public function get_subscription_status($subscription_id)
+    public function is_subscription_canceled($subscription_id)
     {
         if (isset($this->recentRequest)) {
             unset($this->recentRequest);
