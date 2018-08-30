@@ -202,7 +202,7 @@ class Vindi_Webhook_Handler
     {
         $subscription    = $this->find_subscription_by_id($data->subscription->code);
         
-        if($this->container->get_synchronism_status()
+        if ($this->container->get_synchronism_status()
             && ($subscription->has_status('cancelled')
             || $subscription->has_status('pending-cancel')
             || $subscription->has_status('on-hold'))) {
