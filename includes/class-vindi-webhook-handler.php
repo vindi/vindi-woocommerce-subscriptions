@@ -200,7 +200,7 @@ class Vindi_Webhook_Handler
      **/
     private function subscription_canceled($data)
     {
-        $subscription    = $this->find_subscription_by_id($data->subscription->code);
+        $subscription = $this->find_subscription_by_id($data->subscription->code);
         
         if ($this->container->get_synchronism_status()
             && ($subscription->has_status('cancelled')
