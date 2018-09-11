@@ -50,7 +50,7 @@ class Vindi_Subscription_Status_Handler
      * @param WC_Subscription $wc_subscription
      * @param string          $new_status
      **/
-    public function cancelled_status($wc_subscription,$new_status)
+    public function cancelled_status($wc_subscription,$new_status = 'cancelled')
     {
         if (!$this->container->dependency->wc_memberships_are_activated() && 'pending-cancel' === $new_status) {
             return $wc_subscription->update_status('cancelled');
