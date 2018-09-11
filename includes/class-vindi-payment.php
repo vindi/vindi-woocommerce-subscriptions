@@ -336,7 +336,7 @@ class Vindi_Payment
 
         $payment_profile_id = $this->container->api->create_customer_payment_profile($cc_info);
         
-        if (false == $payment_profile_id)
+        if (!$payment_profile_id)
             $this->abort(__('Falha ao registrar o método de pagamento. Verifique os dados e tente novamente.', VINDI_IDENTIFIER), true);
 
         if ($this->gateway->verify_method())
