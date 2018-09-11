@@ -62,8 +62,9 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
-= 5.2.0 - 11/09/2018 =
+= 5.2.0 - 12/09/2018 =
 - Ajusta sincronismo de assinaturas
+- Corrige comportamento das transações recusadas
 - Remove consulta adicional na fatura da Vindi após finalização da compra
 
 = 5.0.1 - 29/08/2018 =
