@@ -1,5 +1,14 @@
 # Notas das versões
 
+## [5.2.0 - 11/09/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.2.0)
+
+### Ajustado
+- Ajusta sincronismo de assinaturas
+
+### Removido
+- Remove consulta adicional na fatura da Vindi após finalização da compra
+
+
 ## [5.0.1 - 29/08/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.0.1)
 
 ### Corrigido
