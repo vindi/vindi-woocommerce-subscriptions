@@ -8,9 +8,6 @@
 ### Corrigido
 - Corrige comportamento das transações recusadas
 
-### Removido
-- Remove consulta adicional na fatura da Vindi após finalização da compra
-
 
 ## [5.0.1 - 29/08/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.0.1)
 

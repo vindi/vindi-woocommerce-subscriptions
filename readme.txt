@@ -65,7 +65,6 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 = 5.2.0 - 12/09/2018 =
 - Ajusta sincronismo de assinaturas
 - Corrige comportamento das transações recusadas
-- Remove consulta adicional na fatura da Vindi após finalização da compra
 
 = 5.0.1 - 29/08/2018 =
 - Corrige erro no cancelamento de assinaturas em algumas versões do PHP.
