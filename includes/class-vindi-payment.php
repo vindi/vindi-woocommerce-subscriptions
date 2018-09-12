@@ -133,7 +133,7 @@ class Vindi_Payment
             ]
         ));
 
-        $customer = array(
+        $wc_customer = array(
             'name'          => $name,
             'email'         => $email,
             'registry_code' => $cpf_or_cnpj,
@@ -144,22 +144,22 @@ class Vindi_Payment
             'metadata' => $metadata,
         );
 
-        $customer_id = $this->container->api->find_or_create_customer($customer);
+        $vindi_customer = $this->container->api->find_or_create_customer($wc_customer);
 
-        if(!$this->container->api->update_customer_phone($customer_id, $phones)) {
+        if (false == $vindi_customer['id']) {
             $this->abort(__('Falha ao registrar o usuário. Verifique os dados e tente novamente.', VINDI_IDENTIFIER ), true);
         }
 
-        if (false === $customer_id) {
+        if(!$this->container->api->update_customer_phone($vindi_customer['id'], $phones)) {
             $this->abort(__('Falha ao registrar o usuário. Verifique os dados e tente novamente.', VINDI_IDENTIFIER ), true);
         }
 
-        $this->container->logger->log(sprintf('Cliente Vindi: %s', $customer_id));
+        $this->container->logger->log(sprintf('Cliente Vindi: %s', $vindi_customer['id']));
 
         if ($this->is_cc())
-            $this->create_payment_profile($customer_id);
+            $this->create_payment_profile($vindi_customer['id']);
 
-        return $customer_id;
+        return $vindi_customer;
     }
 
     /**
@@ -278,8 +278,8 @@ class Vindi_Payment
      */
     public function process_subscription()
     {
-        $customer_id      = $this->get_customer();
-        $subscription     = $this->create_subscription($customer_id);
+        $customer         = $this->get_customer();
+        $subscription     = $this->create_subscription($customer['id']);
         $wc_subscriptions = wcs_get_subscriptions_for_order($this->order);
         $wc_subscription  = end($wc_subscriptions);
 
@@ -294,7 +294,7 @@ class Vindi_Payment
             $this->abort(__($message, VINDI_IDENTIFIER), true);
         }
 
-        $this->add_download_url_meta_for_subscription($subscription);
+        $this->add_download_url_meta_for_order($subscription, true);
 
         remove_action( 'woocommerce_scheduled_subscription_payment', 'WC_Subscriptions_Manager::prepare_renewal' );
 
@@ -307,8 +307,8 @@ class Vindi_Payment
      */
     public function process_single_payment()
     {
-        $customer_id = $this->get_customer();
-        $bill        = $this->create_bill($customer_id);
+        $customer = $this->get_customer();
+        $bill     = $this->create_bill($customer['id']);
 
         if($message = $this->cancel_if_denied_bill_status($bill)) {
             $this->container->api->delete_bill($bill['id']);
@@ -317,7 +317,7 @@ class Vindi_Payment
         }
 
         add_post_meta($this->order->id, 'vindi_wc_bill_id', $bill['id']);
-        $this->add_download_url_meta_for_single_payment($bill['id']);
+        $this->add_download_url_meta_for_order($bill, false);
 
         return $this->finish_payment($bill);
     }
@@ -334,13 +334,13 @@ class Vindi_Payment
         if(false === $cc_info)
             return ;
 
-        $payment_profile_id = $this->container->api->create_customer_payment_profile($cc_info);
+        $payment_profile = $this->container->api->create_customer_payment_profile($cc_info);
         
-        if (false == $payment_profile_id)
+        if (false == $payment_profile)
             $this->abort(__('Falha ao registrar o método de pagamento. Verifique os dados e tente novamente.', VINDI_IDENTIFIER), true);
 
         if ($this->gateway->verify_method())
-            $this->verify_payment_profile($payment_profile_id);
+            $this->verify_payment_profile($payment_profile['id']);
     }
 
     /**
@@ -610,9 +610,9 @@ class Vindi_Payment
             'installments'        => $this->installments()
         );
 
-        $bill_id = $this->container->api->create_bill($body);
+        $bill = $this->container->api->create_bill($body);
 
-        if (! $bill_id) {
+        if (! $bill) {
             $this->container->logger->log(sprintf('Erro no pagamento do pedido %s.', $this->order->id));
             $message = sprintf(__('Pagamento Falhou. (%s)', VINDI_IDENTIFIER), $this->container->api->last_error);
             $this->order->update_status('failed', $message);
@@ -620,42 +620,24 @@ class Vindi_Payment
             throw new Exception($message);
         }
 
-        return $bill_id;
+        return $bill;
     }
 
-    /**
-     * @param $subscription
-     */
-    protected function add_download_url_meta_for_subscription($subscription)
+    protected function add_download_url_meta_for_order($sale, $subscription)
     {
-        if (isset($subscription['bill'])) {
-            $bill         = $subscription['bill'];
-            $download_url = false;
-
-            if ('review' === $bill['status']) {
-                $this->container->api->approve_bill($bill['id']);
-                $download_url = $this->container->api->get_bank_slip_download($bill['id']);
-            } elseif (isset($bill['charges']) && count($bill['charges'])) {
-                $download_url = $bill['charges'][0]['print_url'];
+        if ($subscription)
+        {
+            if (isset($sale['bill']) && isset($sale['bill']['charges']) && count($sale['bill']['charges'])) {
+                add_post_meta($this->order->id, 'vindi_wc_invoice_download_url',
+                $sale['bill']['charges'][0]['print_url']);
             }
-
-            if ($download_url)
-                add_post_meta($this->order->id, 'vindi_wc_invoice_download_url', $download_url);
+            return;
         }
-    }
 
-    /**
-     * @param int $bill_id
-     */
-    protected function add_download_url_meta_for_single_payment($bill_id)
-    {
-        $download_url = false;
-
-        if ($this->container->api->approve_bill($bill_id))
-            $download_url = $this->container->api->get_bank_slip_download($bill_id);
-
-        if ($download_url)
-            add_post_meta($this->order->id, 'vindi_wc_invoice_download_url', $download_url);
+        if (isset($sale['charges']) && count($sale['charges'])) {
+            add_post_meta($this->order->id, 'vindi_wc_invoice_download_url',
+            $sale['charges'][0]['print_url']);
+        }
     }
 
     protected function cancel_if_denied_bill_status($bill)

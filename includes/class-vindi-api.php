@@ -203,7 +203,7 @@ class Vindi_API
     public function create_customer($body)
     {
         if ($response = $this->request('customers', 'POST', $body)) {
-            return $response['customer']['id'];
+            return $response['customer'];
         }
 
         return false;
@@ -284,26 +284,26 @@ class Vindi_API
 
         if ($response && (1 === count($response['customers'])) &&
             isset($response['customers'][0]['id'])) {
-            return $response['customers'][0]['id'];
+            return $response['customers'][0];
         }
 
         return false;
     }
 
     /**
-     * @param array $body (name, email, code)
+     * @param array $wc_customer (name, email, code)
      *
      * @return array|bool|mixed
      */
-    public function find_or_create_customer($body)
+    public function find_or_create_customer($wc_customer)
     {
-        $customer_id = $this->find_customer_by_code($body['code']);
+        $vindi_customer = $this->find_customer_by_code($wc_customer['code']);
 
-        if (false === $customer_id) {
-            return $this->create_customer($body);
+        if (false == $vindi_customer['id']) {
+            return $this->create_customer($wc_customer);
         }
 
-        return $customer_id;
+        return $vindi_customer;
     }
 
 
@@ -317,7 +317,7 @@ class Vindi_API
         if(empty($customer))
             return false;
 
-        $query    = urlencode("customer_id={$customer} status=active type=PaymentProfile::CreditCard");
+        $query    = urlencode("customer_id={$customer['id']} status=active type=PaymentProfile::CreditCard");
         $response = $this->request('payment_profiles?query='.$query, 'GET');
 
         if(isset($response['payment_profiles'][0]))
@@ -338,7 +338,7 @@ class Vindi_API
         $log['card_number'] = '**** *' . substr($log['card_number'], -3);
         $log['card_cvv']    = '***';
 
-        return $this->request('payment_profiles', 'POST', $body, $log)['payment_profile']['id'];
+        return $this->request('payment_profiles', 'POST', $body, $log)['payment_profile'];
     }
 
     public function verify_customer_payment_profile($payment_profile_id)
@@ -379,7 +379,7 @@ class Vindi_API
 
             $response = $this->request('payment_methods', 'GET');
 
-            if (false === $response)
+            if (false == $response)
                 return false;
 
             foreach ($response['payment_methods'] as $method) {
@@ -468,9 +468,7 @@ class Vindi_API
             return false;
         }
 
-        $bill = $response['bill'];
-
-        if ('review' !== $bill['status']) {
+        if ('review' !== $response['bill']['status']) {
             return true;
         }
 
@@ -808,9 +806,9 @@ class Vindi_API
 
     public function update_user_billing_informations($code, $informations)
     {
-        $user_id = $this->find_customer_by_code($code);
+        $customer = $this->find_customer_by_code($code);
 
-        if(empty($user_id)) {
+        if(empty($customer)) {
             return false;
         }
 
@@ -829,6 +827,6 @@ class Vindi_API
             ]
         ];
 
-        return $this->request("customers/{$user_id}", 'PUT', $data);
+        return $this->request("customers/{$customer['id']}", 'PUT', $data);
     }
 }
