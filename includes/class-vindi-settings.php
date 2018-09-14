@@ -5,7 +5,7 @@ class Vindi_Settings extends WC_Settings_API
     /**
      * @var Vindi_Dependencies
      **/
-    private $dependency;
+    public $dependency;
 
     /**
      * @var Vindi_WooCommerce_Subscriptions
