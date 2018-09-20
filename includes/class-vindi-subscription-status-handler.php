@@ -23,7 +23,7 @@ class Vindi_Subscription_Status_Handler
      **/
     public function filter_pre_status($wc_subscription, $new_status, $old_status)
     {
-	    $vindi_subscription_id = $this->get_vindi_subscription_id( $wc_subscription );
+	    $vindi_sub_id = $this->get_vindi_subscription_id( $wc_subscription );
 
         switch ($new_status) {
             case 'on-hold':
@@ -31,11 +31,11 @@ class Vindi_Subscription_Status_Handler
                 break;
             case 'active':
             	if( 'on-hold' === $old_status ) {
-		            $this->active_status( $vindi_subscription_id );
+		            $this->active_status( $vindi_sub_id );
 	            }
                 break;
 	        case 'cancelled':
-		        $this->cancelled_status( $vindi_subscription_id );
+		        $this->cancelled_status( $vindi_sub_id );
 	        	break;
 	        case 'pending-cancel':
 		        if ( ! $this->container->dependency->wc_memberships_are_activated() ) {
@@ -45,27 +45,27 @@ class Vindi_Subscription_Status_Handler
         }
     }
 
-    public function suspend_status($vindi_subscription_id)
+    public function suspend_status($vindi_sub_id)
     {
         if ($this->container->get_synchronism_status()) {
-            $this->container->api->suspend_subscription($vindi_subscription_id);
+            $this->container->api->suspend_subscription($vindi_sub_id);
         }
     }
 
 	/**
 	 * @param string $vindi_subscription_id
 	 **/
-	public function cancelled_status( $vindi_subscription_id ) {
-		$this->container->api->suspend_subscription( $vindi_subscription_id, true );
+	public function cancelled_status( $vindi_sub_id ) {
+		$this->container->api->suspend_subscription( $vindi_sub_id, true );
 	}
 
     /**
      * @param string $vindi_subscription_id
      **/
-    public function active_status( $vindi_subscription_id )
+    public function active_status( $vindi_sub_id )
     {
         if ( $this->container->get_synchronism_status() ) {
-            $this->container->api->activate_subscription( $vindi_subscription_id );
+            $this->container->api->activate_subscription( $vindi_sub_id );
         }
     }
 
