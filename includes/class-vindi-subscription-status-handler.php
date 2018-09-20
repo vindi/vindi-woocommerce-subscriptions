@@ -38,8 +38,13 @@ class Vindi_Subscription_Status_Handler
 	            }
                 break;           
             default:
-                $this->cancelled_status($wc_subscription,$new_status);
-                break;
+
+	            if ( ! $this->container->dependency->wc_memberships_are_activated() && 'pending-cancel' === $new_status ) {
+		            return $wc_subscription->update_status( 'cancelled' );
+	            }
+
+	            $this->cancelled_status( $vindi_subscription_id );
+	            break;
         }
     }
 
@@ -50,19 +55,14 @@ class Vindi_Subscription_Status_Handler
         }
     }
 
-    /**
-     * @param WC_Subscription $wc_subscription
-     * @param string          $new_status
-     **/
-    public function cancelled_status($wc_subscription,$new_status = 'cancelled')
-    {
-        if (!$this->container->dependency->wc_memberships_are_activated() && 'pending-cancel' === $new_status) {
-            return $wc_subscription->update_status('cancelled');
-        }
-        if ($this->container->api->is_subscription_canceled($this->vindi_subscription_id)) {
-            $this->container->api->suspend_subscription($this->vindi_subscription_id, true); 
-        }
-    }
+	/**
+	 * @param string $vindi_subscription_id
+	 **/
+	public function cancelled_status( $vindi_subscription_id ) {
+		if ( $this->container->api->is_subscription_canceled( $vindi_subscription_id ) ) {
+			$this->container->api->suspend_subscription( $vindi_subscription_id, true );
+		}
+	}
 
     /**
      * @param string $vindi_subscription_id
