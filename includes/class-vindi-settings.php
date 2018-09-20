@@ -28,6 +28,11 @@ class Vindi_Settings extends WC_Settings_API
     public $api;
 
     /**
+     * @var Vindi_Plan
+     **/
+    public $vindi_plan;
+
+    /**
      * @var Vindi_Logger
      **/
     public $logger;

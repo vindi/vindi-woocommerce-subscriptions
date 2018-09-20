@@ -201,16 +201,8 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         if($this->is_single_order())
             return $this->installments;
         
-        foreach($this->container->woocommerce->cart->cart_contents as $item) {
-            $plan_id[] = $item['data']->get_meta('vindi_subscription_plan');
-        }
-        
-        foreach($plan_id as $id) {
-            $response = $this->container->api->get_plan_installments($id);
-
-            if($response > 1)
-                $installments = $response;               
-        }
+        if(($plan_installments = $this->container->vindi_plan['installments']) > 1)
+            $installments = $plan_installments;               
 
         if(empty($installments))
             return 1;
