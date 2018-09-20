@@ -25,22 +25,23 @@ class Vindi_Subscription_Status_Handler
      * @param string          $new_status
      **/
     public function filter_pre_status($wc_subscription, $new_status)
-    {   
+    {
         switch ($new_status) {
             case 'on-hold':
-                $this->suspend_status($this->get_vindi_subscription_id($wc_subscription));
+                $this->suspend_status($wc_subscription);
                 break;
             case 'active':
                 $this->active_status($wc_subscription);
-                break;           
+                break;
             default:
-                $this->cancelled_status($wc_subscription,$new_status);
+                $this->cancelled_status($wc_subscription, $new_status);
                 break;
         }
     }
 
-    public function suspend_status($vindi_subscription_id)
+    public function suspend_status($wc_subscription)
     {
+        $vindi_subscription_id = $this->get_vindi_subscription_id($wc_subscription);
         if ($this->container->get_synchronism_status()) {
             $this->container->api->suspend_subscription($vindi_subscription_id);
         }
@@ -50,13 +51,15 @@ class Vindi_Subscription_Status_Handler
      * @param WC_Subscription $wc_subscription
      * @param string          $new_status
      **/
-    public function cancelled_status($wc_subscription,$new_status = 'cancelled')
+    public function cancelled_status($wc_subscription, $new_status = 'cancelled')
     {
         if (!$this->container->dependency->wc_memberships_are_activated() && 'pending-cancel' === $new_status) {
             return $wc_subscription->update_status('cancelled');
         }
-        if ($this->container->api->is_subscription_canceled($this->vindi_subscription_id)) {
-            $this->container->api->suspend_subscription($this->vindi_subscription_id, true); 
+
+        $vindi_subscription_id = $this->get_vindi_subscription_id($wc_subscription);
+        if ($this->container->api->is_subscription_canceled($vindi_subscription_id)) {
+            $this->container->api->suspend_subscription($vindi_subscription_id, true); 
         }
     }
 
@@ -65,8 +68,9 @@ class Vindi_Subscription_Status_Handler
      **/
     public function active_status($wc_subscription)
     {
-        if ($wc_subscription->has_status('on-hold') && $this->container->get_synchronism_status()) {
-            $this->container->api->activate_subscription($this->vindi_subscription_id);
+        $vindi_subscription_id = $this->get_vindi_subscription_id($wc_subscription);
+        if ($this->container->get_synchronism_status()) {
+            $this->container->api->activate_subscription($vindi_subscription_id);
         }
     }
 
