@@ -88,6 +88,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
     			'class-vindi-payment.php',
     			'class-vindi-webhook-handler.php',
     			'class-vindi-subscription-status-handler.php',
+				'class-vindi-wc-subscriptions-disable-renewal.php',
             ));
 
 			$this->settings                    = new Vindi_Settings();
