@@ -11,10 +11,6 @@ class Vindi_Subscription_Status_Handler
     {
         $this->container = $container;
 
-        add_action('woocommerce_subscription_status_cancelled',array(
-            &$this, 'cancelled_status'
-        ));
-
         add_action('woocommerce_subscription_status_updated',array(
             &$this, 'filter_pre_status'
         ), 1, 3);
@@ -34,18 +30,18 @@ class Vindi_Subscription_Status_Handler
                 $this->suspend_status($this->get_vindi_subscription_id($wc_subscription));
                 break;
             case 'active':
-            	if( 'on-hold' == $old_status ) {
+            	if( 'on-hold' === $old_status ) {
 		            $this->active_status( $vindi_subscription_id );
 	            }
-                break;           
-            default:
-
-	            if ( ! $this->container->dependency->wc_memberships_are_activated() && 'pending-cancel' === $new_status ) {
-		            return $wc_subscription->update_status( 'cancelled' );
-	            }
-
-	            $this->cancelled_status( $vindi_subscription_id );
-	            break;
+                break;
+	        case 'cancelled':
+		        $this->cancelled_status( $vindi_subscription_id );
+	        	break;
+	        case 'pending-cancel':
+		        if ( ! $this->container->dependency->wc_memberships_are_activated() ) {
+			        $wc_subscription->update_status( 'cancelled' );
+		        }
+	        	break;
         }
     }
 
