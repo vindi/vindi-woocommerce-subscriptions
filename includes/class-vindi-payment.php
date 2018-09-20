@@ -291,6 +291,7 @@ class Vindi_Payment
         if ($message = $this->cancel_if_denied_bill_status($subscription['bill'])) {
             $wc_subscription->update_status('cancelled', __($message, VINDI_IDENTIFIER));
             $this->order->update_status('cancelled', __($message, VINDI_IDENTIFIER));
+            $this->container->api->suspend_subscription( $subscription['id'], true );
             $this->abort(__($message, VINDI_IDENTIFIER), true);
         }
 
