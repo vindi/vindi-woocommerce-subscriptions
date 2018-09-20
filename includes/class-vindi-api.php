@@ -240,6 +240,20 @@ class Vindi_API
         return false;
     }
 
+
+	/**
+	 * @param int   $subscription_id
+	 *
+	 * @return array|bool|mixed
+	 */
+	public function get_subscription($subscription_id)
+	{
+		if ($response = $this->request('subscriptions/' . $subscription_id, 'GET'))
+			return $response;
+
+		return false;
+	}
+
     /**
      * @param int   $bill_id
      *
