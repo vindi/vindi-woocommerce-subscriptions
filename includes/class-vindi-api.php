@@ -28,6 +28,11 @@ class Vindi_API
     private $recentRequest;
 
     /**
+     * @var Vindi_Logger
+     */
+    private $vindi_customer;
+
+    /**
      * @var String 'Yes' or 'no'
      */
     private $sandbox;
@@ -277,6 +282,9 @@ class Vindi_API
 
     public function find_customer_by_code($code)
     {
+        if (isset($this->vindi_customer) && $this->vindi_customer['code'] == $code)
+            return $this->vindi_customer;
+
         $response = $this->request(sprintf(
             'customers/search?code=%s',
             $code
@@ -284,7 +292,8 @@ class Vindi_API
 
         if ($response && (1 === count($response['customers'])) &&
             isset($response['customers'][0]['id'])) {
-            return $response['customers'][0];
+            $this->vindi_customer = $response['customers'][0]
+            return $this->vindi_customer;
         }
 
         return false;
