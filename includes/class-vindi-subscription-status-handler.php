@@ -33,12 +33,20 @@ class Vindi_Subscription_Status_Handler
             case 'active':
                 $this->active_status($wc_subscription);
                 break;
-            default:
-                $this->cancelled_status($wc_subscription, $new_status);
+            case 'cancelled':
+                $this->cancelled_status($wc_subscription);
+                break;
+            case 'pending-cancel':
+                if (!$this->container->dependency->wc_memberships_are_activated()) {
+                    $wc_subscription->update_status( 'cancelled' );
+                }
                 break;
         }
     }
 
+    /**
+     * @param WC_Subscription $wc_subscription
+     **/
     public function suspend_status($wc_subscription)
     {
         $vindi_subscription_id = $this->get_vindi_subscription_id($wc_subscription);
@@ -49,14 +57,9 @@ class Vindi_Subscription_Status_Handler
 
     /**
      * @param WC_Subscription $wc_subscription
-     * @param string          $new_status
      **/
-    public function cancelled_status($wc_subscription, $new_status = 'cancelled')
+    public function cancelled_status($wc_subscription)
     {
-        if (!$this->container->dependency->wc_memberships_are_activated() && 'pending-cancel' === $new_status) {
-            return $wc_subscription->update_status('cancelled');
-        }
-
         $vindi_subscription_id = $this->get_vindi_subscription_id($wc_subscription);
         if ($this->container->api->is_subscription_canceled($vindi_subscription_id)) {
             $this->container->api->suspend_subscription($vindi_subscription_id, true); 
@@ -79,6 +82,9 @@ class Vindi_Subscription_Status_Handler
      **/
     public function get_vindi_subscription_id($wc_subscription)
     {
-        return end(get_post_meta($wc_subscription->id, 'vindi_wc_subscription_id'));
+        $subscription_id = method_exists($wc_subscription, 'get_id')
+        ? $wc_subscription->get_id()
+        : $wc_subscription->id;
+        return end(get_post_meta($subscription_id, 'vindi_wc_subscription_id'));
     }
 }
