@@ -23,6 +23,7 @@ class Vindi_Subscription_Status_Handler
     /**
      * @param WC_Subscription $wc_subscription
      * @param string          $new_status
+     * @param string          $old_status
      **/
     public function filter_pre_status($wc_subscription, $new_status, $old_status)
     {
@@ -59,9 +60,7 @@ class Vindi_Subscription_Status_Handler
 	 * @param string $vindi_subscription_id
 	 **/
 	public function cancelled_status( $vindi_subscription_id ) {
-		if ( $this->container->api->is_subscription_canceled( $vindi_subscription_id ) ) {
-			$this->container->api->suspend_subscription( $vindi_subscription_id, true );
-		}
+		$this->container->api->suspend_subscription( $vindi_subscription_id, true );
 	}
 
     /**
