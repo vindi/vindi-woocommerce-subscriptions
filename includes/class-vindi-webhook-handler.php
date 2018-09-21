@@ -122,7 +122,8 @@ class Vindi_Webhook_Handler
             'bill_id'                => $data->bill->id
         ];
 
-        if(!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id'], $renew_infos['cycle'])) {
+        if(!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id']
+            , $renew_infos['cycle'])) {
             $this->subscription_renew($renew_infos);
         }
     }
@@ -369,22 +370,22 @@ class Vindi_Webhook_Handler
 	 *
 	 * @param $data object
 	 **/
-	private function update_next_payment( $data ) {
+	private function update_next_payment($data) {
 
 		// let's find the subscription in the API
 		// we need this step because the actual next billing date does not come from the /bill webhook
-		$vindi_subscription = $this->container->api->get_subscription( $data->bill->subscription->id );
+		$vindi_subscription = $this->container->api->get_subscription($data->bill->subscription->id);
 
-		if ( $vindi_subscription and isset( $vindi_subscription['subscription'] ) ) {
+		if ($vindi_subscription && isset($vindi_subscription['subscription'])) {
 
 			// format next payment date
-			$next_payment = date( 'Y-m-d H:i:s', strtotime( $vindi_subscription['subscription']['next_billing_at'] ) );
+			$next_payment = date('Y-m-d H:i:s', strtotime($vindi_subscription['subscription']['next_billing_at']));
 
 			// find our wc_subscription
-			$subscription = $this->find_subscription_by_id( $data->bill->subscription->code );
+			$subscription = $this->find_subscription_by_id($data->bill->subscription->code);
 
 			// update the date to show the user when will be his next payment
-			$subscription->update_dates( array( 'next_payment' => $next_payment ) );
+			$subscription->update_dates(array('next_payment' => $next_payment));
 		}
 	}
 }
