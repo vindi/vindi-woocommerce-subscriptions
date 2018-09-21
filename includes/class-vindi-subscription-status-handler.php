@@ -55,7 +55,7 @@ class Vindi_Subscription_Status_Handler
         if (!$this->container->dependency->wc_memberships_are_activated() && 'pending-cancel' === $new_status) {
             return $wc_subscription->update_status('cancelled');
         }
-        if ($this->container->api->is_subscription_canceled($this->vindi_subscription_id)) {
+        if (!$this->container->api->is_subscription_canceled($this->vindi_subscription_id)) {
             $this->container->api->suspend_subscription($this->vindi_subscription_id, true); 
         }
     }
