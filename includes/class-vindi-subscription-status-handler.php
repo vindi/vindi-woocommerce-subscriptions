@@ -49,9 +49,9 @@ class Vindi_Subscription_Status_Handler
      **/
     public function suspend_status($wc_subscription)
     {
-        $vindi_subscription_id = $this->get_vindi_subscription_id($wc_subscription);
+        $subscription_id = $this->get_vindi_subscription_id($wc_subscription);
         if ($this->container->get_synchronism_status()) {
-            $this->container->api->suspend_subscription($vindi_subscription_id);
+            $this->container->api->suspend_subscription($subscription_id);
         }
     }
 
@@ -60,9 +60,9 @@ class Vindi_Subscription_Status_Handler
      **/
     public function cancelled_status($wc_subscription)
     {
-        $vindi_subscription_id = $this->get_vindi_subscription_id($wc_subscription);
-        if ($this->container->api->is_subscription_canceled($vindi_subscription_id)) {
-            $this->container->api->suspend_subscription($vindi_subscription_id, true); 
+        $subscription_id = $this->get_vindi_subscription_id($wc_subscription);
+        if ($this->container->api->is_subscription_canceled($subscription_id)) {
+            $this->container->api->suspend_subscription($subscription_id, true); 
         }
     }
 
@@ -71,9 +71,9 @@ class Vindi_Subscription_Status_Handler
      **/
     public function active_status($wc_subscription)
     {
-        $vindi_subscription_id = $this->get_vindi_subscription_id($wc_subscription);
+        $subscription_id = $this->get_vindi_subscription_id($wc_subscription);
         if ($this->container->get_synchronism_status()) {
-            $this->container->api->activate_subscription($vindi_subscription_id);
+            $this->container->api->activate_subscription($subscription_id);
         }
     }
 
