@@ -248,7 +248,7 @@ class Vindi_API
 	 */
 	public function get_subscription($subscription_id)
 	{
-		if ($response = $this->request('subscriptions/' . $subscription_id, 'GET'))
+		if ($response = $this->request(sprintf('subscriptions/%s', $subscription_id),'GET')['subscription'])
 			return $response;
 
 		return false;
@@ -274,16 +274,18 @@ class Vindi_API
      */
     public function is_subscription_canceled($subscription_id)
     {
-        if (isset($this->recentRequest)) {
-            unset($this->recentRequest);
+        if (isset($this->recentRequest)
+            && $this->recentRequest['id'] == $subscription_id) {
+            if ($this->recentRequest['status'] == 'canceled')
+                return true;
             return false;
         }
 
-        $response = $this->request(sprintf('subscriptions/%s', $subscription_id),'GET')['subscription'];
+        $response = $this->get_subscription($subscription_id);
         
         if (array_key_exists('status', $response)) {
-            if ($response['status'] != 'canceled') {
-                $this->recentRequest = $subscription_id;
+            if ($response['status'] == 'canceled') {
+                $this->recentRequest = $response;
                 return true;
             }
         }
