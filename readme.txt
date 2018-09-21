@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 4.9.8
 WC requires at least: 3.0.0
 WC tested up to: 3.4.4
-Stable Tag: 5.2.0
+Stable Tag: 5.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -62,6 +62,9 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+= 5.2.1 - 21/09/2018 =
+- Corrige fluxo de assinatura pós-cancelamento no Woocommerce
+
 = 5.2.0 - 12/09/2018 =
 - Ajusta sincronismo de assinaturas
 - Corrige comportamento das transações recusadas
