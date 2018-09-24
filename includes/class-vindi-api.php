@@ -308,7 +308,7 @@ class Vindi_API
     {
         $vindi_customer = $this->find_customer_by_code($wc_customer['code']);
 
-        if (false == $vindi_customer['id']) {
+        if (false == $vindi_customer) {
             return $this->create_customer($wc_customer);
         }
 
