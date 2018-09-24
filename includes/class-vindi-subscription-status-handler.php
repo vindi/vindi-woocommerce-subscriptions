@@ -24,7 +24,6 @@ class Vindi_Subscription_Status_Handler{
 
 		$subscription_id = $this->get_vindi_subscription_id( $wc_subscription );
 
-
 		$result = apply_filters( 'vindi_status_handler_filter_pre_status', null, $wc_subscription, $new_status, $old_status, $this );
 
 		if ( null !== $result ) {
@@ -35,7 +34,6 @@ class Vindi_Subscription_Status_Handler{
 			return;
 		}
 
-
 		switch ( $new_status ) {
 			case 'on-hold':
 				$this->suspend_status( $subscription_id );
@@ -43,16 +41,15 @@ class Vindi_Subscription_Status_Handler{
 			case 'active':
 				$this->active_status( $subscription_id );
 				break;
+			case 'cancelled':
+				$this->cancelled_status( $subscription_id );
+				break;
 			case 'pending-cancel':
 				if ( ! $this->container->dependency->wc_memberships_are_activated() ) {
 					$wc_subscription->update_status( 'cancelled' );
 				}
 				break;
-			default:
-				$this->suspend_status( $subscription_id );
-				break;
 		}
-
 	}
 
 	public function suspend_status( $subscription_id ) {
