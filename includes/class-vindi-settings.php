@@ -28,11 +28,6 @@ class Vindi_Settings extends WC_Settings_API
     public $api;
 
     /**
-     * @var Vindi_Plan
-     **/
-    public $vindi_plan;
-
-    /**
      * @var Vindi_Logger
      **/
     public $logger;
@@ -276,6 +271,9 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function check_ssl()
     {
+        if ($this->get_is_active_sandbox())
+            return true;
+
         return $this->api->is_merchant_status_trial_or_sandbox()
             || is_ssl();
     }

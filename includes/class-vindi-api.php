@@ -23,14 +23,19 @@ class Vindi_API
     private $logger;
 
     /**
-     * @var Vindi_Logger
+     * @var string
      */
     private $recentRequest;
 
     /**
-     * @var Vindi_Logger
+     * @var Vindi_Customer
      */
     private $vindi_customer;
+
+    /**
+     * @var Vindi_Plan
+     */
+    public $current_plan;
 
     /**
      * @var String 'Yes' or 'no'
@@ -292,7 +297,7 @@ class Vindi_API
 
         if ($response && (1 === count($response['customers'])) &&
             isset($response['customers'][0]['id'])) {
-            $this->vindi_customer = $response['customers'][0]
+            $this->vindi_customer = $response['customers'][0];
             return $this->vindi_customer;
         }
 
@@ -518,50 +523,6 @@ class Vindi_API
     }
 
     /**
-     * @param int $id
-     *
-     * @return array
-     */
-    public function get_plan_items($id)
-    {
-        $list     = array();
-        $response = $this->request(sprintf('plans/%s', $id), 'GET');
-
-        if ($plan = $response['plan']) {
-            foreach ($plan['plan_items'] as $item) {
-                if (isset($item['product'])) {
-                    $list[] = $item['product']['id'];
-                }
-            }
-        }
-
-        return $list;
-    }
-
-    /**
-     * @param int   $plan_id
-     * @param float $order_total
-     *
-     * @return array
-     */
-    public function build_plan_items_for_subscription($plan_id, $order_total)
-    {
-        $list = array();
-
-        foreach ($this->get_plan_items($plan_id) as $item) {
-            $list[] = array(
-                'product_id'     => $item,
-                'pricing_schema' => array(
-                    'price' => $order_total
-                ),
-            );
-            $order_total = 0;
-        }
-
-        return $list;
-    }
-
-    /**
      * @return array
      */
     public function get_plans()
@@ -606,39 +567,11 @@ class Vindi_API
         $response = $this->request('plans/' . $id, 'GET');
 
         if (empty($response['plan'])) {
+            $this->current_plan = false;
             return false;
         }
-
-        return $response['plan'];
-    }
-
-    /**
-     * @return int|bool|mixed
-     */
-    public function get_plan_billing_cycles($plan_id)
-    {
-        $plan = $this->get_plan($plan_id);
-
-        if(empty($plan)) {
-            return false;
-        }
-
-        return (int) $plan['billing_cycles'];
-
-    }
-
-    /**
-     * @return int|bool|mixed
-     */
-    public function get_plan_installments($plan_id)
-    {
-        $plan = $this->get_plan($plan_id);
-
-        if(empty($plan)) {
-            return false;
-        }
-
-        return (int) $plan['installments'];
+        $this->current_plan = $response['plan'];
+        return $this->current_plan;
     }
 
     /**

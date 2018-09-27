@@ -528,7 +528,7 @@ class Vindi_Payment
             if (!$cycles_to_discount) {
                 return  null;
             }
-            $plan_cycles = $this->container->vindi_plan['billing_cycles'];
+            $plan_cycles = (int) $this->container->api->current_plan['billing_cycles'];
 
             if ($plan_cycles) { 
                 return min($plan_cycles, $cycles_to_discount);
@@ -568,14 +568,14 @@ class Vindi_Payment
      */
     protected function create_subscription($customer_id)
     {
-        $this->container->vindi_plan = $this->container->api->get_plan($this->get_plan());
+        $vindi_plan = $this->get_plan();
         $wc_subscription_array = wcs_get_subscriptions_for_order($this->order->id);
         $wc_subscription       = end($wc_subscription_array);
 
         $body = array(
             'customer_id'         => $customer_id,
             'payment_method_code' => $this->payment_method_code(),
-            'plan_id'             => $this->container->vindi_plan['id'],
+            'plan_id'             => $this->vindi_plan,
             'product_items'       => $this->build_product_items('subscription'),
             'code'                => $wc_subscription->id,
             'installments'        => $this->installments()
