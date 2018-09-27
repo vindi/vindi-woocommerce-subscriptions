@@ -7,6 +7,10 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
      */
     private $max_installments = 12;
 
+    private $payment_profile;
+
+    private $current_customer;
+
     public function __construct(Vindi_Settings $container)
     {
         $this->id           = 'vindi-wc-creditcard';
@@ -119,15 +123,19 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     {
         $user_payment_profile = array();
         $user_code            = get_user_meta(wp_get_current_user()->ID, 'vindi_user_code', true);
-        $payment_profile      = $this->container->api->get_payment_profile($user_code);
 
-        if($payment_profile['type'] !== 'PaymentProfile::CreditCard')
+        if (!isset($this->payment_profile) || $this->current_customer != $user_code) {
+            $this->payment_profile = $this->container->api->get_payment_profile($user_code);
+            $this->current_customer = $user_code;
+        }
+
+        if($this->payment_profile['type'] !== 'PaymentProfile::CreditCard')
             return $user_payment_profile;
 
-        if(false === empty($payment_profile)) {
-            $user_payment_profile['holder_name']     = $payment_profile['holder_name'];
-            $user_payment_profile['payment_company'] = $payment_profile['payment_company']['code'];
-            $user_payment_profile['card_number']     = sprintf('**** **** **** %s', $payment_profile['card_number_last_four']);
+        if(false === empty($this->payment_profile)) {
+            $user_payment_profile['holder_name']     = $this->payment_profile['holder_name'];
+            $user_payment_profile['payment_company'] = $this->payment_profile['payment_company']['code'];
+            $user_payment_profile['card_number']     = sprintf('**** **** **** %s', $this->payment_profile['card_number_last_four']);
         }
 
         return $user_payment_profile;
@@ -203,13 +211,14 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
                 break;
         }
         
-        if(($plan_installments = $this->container->api->get_plan($plan_id)['installments']) > 1)
-            $installments = $plan_installments;               
+        $current_plan = $this->container->api->current_plan;
+        if ($current_plan && $current_plan['id'] == $plan_id && !empty($current_plan['installments']))
+            return $current_plan['installments'];
 
-        if(empty($installments))
-            return 1;
+        if(($plan_installments = $this->container->api->get_plan($plan_id)['installments']) > 1)
+            return $plan_installments;               
                 
-        return $installments;
+        return 1;
     }
 
     /**
