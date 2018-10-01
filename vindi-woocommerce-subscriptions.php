@@ -39,7 +39,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 	    /**
 		 * @var string
 		 */
-        const VERSION = '5.2.0';
+        const VERSION = '5.2.1';
 
         /**
 		 * @var string
