@@ -28,11 +28,6 @@ class Vindi_API
     private $recentRequest;
 
     /**
-     * @var Vindi_Customer
-     */
-    private $vindi_customer;
-
-    /**
      * @var Vindi_Plan
      */
     public $current_plan;
@@ -104,11 +99,10 @@ class Vindi_API
 
     /**
      * @param array $error
-     * @param       $endpoint
      *
      * @return string
      */
-    private function get_error_message($error, $endpoint)
+    private function get_error_message($error)
     {
         $error_id         = empty($error['id']) ? '' : $error['id'];
         $error_parameter  = empty($error['parameter']) ? '' : $error['parameter'];
@@ -123,15 +117,14 @@ class Vindi_API
 
     /**
      * @param array $response
-     * @param       $endpoint
      *
      * @return bool
      */
-    private function check_response($response, $endpoint)
+    private function check_response($response)
     {
         if (isset($response['errors']) && ! empty($response['errors'])) {
             foreach ($response['errors'] as $error) {
-                $message = $this->get_error_message($error, $endpoint);
+                $message = $this->get_error_message($error);
 
                 if (function_exists('wc_add_notice')) {
                     wc_add_notice(__($message, VINDI_IDENTIFIER), 'error');
@@ -198,7 +191,7 @@ class Vindi_API
 
         $response_body_array = json_decode($response_body, true);
 
-        if (! $this->check_response($response_body_array, $endpoint)) {
+        if (! $this->check_response($response_body_array)) {
             return false;
         }
 
@@ -213,6 +206,7 @@ class Vindi_API
     public function create_customer($body)
     {
         if ($response = $this->request('customers', 'POST', $body)) {
+            WC()->session->set('current_customer', $response['customer']);
             return $response['customer'];
         }
 
@@ -268,7 +262,7 @@ class Vindi_API
      *
      * @return bool
      */
-    public function is_subscription_canceled($subscription_id)
+    public function is_subscription_active($subscription_id)
     {
         if (isset($this->recentRequest)) {
             unset($this->recentRequest);
@@ -287,8 +281,10 @@ class Vindi_API
 
     public function find_customer_by_code($code)
     {
-        if (isset($this->vindi_customer) && $this->vindi_customer['code'] == $code)
-            return $this->vindi_customer;
+        $vindi_customer = WC()->session->get('current_customer');
+
+        if (isset($vindi_customer) && $vindi_customer['code'] == $code)
+            return $vindi_customer;
 
         $response = $this->request(sprintf(
             'customers/search?code=%s',
@@ -297,8 +293,8 @@ class Vindi_API
 
         if ($response && (1 === count($response['customers'])) &&
             isset($response['customers'][0]['id'])) {
-            $this->vindi_customer = $response['customers'][0];
-            return $this->vindi_customer;
+            WC()->session->set('current_customer', $response['customers'][0]);
+            return $response['customers'][0];
         }
 
         return false;
@@ -328,13 +324,13 @@ class Vindi_API
     {
         $customer = $this->find_customer_by_code($user_code);
 
-        if(empty($customer))
+        if (empty($customer))
             return false;
 
         $query    = urlencode("customer_id={$customer['id']} status=active type=PaymentProfile::CreditCard");
         $response = $this->request('payment_profiles?query='.$query, 'GET');
 
-        if(isset($response['payment_profiles'][0]))
+        if (isset($response['payment_profiles'][0]))
             return $response['payment_profiles'][0];
 
         return false;
@@ -357,7 +353,8 @@ class Vindi_API
 
     public function verify_customer_payment_profile($payment_profile_id)
     {
-        return 'success' === $this->request('payment_profiles/' . $payment_profile_id . '/verify', 'POST', $body, $log)['transaction']['status'];
+        return 'success' === $this->request('payment_profiles/' . 
+            $payment_profile_id . '/verify', 'POST')['transaction']['status'];
     }
 
     /**
@@ -420,19 +417,25 @@ class Vindi_API
     }
 
     /**
-     * @param string $code
+     * @param int $id_customer
+     *
+     * @param array $phone_number
      *
      * @return array|bool|mixed
      */
     public function update_customer_phone($id_customer, $phone_number)
     {
-        $response = $this->request(sprintf('customers/%s', $id_customer),'GET');
+        $vindi_customer = WC()->session->get('current_customer');
 
-        if(empty($response['customer'])) {
+        if (isset($vindi_customer) && $vindi_customer['id'] == $id_customer)
+            $response['customer'] = $vindi_customer;
+        else
+            $response = $this->request(sprintf('customers/%s', $id_customer),'GET');
+
+        if (empty($response['customer']))
             return false;
-        }
 
-        if(empty($response['customer']['phones'])) {
+        if (empty($response['customer']['phones'])) {
             $phone_data = [
                 'phones' => $phone_number
             ];
@@ -562,9 +565,9 @@ class Vindi_API
     /**
      * @return array
      */
-    public function get_plan($id)
+    public function get_plan($plan_id)
     {
-        $response = $this->request('plans/' . $id, 'GET');
+        $response = $this->request('plans/' . $plan_id, 'GET');
 
         if (empty($response['plan'])) {
             $this->current_plan = false;
@@ -658,13 +661,13 @@ class Vindi_API
 
     /**
      * Make an API request to retrieve informations about a charge.
-     * @param int $id
+     * @param int $charge_id
      *
      * @return array|bool|mixed
      */
-    public function get_charge($id)
+    public function get_charge($charge_id)
     {
-        $response = $this->request('charges/' . $id, 'GET');
+        $response = $this->request('charges/' . $charge_id, 'GET');
 
         if (empty($response['charge']))
             return false;

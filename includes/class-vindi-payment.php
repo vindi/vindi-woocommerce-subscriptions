@@ -528,7 +528,7 @@ class Vindi_Payment
             if (!$cycles_to_discount) {
                 return  null;
             }
-            $plan_cycles = (int) $this->container->api->current_plan['billing_cycles'];
+            $plan_cycles = (int) WC()->session->get('current_plan')['billing_cycles'];
 
             if ($plan_cycles) { 
                 return min($plan_cycles, $cycles_to_discount);
@@ -575,7 +575,7 @@ class Vindi_Payment
         $body = array(
             'customer_id'         => $customer_id,
             'payment_method_code' => $this->payment_method_code(),
-            'plan_id'             => $this->vindi_plan,
+            'plan_id'             => $vindi_plan,
             'product_items'       => $this->build_product_items('subscription'),
             'code'                => $wc_subscription->id,
             'installments'        => $this->installments()
@@ -591,7 +591,8 @@ class Vindi_Payment
 
             throw new Exception($message);
         }
-
+        WC()->session->__unset('current_payment_profile');
+        WC()->session->__unset('current_customer');
         return $subscription;
     }
 
@@ -620,7 +621,8 @@ class Vindi_Payment
 
             throw new Exception($message);
         }
-
+        WC()->session->__unset('current_payment_profile');
+        WC()->session->__unset('current_customer');
         return $bill;
     }
 
