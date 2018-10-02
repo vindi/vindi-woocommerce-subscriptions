@@ -280,19 +280,20 @@ class Vindi_API
     {
         if (isset($this->recentRequest)
             && $this->recentRequest['id'] == $subscription_id) {
-            if ($this->recentRequest['status'] == 'canceled')
+            if ($this->recentRequest['status'] != 'canceled')
                 return true;
             return false;
         }
 
         $response = $this->get_subscription($subscription_id);
         
-        if (array_key_exists('status', $response)) {
-            if ($response['status'] == 'canceled') {
+        if ($response && array_key_exists('status', $response)) {
+            if ($response['status'] != 'canceled') {
                 $this->recentRequest = $response;
                 return true;
             }
         }
+        return false;
     }
 
     public function find_customer_by_code($code)

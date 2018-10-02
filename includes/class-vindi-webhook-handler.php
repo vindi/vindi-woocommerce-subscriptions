@@ -111,7 +111,7 @@ class Vindi_Webhook_Handler
      **/
     private function bill_created($data)
     {
-        if(empty($data->bill->subscription)) {
+        if (empty($data->bill->subscription)) {
             return;
         }
 
@@ -122,7 +122,7 @@ class Vindi_Webhook_Handler
             'bill_id'                => $data->bill->id
         ];
 
-        if(!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id']
+        if (!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id']
             , $renew_infos['cycle'])) {
             $this->subscription_renew($renew_infos);
         }
@@ -139,12 +139,12 @@ class Vindi_Webhook_Handler
         } else {
             $vindi_subscription_id = $data->bill->subscription->id;
             $cycle                 = $data->bill->period->cycle;
-
             $order          = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
         }
 
         $new_status = $this->container->get_return_status();
-        $order->update_status($new_status, __('O Pagamento foi realizado com sucesso pela Vindi.', 'woocommerce-vindi'));
+        $order->update_status($new_status, __('O Pagamento foi realizado com sucesso pela Vindi.',
+            'woocommerce-vindi'));
 	    $this->update_next_payment($data);
     }
 
@@ -191,7 +191,8 @@ class Vindi_Webhook_Handler
         if($order->get_status() == 'pending'){
             $order->update_status('failed', 'Pagamento rejeitado!');
         }else{
-            throw new Exception('Erro ao trocar status da fatura para "failed" pois a fatura #' . $data->charge->bill->id . ' não está mais pendente!');
+            throw new Exception('Erro ao trocar status da fatura para "failed" pois a fatura #' .
+                $data->charge->bill->id . ' não está mais pendente!');
         }
     }
 
