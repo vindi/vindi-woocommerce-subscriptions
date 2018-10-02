@@ -92,7 +92,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     }
 
     /**
-     * Check if this gateway is enabled and available in the user's country
+     * Check if this gateway is enabled and available in the user's checkout
      * @return bool
     */
     public function is_available()
@@ -151,13 +151,6 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
             for ($times = 1; $times <= $max_times; $times++) {
                 $installments[$times] = ceil($total / $times * 100) / 100;
             }
-        }
-
-        $user_country = $this->get_country_code();
-
-        if (empty($user_country)) {
-            _e( 'Selecione o País para visualizar as formas de pagamento.', VINDI_IDENTIFIER);
-            return;
         }
 
         $user_payment_profile = $this->build_user_payment_profile();
