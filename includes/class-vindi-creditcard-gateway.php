@@ -92,7 +92,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     }
 
     /**
-     * Check if this gateway is enabled and available in the user's country
+     * Check if this gateway is enabled and available in the user's checkout
      * @return bool
     */
     public function is_available()
@@ -100,12 +100,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         if(false === is_checkout())
             return false;
 
-        $methods    = $this->container->api->get_payment_methods();
-        $cc_methods = $methods['credit_card'];
-
-        return 'yes' === $this->enabled
-            && count($cc_methods)
-            && $this->container->check_ssl();
+        return 'yes' === $this->enabled && $this->container->check_ssl();
     }
 
     /**
@@ -124,7 +119,12 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     {
         $user_payment_profile = array();
         $user_code            = get_user_meta(wp_get_current_user()->ID, 'vindi_user_code', true);
-        $payment_profile      = $this->container->api->get_payment_profile($user_code);
+        $payment_profile = WC()->session->get('current_payment_profile'); 
+        $current_customer = WC()->session->get('current_customer'); 
+
+        if (!isset($payment_profile) || $current_customer['code'] != $user_code) {
+            $payment_profile = $this->container->api->get_payment_profile($user_code);
+        }
 
         if($payment_profile['type'] !== 'PaymentProfile::CreditCard')
             return $user_payment_profile;
@@ -135,6 +135,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
             $user_payment_profile['card_number']     = sprintf('**** **** **** %s', $payment_profile['card_number_last_four']);
         }
 
+        WC()->session->set('current_payment_profile', $payment_profile); 
         return $user_payment_profile;
     }
 
@@ -150,13 +151,6 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
             for ($times = 1; $times <= $max_times; $times++) {
                 $installments[$times] = ceil($total / $times * 100) / 100;
             }
-        }
-
-        $user_country = $this->get_country_code();
-
-        if (empty($user_country)) {
-            _e( 'Selecione o País para visualizar as formas de pagamento.', VINDI_IDENTIFIER);
-            return;
         }
 
         $user_payment_profile = $this->build_user_payment_profile();
@@ -181,7 +175,8 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         for ($i = date('Y') ; $i <= date('Y') + 15 ; $i++)
             $years[] = $i;
 
-        $is_trial = $this->container->api->is_merchant_status_trial_or_sandbox();
+        if (!($is_trial = $this->container->get_is_active_sandbox()))
+            $is_trial = $this->container->api->is_merchant_status_trial_or_sandbox();
 
         $this->container->get_template('creditcard-checkout.html.php', compact(
             'months',
@@ -200,22 +195,23 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
     {
         if($this->is_single_order())
             return $this->installments;
-        
+
         foreach($this->container->woocommerce->cart->cart_contents as $item) {
-            $plan_id[] = $item['data']->get_meta('vindi_subscription_plan');
+            $plan_id = $item['data']->get_meta('vindi_subscription_plan');
+            if (!empty($plan_id))
+                break;
         }
         
-        foreach($plan_id as $id) {
-            $response = $this->container->api->get_plan_installments($id);
+        $current_plan = WC()->session->get('current_plan');
+        if ($current_plan && $current_plan['id'] == $plan_id && !empty($current_plan['installments']))
+            return $current_plan['installments'];
 
-            if($response > 1)
-                $installments = $response;               
-        }
-
-        if(empty($installments))
-            return 1;
+        $plan = $this->container->api->get_plan($plan_id);
+        WC()->session->set('current_plan', $plan);
+        if($plan['installments'] > 1)
+            return $plan['installments'];               
                 
-        return $installments;
+        return 1;
     }
 
     /**
@@ -228,9 +224,8 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
             $max_times       = empty($order_max_times) ? 1 : $order_max_times;
 
             return min($this->max_installments, $max_times, $this->get_installments());
-        } else {
-            return $this->get_installments();
         }
+        return $this->get_installments();
     }
 
     /**

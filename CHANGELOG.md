@@ -1,5 +1,17 @@
 # Notas das versões
 
+## [5.3.0 - 01/10/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.0)
+
+### Corrigido
+- Ajusta performance do checkout
+
+
+## [5.2.1 - 21/09/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.2.1)
+
+### Corrigido
+- Corrige fluxo de assinatura pós-cancelamento no Woocommerce
+
+
 ## [5.2.0 - 12/09/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.2.0)
 
 ### Ajustado
