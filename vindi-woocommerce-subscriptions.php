@@ -112,16 +112,6 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 &$this, 'user_related_orders_actions'
             ), 100, 2);
 
-            add_filter('woocommerce_subscription_period_interval_strings',
-                function ($intervals) {
-                    foreach ([7, 8, 9, 10, 11, 12, 13] as $new_interval) {
-                        array_push($intervals, $new_interval);
-                    }
-
-                    return $intervals;
-                }
-            );
-
             add_action('woocommerce_customer_save_address', array(
                 &$this, 'sync_vindi_user_information'
             ), 1, 2 );
@@ -203,38 +193,46 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
             $wc_product                   = wc_get_product($post_id);
             $subscription_plan            = wc_clean($_POST['vindi_subscription_plan']);
-            $subscription_period_interval = wc_clean($_POST['_subscription_period_interval']);
+            $period_interval              = wc_clean($_POST['_subscription_period_interval']);
             $subscription_period          = wc_clean($_POST['_subscription_period']);
             $subscription_length          = wc_clean($_POST['_subscription_length']);
 
-            if(empty($subscription_period_interval)) {
+            if(empty($period_interval)) {
                 return;
             }
 
-            if($subscription_period_interval % 12 == 0) {
-                $years_interval = (int) $subscription_period_interval / 12;
+            if($period_interval % 12 == 0 && $subscription_period != 'day') {
+                $years_interval = (int) $period_interval / 12;
                 update_post_meta($post_id, '_subscription_period_interval', $years_interval);
                 update_post_meta($post_id, '_subscription_period', 'year');
                 update_post_meta($post_id, 'vindi_subscription_period_interval', $years_interval);
                 update_post_meta($post_id, 'vindi_subscription_period', 'year');
+            } else if ($period_interval % 7 == 0 && $subscription_period == 'day') {
+                $weeks_interval = (int) $period_interval / 7;
+                update_post_meta($post_id, '_subscription_period_interval', $weeks_interval);
+                update_post_meta($post_id, '_subscription_period', 'week');
+                update_post_meta($post_id, 'vindi_subscription_period_interval', $weeks_interval);
+                update_post_meta($post_id, 'vindi_subscription_period', 'week');
             } else {
-                update_post_meta($post_id, '_subscription_period_interval', $subscription_period_interval);
+                update_post_meta($post_id, '_subscription_period_interval', $period_interval);
                 update_post_meta($post_id, '_subscription_period', $subscription_period);
-                update_post_meta($post_id, 'vindi_subscription_period_interval', $subscription_period_interval);
+                update_post_meta($post_id, 'vindi_subscription_period_interval', $period_interval);
                 update_post_meta($post_id, 'vindi_subscription_period', $subscription_period);
             }
 
             update_post_meta($post_id, 'vindi_subscription_plan', $subscription_plan);
 
-
             if(preg_match('/variable-subscription/', $wc_product->get_type())) {
                 foreach ($wc_product->get_children() as $child) {
                     update_post_meta($child, '_subscription_length', $subscription_length);
-                    if($subscription_period_interval % 12 == 0) {
+                    if($period_interval % 12 == 0 && $subscription_period != 'day') {
                         update_post_meta($child, '_subscription_period_interval', $years_interval);
                         update_post_meta($child, '_subscription_period', 'year');
+                    } else if ($period_interval % 7 == 0 && $subscription_period == 'day') {
+                        update_post_meta($child, '_subscription_period_interval', $weeks_interval);
+                        update_post_meta($child, '_subscription_period', 'week');
                     } else {
-                        update_post_meta($child, '_subscription_period_interval', $subscription_period_interval);
+                        update_post_meta($child, '_subscription_period_interval', $period_interval);
                         update_post_meta($child, '_subscription_period', $subscription_period);
                     }
                 }
@@ -247,19 +245,19 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 return;
             }
 
-            $subscription_period_interval = get_post_meta($post_id, 'vindi_subscription_period_interval', true);
+            $period_interval              = get_post_meta($post_id, 'vindi_subscription_period_interval', true);
             $subscription_period          = get_post_meta($post_id, 'vindi_subscription_period', true);
             $subscription_length          = get_post_meta($post_id, 'vindi_subscription_length', true);
 
             update_post_meta($post_id, '_subscription_length', $subscription_length);
-            update_post_meta($post_id, '_subscription_period_interval', $subscription_period_interval);
+            update_post_meta($post_id, '_subscription_period_interval', $period_interval);
             update_post_meta($post_id, '_subscription_period', $subscription_period);
 
             $wc_product = wc_get_product($post_id);
 
             foreach ($wc_product->get_children() as $child) {
                 update_post_meta($child, '_subscription_length', $subscription_length);
-                update_post_meta($child, '_subscription_period_interval', $subscription_period_interval);
+                update_post_meta($child, '_subscription_period_interval', $period_interval);
                 update_post_meta($child, '_subscription_period', $subscription_period);
             }
         }
