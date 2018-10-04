@@ -153,7 +153,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             $address        = array();
 
             foreach ( $address_fields as $key => $field ) {
-                if ( isset( $_POST[ $key ] ) ) {
+                if (isset( $_POST[ $key ]) || isset($field)) {
                     $address[ str_replace( $address_type . '_', '', $key ) ] = wc_clean( $_POST[ $key ] );
                 }
             }
@@ -321,6 +321,9 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 		 */
 		public function validate_add_to_cart($valid, $product_id, $quantity)
         {
+            if (!isset($quantity))
+                return false;
+
             $cart       = $this->settings->woocommerce->cart;
 			$cart_items = $cart->get_cart();
 
@@ -331,17 +334,17 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
             if ($product->is_type('subscription')) {
 
-                $product_vindi_subscription_plan_meta = get_post_meta($product->post->ID, 'vindi_subscription_plan');
-                $product_vindi_subscription_plan_id   = (int) end($product_vindi_subscription_plan_meta);
+                $first_plan_meta = get_post_meta($product->post->ID, 'vindi_subscription_plan');
+                $first_plan_id   = (int) end($first_plan_meta);
 
                 foreach($cart_items as $item)
                 {
                     if ('subscription' === $item['data']->product_type) {
 
-                        $item_vindi_subscription_plan_meta = get_post_meta($item['data']->post->ID, 'vindi_subscription_plan');
-                        $item_vindi_subscription_plan_id   = (int) end($item_vindi_subscription_plan_meta);
+                        $next_plan_meta = get_post_meta($item['data']->post->ID, 'vindi_subscription_plan');
+                        $next_plan_id   = (int) end($next_plan_meta);
 
-                        if($product_vindi_subscription_plan_id != $item_vindi_subscription_plan_id) {
+                        if($first_plan_id != $next_plan_id) {
                             wc_add_notice(__('Você só pode adicionar produtos que façam parte do mesmo plano!', VINDI_IDENTIFIER), 'error');
                             return false;
                         }
@@ -358,6 +361,9 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
          **/
         public function user_related_orders_actions($actions, $order)
         {
+            if (!isset($order))
+                return;
+
             //remove from second array to allow action
             $filtred_actions = $this->filter_actions($actions, array(
                 'pay',
@@ -393,20 +399,20 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         /**
          * @param resource $ch Curl Resource
          **/
-        public function add_support_to_tlsv1_2($ch)
+        public function add_support_to_tlsv1_2($connection)
         {
-            if(empty($ch))
+            if (empty($connection))
                 return;
 
-            $host_to = parse_url(curl_getinfo($ch, CURLINFO_EFFECTIVE_URL), PHP_URL_HOST);
+            $host_to = parse_url(curl_getinfo($connection, CURLINFO_EFFECTIVE_URL), PHP_URL_HOST);
 
-            if($host_to !== 'app.vindi.com.br')
+            if ($host_to !== 'app.vindi.com.br')
                 return;
 
-            if(!defined('CURL_SSLVERSION_TLSv1_2'))
+            if (!defined('CURL_SSLVERSION_TLSv1_2'))
                 return;
 
-            curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+            curl_setopt($connection, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         }
 	}
 }
