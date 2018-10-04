@@ -377,10 +377,10 @@ class Vindi_Webhook_Handler
 		// we need this step because the actual next billing date does not come from the /bill webhook
 		$vindi_subscription = $this->container->api->get_subscription($data->bill->subscription->id);
 
-		if ($vindi_subscription && isset($vindi_subscription['subscription'])) {
+		if ($vindi_subscription && isset($vindi_subscription['next_billing_at'])) {
 
 			// format next payment date
-			$next_payment = date('Y-m-d H:i:s', strtotime($vindi_subscription['subscription']['next_billing_at']));
+			$next_payment = date('Y-m-d H:i:s', strtotime($vindi_subscription['next_billing_at']));
 
 			// find our wc_subscription
 			$subscription = $this->find_subscription_by_id($data->bill->subscription->code);
