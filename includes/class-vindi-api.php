@@ -681,9 +681,12 @@ class Vindi_API
      */
     public function is_merchant_status_trial_or_sandbox()
     {
+        if ('yes' === $this->sandbox)
+            return true;
+
         $merchant = $this->get_merchant();
         
-        if ('trial' === $merchant['status'] || 'yes' === $this->sandbox)
+        if ('trial' === $merchant['status'])
             return true;
         
         return false;
