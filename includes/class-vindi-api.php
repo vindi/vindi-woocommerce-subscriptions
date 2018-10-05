@@ -643,9 +643,9 @@ class Vindi_API
      * Make an API request to retrieve informations about the Merchant.
      * @return array|bool|mixed
      */
-    public function get_merchant()
+    public function get_merchant($is_config = false)
     {
-        if (false === ($merchant = get_transient('vindi_merchant'))) {
+        if (false === ($merchant = get_transient('vindi_merchant')) || $is_config) {
             $response = $this->request('merchant', 'GET');
 
             if (! $response || ! $response['merchant'])
@@ -679,11 +679,14 @@ class Vindi_API
      * Check to see if Merchant Status is Trial or Sandbox Merchant.
      * @return boolean
      */
-    public function is_merchant_status_trial_or_sandbox()
+    public function is_merchant_status_trial_or_sandbox($is_config = false)
     {
-        $merchant = $this->get_merchant();
+        if ('yes' === $this->sandbox)
+            return true;
+
+        $merchant = $is_config ? $this->get_merchant($is_config) : $this->get_merchant();
         
-        if ('trial' === $merchant['status'] || 'yes' === $this->sandbox)
+        if ('trial' === $merchant['status'])
             return true;
         
         return false;
@@ -746,6 +749,7 @@ class Vindi_API
 			}
 		}
 
+        set_transient('vindi_merchant', $response_body_array['merchant'], 1 * HOUR_IN_SECONDS);
 		return true;
     }
 
