@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [5.3.1 - 05/10/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.1)
+
+### Corrigido
+- Corrige falha na verificação do certificado SSL
+
+
 ## [5.3.0 - 01/10/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.0)
 
 ### Corrigido
