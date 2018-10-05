@@ -271,7 +271,7 @@ class Vindi_Settings extends WC_Settings_API
      */
     public function check_ssl()
     {
-        return $this->api->is_merchant_status_trial_or_sandbox()
+        return $this->api->is_merchant_status_trial_or_sandbox(true)
             || is_ssl();
     }
 
