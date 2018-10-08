@@ -244,6 +244,20 @@ class Vindi_API
         return false;
     }
 
+
+	/**
+	 * @param int   $subscription_id
+	 *
+	 * @return array|bool|mixed
+	 */
+	public function get_subscription($subscription_id)
+	{
+		if ($response = $this->request(sprintf('subscriptions/%s', $subscription_id),'GET')['subscription'])
+			return $response;
+
+		return false;
+	}
+
     /**
      * @param int   $bill_id
      *
@@ -264,19 +278,22 @@ class Vindi_API
      */
     public function is_subscription_active($subscription_id)
     {
-        if (isset($this->recentRequest)) {
-            unset($this->recentRequest);
+        if (isset($this->recentRequest)
+            && $this->recentRequest['id'] == $subscription_id) {
+            if ($this->recentRequest['status'] != 'canceled')
+                return true;
             return false;
         }
 
-        $response = $this->request(sprintf('subscriptions/%s', $subscription_id),'GET')['subscription'];
+        $response = $this->get_subscription($subscription_id);
         
-        if (array_key_exists('status', $response)) {
+        if ($response && array_key_exists('status', $response)) {
             if ($response['status'] != 'canceled') {
-                $this->recentRequest = $subscription_id;
+                $this->recentRequest = $response;
                 return true;
             }
         }
+        return false;
     }
 
     public function find_customer_by_code($code)
