@@ -1,5 +1,13 @@
 # Notas das versões
 
+## [5.3.2 - 08/10/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.2)
+
+### Corrigido
+- Corrige cache dos métodos de pagamento
+- Corrige data do próximo pagamento para as assinaturas
+- Corrige comportamento dos hooks do WooCommerce Subscriptions para assinaturas Vindi (por [@cristian-rossi](https://github.com/cristian-rossi): [#102](https://github.com/vindi/vindi-woocommerce-subscriptions/pull/102))
+
+
 ## [5.3.1 - 05/10/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.1)
 
 ### Corrigido
