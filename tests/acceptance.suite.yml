@@ -1,0 +1,75 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WPWebDriver or WPBrowser.
+# Use WPDb to set up your initial database fixture.
+# If you need both WPWebDriver and WPBrowser tests - create a separate suite.
+
+actor: AcceptanceTester
+modules:
+  enabled:
+  - WPDb
+#  - WordPress
+  #  - WPBrowser
+  - WPLoader
+  - \Helper\Acceptance
+  - WPWebDriver
+  - WPCLI
+  config:
+    WPDb:
+      dsn: 'mysql:host=%DB_HOST%;dbname=%DB_NAME%'
+      user: '%DB_USER%'
+      password: '%DB_PASSWORD%'
+      dump: 'tests/_data/dump.sql'
+      populate: true #import the dump before the tests
+      cleanup: false #import the dump between tests
+      waitlock: 0
+      url: '%WP_URL%'
+      urlReplacement: true #replace the hardcoded dump URL with the one above
+      tablePrefix: '%TABLE_PREFIX%'
+    WPBrowser:
+      url: '%WP_URL%'
+      adminUsername: '%ADMIN_USERNAME%'
+      adminPassword: '%ADMIN_PASSWORD%'
+      adminPath: '%WP_ADMIN_PATH%'
+    WPWebDriver:
+      url: '%WP_URL%'
+      browser: 'chrome'
+      host: 'selenium'
+      port: 4444
+      restart: true
+      wait: 0
+      adminUsername: '%ADMIN_USERNAME%'
+      adminPassword: '%ADMIN_PASSWORD%'
+      adminUrl: /wp-admin
+      adminPath: '%WP_ADMIN_PATH%'
+    WPCLI:
+      path: '%WP_ROOT_FOLDER%'
+      throw: true
+    WordPress:
+      depends: WPDb
+      wpRootFolder: '%WP_ROOT_FOLDER%'
+      adminUsername: '%ADMIN_USERNAME%'
+      adminPassword: '%ADMIN_PASSWORD%'
+      adminPath: '%WP_ADMIN_PATH%'
+    WPLoader:
+      multisite: false
+      wpRootFolder: '%WP_ROOT_FOLDER%'
+      dbName: '%DB_NAME%'
+      dbHost: '%DB_HOST%'
+      dbUser: '%DB_USER%'
+      dbPassword: '%DB_PASSWORD%'
+      isolatedInstall: true
+      wpDebug: true
+      dbCharset: "utf8"
+      dbCollate: ""
+      tablePrefix: '%TABLE_PREFIX%'
+      domain: '%WP_URL%'
+      adminEmail: '%ADMIN_EMAIL%'
+      title: "Test Blog"
+      phpBinary: "php"
+      language: ""
+      configFile: ""
+      theme: storefront
+      plugins: ['woocommerce/woocommerce.php', 'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php']
+      activatePlugins: ['woocommerce/woocommerce.php', 'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php']
