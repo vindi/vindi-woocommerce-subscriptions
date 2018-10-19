@@ -21,6 +21,6 @@
     "codeception/verify": "^1.0"
   },
   "scripts": {
-    "test": "vendor/bin/codecept run acceptance --steps"
+    "test": "codecept run acceptance --steps"
   }
 }
