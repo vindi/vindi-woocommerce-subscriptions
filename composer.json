@@ -21,6 +21,9 @@
     "codeception/verify": "^1.0"
   },
   "scripts": {
-    "test": "codecept run acceptance --steps"
+    "test": [
+      "codecept run -g init --steps --html",
+      "codecept run -g register --steps --html"
+    ]
   }
 }

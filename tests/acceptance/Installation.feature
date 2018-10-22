@@ -1,3 +1,4 @@
+@init
 Feature: Installation
   In order to use the plugin
   As an administrator

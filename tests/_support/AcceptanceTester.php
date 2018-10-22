@@ -12,10 +12,10 @@
  * @method void am($role)
  * @method void lookForwardTo($achieveValue)
  * @method void comment($description)
- * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
+ * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = null)
  *
  * @SuppressWarnings(PHPMD)
-*/
+ */
 class AcceptanceTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
@@ -42,6 +42,16 @@ class AcceptanceTester extends \Codeception\Actor
     public function iShouldSeeThePlugin($pluginName)
     {
         $this->seeElement('#the-list  tr[data-slug="' . $this->buildPluginSlug($pluginName) . '"]');
+    }
+
+    /**
+     * @param $pluginName
+     *
+     * @return string
+     */
+    protected function buildPluginSlug($pluginName)
+    {
+        return implode('-', array_map('strtolower', preg_split('/[-_\\s]/', $pluginName))) . '-subscriptions';
     }
 
     /**
@@ -87,6 +97,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function iDeactivateThePlugin($pluginName)
     {
         $this->deactivatePlugin($this->buildPluginSlug($pluginName));
+        $this->reloadPage();
 
     }
 
@@ -96,14 +107,30 @@ class AcceptanceTester extends \Codeception\Actor
     public function iShouldSeeThePluginDeactivated($pluginName)
     {
         $this->seeElement('#the-list  tr[data-slug="' . $this->buildPluginSlug($pluginName) . '"] td div span[class="activate"]');
+        $this->reloadPage();
+    }
+
+
+    /**
+     * @When I type the API KEY on the field Chave da API Vindi
+     */
+    public function iTypeTheApiKeyOnTheFieldChaveDaApiVindi()
+    {
+        $this->amOnPage('wp-admin/admin.php?page=wc-settings&tab=settings_vindi');
+        $this->click('#mainform input[name="woocommerce__sandbox"]');
+        $this->fillField('#mainform input[name="woocommerce__api_key_sandbox"]', $_ENV['API_KEY']);
+        $this->click('save');
+        $this->cantSeeElement('//p[text()="Conectado com sucesso!"]');
     }
 
     /**
-     * @param $pluginName
-     * @return string
+     * @Then I reload the page and I see status active :text
      */
-    protected function buildPluginSlug($pluginName)
+    public function iSeeStatusActive($text)
     {
-        return implode('-', array_map('strtolower', preg_split('/[-_\\s]/', $pluginName))).'-subscriptions';
+        $this->reloadPage();
+        $this->canSeeElement('//p[text()="'.$text.'"]');
     }
+
+
 }
