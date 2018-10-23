@@ -22,7 +22,7 @@
   },
   "scripts": {
     "test": [
-      "codecept run -g init --steps --html",
+      "codecept run -g initialize --steps --html",
       "codecept run -g register --steps --html"
     ]
   }
