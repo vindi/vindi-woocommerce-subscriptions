@@ -1,24 +1,25 @@
-@init
-Feature: Installation
-  In order to use the plugin
-  As an administrator
-  I need to be able to activate and deactivate the plugin
+@initialize
+# language: pt
+Funcionalidade: Instalação
+  A fim de utilizar o plugin
+  Como um administrador
+  Eu necessito ser capaz de ativar e desativar o plugin
 
-  Scenario: see the plugin in the plugins admin screen
-    Given I am logged in as an administrator
-    When I go to the plugins administration page
-    Then I should see the "Vindi Woocommerce" plugin
+  Cenário: Vejo o plugin na tela de administração do plugin
+    Dado Eu estou logado como administrador
+    Quando Eu vou para página de administração do plugin
+    Então Eu deveria ver o plugin "Vindi WooCommerce"
 
-  Scenario: deactivate the plugin
-    Given I am logged in as an administrator
-    And the "Vindi Woocommerce" plugin is activated
-    When I go to the plugins administration page
-    And I deactivate the "Vindi Woocommerce" plugin
-    Then I should see the "Vindi Woocommerce" plugin deactivated
+  Cenário: Desativo o Plugin
+    Dado Eu estou logado como administrador
+    E O plugin "Vindi Woocommerce" está ativado
+    Quando Eu vou para página de administração do plugin
+    E Eu desativo o plugin "Vindi Woocommerce"
+    Então Eu deveria ver o plugin "Vindi Woocommerce" desativado
 
-  Scenario: activate the plugin
-    Given I am logged in as an administrator
-    When I go to the plugins administration page
-    And I activate the "Vindi Woocommerce" plugin
-    Then I should see the "Vindi Woocommerce" plugin activated
+  Cenário: Ativo o  plugin
+    Dado Eu estou logado como administrador
+    Quando Eu vou para página de administração do plugin
+    E Eu ativo o plugin "Vindi Woocommerce"
+    Então Eu deveria ver o plugin "Vindi Woocommerce" ativado
 

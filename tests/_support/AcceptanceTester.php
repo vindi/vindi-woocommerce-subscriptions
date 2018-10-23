@@ -21,7 +21,7 @@ class AcceptanceTester extends \Codeception\Actor
     use _generated\AcceptanceTesterActions;
 
     /**
-     * @Given I am logged in as an administrator
+     * @Given /^Eu estou logado como administrador$/
      */
     public function iAmLoggedInAsAnAdministrator()
     {
@@ -29,7 +29,7 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @When I go to the plugins administration page
+     * @When /^Eu vou para página de administração do plugin$/
      */
     public function iGoToThePluginsAdministrationPage()
     {
@@ -37,25 +37,18 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @Then I should see the :pluginName plugin
+     * @Then /^Eu deveria ver o plugin "([^"]*)"$/
+     * @param $pluginName
      */
     public function iShouldSeeThePlugin($pluginName)
     {
         $this->seeElement('#the-list  tr[data-slug="' . $this->buildPluginSlug($pluginName) . '"]');
     }
 
-    /**
-     * @param $pluginName
-     *
-     * @return string
-     */
-    protected function buildPluginSlug($pluginName)
-    {
-        return implode('-', array_map('strtolower', preg_split('/[-_\\s]/', $pluginName))) . '-subscriptions';
-    }
 
     /**
-     * @When I activate the :pluginName plugin
+     * @When /^Eu ativo o plugin "([^"]*)"$/
+     * @param $pluginName
      */
     public function iActivateThePlugin($pluginName)
     {
@@ -63,7 +56,8 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @Then I should see the :pluginName plugin activated
+     * @Then /^Eu deveria ver o plugin "([^"]*)" ativado$/
+     * @param $pluginName
      */
     public function iShouldSeeThePluginActivated($pluginName)
     {
@@ -71,17 +65,18 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @Given the :pluginNameOrFullSlug plugin is activated
+     * @Given /^O plugin "([^"]*)" está ativado$/
+     * @param $pluginName
      */
-    public function thePluginIsActivated($pluginNameOrFullSlug)
+    public function thePluginIsActivated($pluginName)
     {
         $activePlugins = $this->grabOptionFromDatabase('active_plugins');
         $activePlugins = empty($activePlugins) ? [] : $activePlugins;
-        $isFullSlug = preg_match('/^.*\\.php$/', $pluginNameOrFullSlug);
-        $pluginFullSlug = [$pluginNameOrFullSlug];
+        $isFullSlug = preg_match('/^.*\\.php$/', $pluginName);
+        $pluginFullSlug = [$pluginName];
 
         if (!$isFullSlug) {
-            $pluginSlug = $this->buildPluginSlug($pluginNameOrFullSlug);
+            $pluginSlug = $this->buildPluginSlug($pluginName);
             $pluginFullSlug = ["{$pluginSlug}/{$pluginSlug}.php", "{$pluginSlug}/plugin.php"];
         }
 
@@ -92,7 +87,8 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @When I deactivate the :pluginName plugin
+     * @When /^Eu desativo o plugin "([^"]*)"$/
+     * @param $pluginName
      */
     public function iDeactivateThePlugin($pluginName)
     {
@@ -102,7 +98,8 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @Then I should see the :pluginName plugin deactivated
+     * @Then /^Eu deveria ver o plugin "([^"]*)" desativado$/
+     * @param $pluginName
      */
     public function iShouldSeeThePluginDeactivated($pluginName)
     {
@@ -110,26 +107,70 @@ class AcceptanceTester extends \Codeception\Actor
         $this->reloadPage();
     }
 
-
     /**
-     * @When I type the API KEY on the field Chave da API Vindi
+     * @When /^Eu vou para página de administração do WooCommerce$/
      */
-    public function iTypeTheApiKeyOnTheFieldChaveDaApiVindi()
+    public function iGoToTheWoocommerceAdministrationPageOnTabVindi()
     {
         $this->amOnPage('wp-admin/admin.php?page=wc-settings&tab=settings_vindi');
-        $this->click('#mainform input[name="woocommerce__sandbox"]');
-        $this->fillField('#mainform input[name="woocommerce__api_key_sandbox"]', $_ENV['API_KEY']);
-        $this->click('save');
-        $this->cantSeeElement('//p[text()="Conectado com sucesso!"]');
     }
 
     /**
-     * @Then I reload the page and I see status active :text
+     * @Then /^Eu vejo a tab "([^"]*)"$/
+     * @param $tab
      */
-    public function iSeeStatusActive($text)
+    public function iSeeTab($tab)
+    {
+        $this->seeElement("//a[text()='$tab']");
+    }
+
+
+    /**
+     * @When /^Eu clico no label "([^"]*)"$/
+     * @param $labelText
+     */
+    public function iClickOnLabel($labelText)
+    {
+        $this->click("//label[text()=' $labelText']");
+    }
+
+
+    /**
+     * @When /^Eu escrevo o "([^"]*)" no campo do label "([^"]*)"$/
+     * @param $text
+     * @param $labelText
+     */
+    public function iTypeTextOnTheFieldOFLabel($text, $labelText)
+    {
+        if (array_key_exists($text, $_ENV)) {
+            $text = $_ENV[$text];
+        }
+        $id = $this->grabAttributeFrom("//label[text()='$labelText ']", 'for');
+        $this->fillField("#$id", $text);
+    }
+
+    /**
+     * @When /^Eu clico em "([^"]*)"$/
+     */
+    public function iClickOn($text)
+    {
+        $this->click("//button[text()='$text']");
+    }
+
+    /**
+     * @When /^Eu recarrego a página$/
+     */
+    public function refreshPage()
     {
         $this->reloadPage();
-        $this->canSeeElement('//p[text()="'.$text.'"]');
+    }
+
+    /**
+     * @Then /^Eu vejo o parágrafo com texto "([^"]*)"$/
+     */
+    public function iSeeText($text)
+    {
+        $this->see( $text, 'p');
     }
 
 

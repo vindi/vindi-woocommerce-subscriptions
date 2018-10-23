@@ -1,17 +1,24 @@
 @register
-Feature: Register Plugin
-  In order to register Vindi Woocommerce
-  As an administrator
-  I need to be able to register API KEY
+# language: pt
+Funcionalidade: Registrar o plugin
+  A fim de registrar o plugin Vindi WooCommerce
+  Como um administrador
+  Eu necessito ser capaz de registar uma API KEY
 
-  Scenario: activate the plugin
-    Given I am logged in as an administrator
-    When I go to the plugins administration page
-    And I activate the "Vindi Woocommerce" plugin
-    Then I should see the "Vindi Woocommerce" plugin activated
+  Cenário: Ativo o plugin
+    Dado Eu estou logado como administrador
+    Quando Eu vou para página de administração do plugin
+    E Eu ativo o plugin "Vindi Woocommerce"
+    Então Eu deveria ver o plugin "Vindi Woocommerce" ativado
 
-  Scenario: register API KEY plugin
-    Given I am logged in as an administrator
-    When I type the API KEY on the field Chave da API Vindi
-    Then I reload the page and I see status active "Conectado com sucesso!"
+
+  Cenário: Registro a API KEY no plugin Vindi WooCommerce
+    Dado Eu estou logado como administrador
+    Quando Eu vou para página de administração do WooCommerce
+    Então Eu vejo a tab "Vindi"
+    E Eu clico no label "Ativar Sandbox"
+    E Eu escrevo o "API_KEY" no campo do label "Chave da API Sandbox Vindi"
+    E Eu clico em "Salvar alterações"
+    E Eu recarrego a página
+    Então Eu vejo o parágrafo com texto "Conectado com sucesso!"
 
