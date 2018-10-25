@@ -24,13 +24,6 @@ class CustomerPopulate
         $email = 'billing_email',
         $submit = '#place_order';
 
-//        $holder = 'vindi_cc_fullname',
-//        $brand = 'vindi_cc_paymentcompany',
-//        $cardNumber = 'vindi_cc_number',
-//        $month = 'vindi_cc_monthexpiry',
-//        $year = 'vindi_cc_yearexpiry',
-//        $cvv = 'vindi_cc_cvc',
-//        $installment = 'vindi_cc_installments';
 
     protected
         $tester;
@@ -64,19 +57,6 @@ class CustomerPopulate
         $I->fillField(self::$landLine, '1159047380');
         $I->fillField(self::$mobile, '1159047380');
         $I->fillField(self::$email, 'comunidade@vindi.com.br');
-
-
-//        $I->fillField(self::$holder, 'Vindi Recorrência');
-//        $I->selectOption(self::$brand, 'MasterCard');
-//        $I->fillField(self::$cardNumber, '5555555555555557');
-//        $I->selectOption(self::$month, '10 - outubro');
-//        $I->selectOption(self::$year, '2019');
-//        $I->fillField(self::$cvv, 1234);
-//        $I->selectOption(self::$installment, '2x de R$12,50');
-//        $I->click(self::$submit);
-
-//        return $this;
     }
-
 
 }
