@@ -9,8 +9,6 @@ actor: AcceptanceTester
 modules:
   enabled:
   - WPDb
-  #  - WordPress
-  #  - WPBrowser
   - WPLoader
   - \Helper\Acceptance
   - WPWebDriver
@@ -27,11 +25,6 @@ modules:
       url: '%WP_URL%'
       urlReplacement: false #replace the hardcoded dump URL with the one above
       tablePrefix: '%TABLE_PREFIX%'
-    WPBrowser:
-      url: '%WP_URL%'
-      adminUsername: '%ADMIN_USERNAME%'
-      adminPassword: '%ADMIN_PASSWORD%'
-      adminPath: '%WP_ADMIN_PATH%'
     WPWebDriver:
       url: '%WP_URL%'
       browser: 'chrome'
@@ -46,12 +39,6 @@ modules:
     WPCLI:
       path: '%WP_ROOT_FOLDER%'
       throw: true
-    WordPress:
-      depends: WPDb
-      wpRootFolder: '%WP_ROOT_FOLDER%'
-      adminUsername: '%ADMIN_USERNAME%'
-      adminPassword: '%ADMIN_PASSWORD%'
-      adminPath: '%WP_ADMIN_PATH%'
     WPLoader:
       multisite: false
       wpRootFolder: '%WP_ROOT_FOLDER%'
@@ -71,5 +58,3 @@ modules:
       language: ""
       configFile: ""
       theme: storefront
-      plugins: ['woocommerce/woocommerce.php', 'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php', 'vindi-woocommerce-subscriptions/vindi-woocommerce-subscriptions.php']
-      activatePlugins: ['woocommerce/woocommerce.php', 'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php', 'vindi-woocommerce-subscriptions/vindi-woocommerce-subscriptions.php']

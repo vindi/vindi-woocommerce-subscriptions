@@ -1,5 +1,8 @@
 <?php
 
+use Page\CreditCardConfiguration;
+use Page\CustomerPopulate;
+use Page\CreditCardPopulate;
 
 /**
  * Inherited Methods
@@ -18,160 +21,51 @@
  */
 class AcceptanceTester extends \Codeception\Actor
 {
-    use _generated\AcceptanceTesterActions;
+    use
+        _generated\AcceptanceTesterActions,
+        Helper\Traits\Activation,
+        Helper\Traits\Registration,
+        Helper\Traits\Purchase;
 
     /**
-     * @Given /^Eu estou logado como administrador$/
+     * @When /^Eu crio um dump$/
      */
-    public function iAmLoggedInAsAnAdministrator()
+    public function iCreateDump()
     {
-        $this->loginAsAdmin();
+        $this->cli('db export ./tests/_data/dump.sql --dbuser=root --dbpass=123 --add-drop-table --allow-root');
     }
 
     /**
-     * @When /^Eu vou para página de administração do plugin$/
+     * @When /^Eu clico no título "([^"]*)"$/
      */
-    public function iGoToThePluginsAdministrationPage()
+    public function iClickOnTitle($title)
     {
-        $this->amOnPluginsPage();
+        $this->click("*[title='$title']");
     }
 
     /**
-     * @Then /^Eu deveria ver o plugin "([^"]*)"$/
-     * @param $pluginName
+     * @When /^Eu clico no texto que contenha "([^"]*)"$/
      */
-    public function iShouldSeeThePlugin($pluginName)
+    public function iClickOnTextThatContains($text)
     {
-        $this->seeElement('#the-list  tr[data-slug="' . $this->buildPluginSlug($pluginName) . '"]');
-    }
-
-
-    /**
-     * @When /^Eu ativo o plugin "([^"]*)"$/
-     * @param $pluginName
-     */
-    public function iActivateThePlugin($pluginName)
-    {
-        $this->activatePlugin($this->buildPluginSlug($pluginName));
+        $this->click("//*[contains(text(),'$text')]");
     }
 
     /**
-     * @Then /^Eu deveria ver o plugin "([^"]*)" ativado$/
-     * @param $pluginName
+     * @When /^Eu seleciono do label "([^"]*)" a opção "([^"]*)"$/
      */
-    public function iShouldSeeThePluginActivated($pluginName)
+    public function iSelectFromLabelAnOption($labelText, $option)
     {
-        $this->seePluginActivated($this->buildPluginSlug($pluginName));
+        $id = $this->grabAttributeFrom("//label[contains(text(),'$labelText')]", 'for');
+        $this->selectOption("select[id='$id']", "$option");
     }
 
     /**
-     * @Given /^O plugin "([^"]*)" está ativado$/
-     * @param $pluginName
+     * @Then /^Eu vejo "([^"]*)"$/
      */
-    public function thePluginIsActivated($pluginName)
+    public function iSee($text)
     {
-        $activePlugins = $this->grabOptionFromDatabase('active_plugins');
-        $activePlugins = empty($activePlugins) ? [] : $activePlugins;
-        $isFullSlug = preg_match('/^.*\\.php$/', $pluginName);
-        $pluginFullSlug = [$pluginName];
-
-        if (!$isFullSlug) {
-            $pluginSlug = $this->buildPluginSlug($pluginName);
-            $pluginFullSlug = ["{$pluginSlug}/{$pluginSlug}.php", "{$pluginSlug}/plugin.php"];
-        }
-
-        if (empty($activePlugins) || !count(array_intersect($pluginFullSlug, $activePlugins))) {
-            $activePlugins = array_merge($activePlugins, $pluginFullSlug);
-            $this->haveOptionInDatabase('active_plugins', $activePlugins);
-        }
+        $this->see($text);
     }
-
-    /**
-     * @When /^Eu desativo o plugin "([^"]*)"$/
-     * @param $pluginName
-     */
-    public function iDeactivateThePlugin($pluginName)
-    {
-        $this->deactivatePlugin($this->buildPluginSlug($pluginName));
-        $this->reloadPage();
-
-    }
-
-    /**
-     * @Then /^Eu deveria ver o plugin "([^"]*)" desativado$/
-     * @param $pluginName
-     */
-    public function iShouldSeeThePluginDeactivated($pluginName)
-    {
-        $this->seeElement('#the-list  tr[data-slug="' . $this->buildPluginSlug($pluginName) . '"] td div span[class="activate"]');
-        $this->reloadPage();
-    }
-
-    /**
-     * @When /^Eu vou para página de administração do WooCommerce$/
-     */
-    public function iGoToTheWoocommerceAdministrationPageOnTabVindi()
-    {
-        $this->amOnPage('wp-admin/admin.php?page=wc-settings&tab=settings_vindi');
-    }
-
-    /**
-     * @Then /^Eu vejo a tab "([^"]*)"$/
-     * @param $tab
-     */
-    public function iSeeTab($tab)
-    {
-        $this->seeElement("//a[text()='$tab']");
-    }
-
-
-    /**
-     * @When /^Eu clico no label "([^"]*)"$/
-     * @param $labelText
-     */
-    public function iClickOnLabel($labelText)
-    {
-        $this->click("//label[text()=' $labelText']");
-    }
-
-
-    /**
-     * @When /^Eu escrevo o "([^"]*)" no campo do label "([^"]*)"$/
-     * @param $text
-     * @param $labelText
-     */
-    public function iTypeTextOnTheFieldOFLabel($text, $labelText)
-    {
-        if (array_key_exists($text, $_ENV)) {
-            $text = $_ENV[$text];
-        }
-        $id = $this->grabAttributeFrom("//label[text()='$labelText ']", 'for');
-        $this->fillField("#$id", $text);
-    }
-
-    /**
-     * @When /^Eu clico em "([^"]*)"$/
-     */
-    public function iClickOn($text)
-    {
-        $this->click("//button[text()='$text']");
-    }
-
-    /**
-     * @When /^Eu recarrego a página$/
-     */
-    public function refreshPage()
-    {
-        $this->reloadPage();
-    }
-
-    /**
-     * @Then /^Eu vejo o parágrafo com texto "([^"]*)"$/
-     */
-    public function iSeeText($text)
-    {
-        $this->see( $text, 'p');
-    }
-
 
 }
