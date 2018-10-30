@@ -3,8 +3,8 @@
 namespace Helper\Traits;
 
 use Page\CreditCardConfiguration;
-use Page\CustomerPopulate;
 use Page\CreditCardPopulate;
+use Page\CustomerPopulate;
 
 trait Purchase
 {
@@ -16,7 +16,6 @@ trait Purchase
         (new CreditCardConfiguration($this))->register();
     }
 
-
     /**
      * @Given /^Eu estou na loja$/
      */
@@ -25,15 +24,27 @@ trait Purchase
         $this->amOnPage('/');
     }
 
-
     /**
-     * @When /^Eu registro uma compra$/
+     * @When /^Eu preencho dados do cliente$/
      */
     public function iPopulateCustomer()
     {
         (new CustomerPopulate($this))->populate();
-        (new CreditCardPopulate($this))->populate();
-        $this->click(CustomerPopulate::$submit);
     }
 
+    /**
+     * @When /^Eu preencho dados do cartão de crédito$/
+     */
+    public function iPopulateCreditCard()
+    {
+        (new CreditCardPopulate($this))->populate();
+    }
+
+    /**
+     * @When /^Eu clico em Finalizar compra$/
+     */
+    public function iClickOnFinishPurchase()
+    {
+        $this->click(CustomerPopulate::$submit);
+    }
 }

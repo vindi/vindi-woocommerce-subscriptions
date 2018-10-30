@@ -24,7 +24,6 @@ class CustomerPopulate
         $email = 'billing_email',
         $submit = '#place_order';
 
-
     protected
         $tester;
 
@@ -32,7 +31,6 @@ class CustomerPopulate
     {
         $this->tester = $I;
     }
-
 
     public static function route($param)
     {
@@ -58,5 +56,4 @@ class CustomerPopulate
         $I->fillField(self::$mobile, '1159047380');
         $I->fillField(self::$email, 'comunidade@vindi.com.br');
     }
-
 }

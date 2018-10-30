@@ -31,7 +31,6 @@ trait Activation
         $this->seeElement('#the-list  tr[data-slug="' . $this->buildPluginSlug($pluginName) . '"]');
     }
 
-
     /**
      * @When /^Eu ativo o plugin "([^"]*)"$/
      * @param $pluginName
@@ -79,7 +78,6 @@ trait Activation
     public function iDeactivateThePlugin($pluginName)
     {
         $this->deactivatePlugin($this->buildPluginSlug($pluginName));
-        $this->reloadPage();
 
     }
 
@@ -90,6 +88,5 @@ trait Activation
     public function iShouldSeeThePluginDeactivated($pluginName)
     {
         $this->seeElement('#the-list  tr[data-slug="' . $this->buildPluginSlug($pluginName) . '"] td div span[class="activate"]');
-        $this->reloadPage();
     }
 }

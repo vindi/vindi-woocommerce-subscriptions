@@ -29,7 +29,6 @@ trait Registration
         $this->amOnPage("wp-admin/admin.php?page=wc-settings$tabText");
     }
 
-
     /**
      * @When /^Eu clico no label "([^"]*)"$/
      * @param $labelText
@@ -38,7 +37,6 @@ trait Registration
     {
         $this->click("//label[text()=' $labelText']");
     }
-
 
     /**
      * @When /^Eu escrevo "([^"]*)" no campo do label "([^"]*)"$/
@@ -65,7 +63,7 @@ trait Registration
     /**
      * @When /^Eu recarrego a página$/
      */
-    public function refreshPage()
+    public function iRefreshPage()
     {
         $this->reloadPage();
     }
@@ -94,6 +92,4 @@ trait Registration
             ];
         $this->click("tr[data-gateway_id={$payments[$payment]}] td[class=action] a");
     }
-
-
 }

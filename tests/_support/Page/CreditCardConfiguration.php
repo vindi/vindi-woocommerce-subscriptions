@@ -35,5 +35,4 @@ class CreditCardConfiguration
         $I->selectOption(self::$maximumInstallment, '12x');
         $I->click(self::$save);
     }
-
 }

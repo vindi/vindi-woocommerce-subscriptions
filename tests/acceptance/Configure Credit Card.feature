@@ -1,9 +1,9 @@
 @credit_card_configuration
 # language: pt
-Funcionalidade: Comprar um produto com cartão de crédito
-  A fim de comprar um produto com cartão de crédito
-  Como um cliente
-  Eu preciso ser capaz de finalizar o checkout
+Funcionalidade: Configurar o pagamento no cartão de crédito
+  A fim de configurar o pagamento no cartão de crédito
+  Como um administrador
+  Eu preciso ser capaz de habilitar o pagamento no cartão de crédito
 
   Cenário: Habilito pagamento com cartão de crédito
     Dado Eu estou logado como administrador

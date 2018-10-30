@@ -22,10 +22,10 @@
   },
   "scripts": {
     "test": [
-      "codecept run -g activation --steps --html -v",
-      "codecept run -g registration --steps --html -v",
-      "codecept run -g credit_card_configuration --steps --html -v",
-      "codecept run -g purchase_by_credit_card --steps --html -v"
+      "codecept run -g activation --steps",
+      "codecept run -g registration --steps",
+      "codecept run -g credit_card_configuration --steps",
+      "codecept run -g purchase_by_credit_card --steps"
     ]
   }
 }

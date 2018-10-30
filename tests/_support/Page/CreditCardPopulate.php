@@ -23,7 +23,6 @@ class CreditCardPopulate
         $this->tester = $I;
     }
 
-
     public static function route($param)
     {
         return static::$URL . $param;
@@ -36,7 +35,7 @@ class CreditCardPopulate
         $I->selectOption(self::$brand, 'MasterCard');
         $I->fillField(self::$cardNumber, '5555555555555557');
         $I->selectOption(self::$month, '10 - outubro');
-        $I->selectOption(self::$year, '2019');
+        $I->selectOption(self::$year, '2020');
         $I->fillField(self::$cvv, 123);
         $I->selectOption(self::$installment, '2x de R$12,50');
     }
