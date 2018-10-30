@@ -3,6 +3,8 @@
 namespace Helper\Traits;
 
 
+use Helper\Support\Word;
+
 trait Activation
 {
 
@@ -28,7 +30,7 @@ trait Activation
      */
     public function iShouldSeeThePlugin($pluginName)
     {
-        $this->seeElement('#the-list  tr[data-slug="' . $this->buildPluginSlug($pluginName) . '"]');
+        $this->seeElement('#the-list  tr[data-slug="' . (new Word)->buildPluginSlug($pluginName) . '"]');
     }
 
     /**
@@ -37,7 +39,7 @@ trait Activation
      */
     public function iActivateThePlugin($pluginName)
     {
-        $this->activatePlugin($this->buildPluginSlug($pluginName));
+        $this->activatePlugin((new Word)->buildPluginSlug($pluginName));
     }
 
     /**
@@ -46,7 +48,7 @@ trait Activation
      */
     public function iShouldSeeThePluginActivated($pluginName)
     {
-        $this->seePluginActivated($this->buildPluginSlug($pluginName));
+        $this->seePluginActivated((new Word)->buildPluginSlug($pluginName));
     }
 
     /**
@@ -61,7 +63,7 @@ trait Activation
         $pluginFullSlug = [$pluginName];
 
         if (!$isFullSlug) {
-            $pluginSlug = $this->buildPluginSlug($pluginName);
+            $pluginSlug = (new Word)->buildPluginSlug($pluginName);
             $pluginFullSlug = ["{$pluginSlug}/{$pluginSlug}.php", "{$pluginSlug}/plugin.php"];
         }
 
@@ -77,7 +79,7 @@ trait Activation
      */
     public function iDeactivateThePlugin($pluginName)
     {
-        $this->deactivatePlugin($this->buildPluginSlug($pluginName));
+        $this->deactivatePlugin((new Word)->buildPluginSlug($pluginName));
 
     }
 
@@ -87,6 +89,6 @@ trait Activation
      */
     public function iShouldSeeThePluginDeactivated($pluginName)
     {
-        $this->seeElement('#the-list  tr[data-slug="' . $this->buildPluginSlug($pluginName) . '"] td div span[class="activate"]');
+        $this->seeElement('#the-list  tr[data-slug="' . (new Word)->buildPluginSlug($pluginName) . '"] td div span[class="activate"]');
     }
 }

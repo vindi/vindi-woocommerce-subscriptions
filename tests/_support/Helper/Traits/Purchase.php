@@ -2,12 +2,15 @@
 
 namespace Helper\Traits;
 
+use Helper\Support\Gateway;
 use Page\CreditCardConfiguration;
 use Page\CreditCardPopulate;
 use Page\CustomerPopulate;
 
 trait Purchase
 {
+    private static $code;
+
     /**
      * @When /^Eu configuro pagamento no cartão de crédito$/
      */
@@ -46,5 +49,31 @@ trait Purchase
     public function iClickOnFinishPurchase()
     {
         $this->click(CustomerPopulate::$submit);
+    }
+
+    /**
+     * @When /^Eu zero o code$/
+     */
+    public function iResetCode()
+    {
+        self::$code = (new Gateway)->resetCode();
+    }
+
+    /**
+     * @Then /^Eu confirmo a compra no gateway da Vindi$/
+     */
+    public function iConfirmPurchase()
+    {
+        $bill = (new Gateway())->billByCode(self::$code);
+        $this->seePostMetaInDatabase([
+            'post_id' => self::$code,
+            'meta_key' => 'vindi_wc_bill_id',
+            'meta_value' => $bill['id'],
+        ]);
+        $this->seePostMetaInDatabase([
+            'post_id' => self::$code,
+            'meta_key' => '_order_total',
+            'meta_value' => (int)$bill['amount'],
+        ]);
     }
 }

@@ -8,6 +8,7 @@ Funcionalidade: Registrar o plugin
   Cenário: Registro a API KEY no plugin Vindi WooCommerce
     Dado Eu estou logado como administrador
     Quando Eu vou para página de administração do WooCommerce na Tab "Vindi"
+    E Eu espero "3" segundos
     E Eu clico no label "Ativar Sandbox"
     E Eu escrevo "API_KEY" no campo do label "Chave da API Sandbox Vindi"
     E Eu clico no texto "Salvar alterações"

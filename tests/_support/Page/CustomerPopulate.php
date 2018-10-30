@@ -43,7 +43,7 @@ class CustomerPopulate
         $I->fillField(self::$name, 'Vindi');
         $I->fillField(self::$surname, 'Recorrência');
         $I->selectOption(self::$personType, 'Pessoa Física');
-        $I->fillField(self::$cpf, '07654509847');
+        $I->fillField(self::$cpf, '57181716298');
         $I->selectOption(self::$country, 'Brasil');
         $I->fillField(self::$cep, '04031-050');
         $I->fillField(self::$address, 'Rua Sena Madureira');

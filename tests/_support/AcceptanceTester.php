@@ -1,7 +1,5 @@
 <?php
 
-use Helper\Support\Service;
-
 /**
  * Inherited Methods
  * @method void wantToTest($text)
@@ -80,26 +78,5 @@ class AcceptanceTester extends \Codeception\Actor
     public function iWait($seconds)
     {
         $this->wait($seconds);
-    }
-
-    /**
-     * @When /^Eu zero o code$/
-     */
-    public function iResetCode()
-    {
-        $dump = file_get_contents(__DIR__ . '/../_data/dump.sql');
-        if (preg_match('/KEY `post_author` \(`post_author`\)
-\) ENGINE=InnoDB AUTO_INCREMENT=(.*?) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;/', $dump, $match)) {
-            $code = $match[1];
-            $billService = new Service();
-            $bill = $billService->all('bills', [
-                'query' => "code=$code",
-                'sort_by' => 'created_at',
-                'sort_order' => 'asc',
-            ]);
-            if (!empty($bill['bills'])) {
-                $billService->update('bills', $bill['bills'][0]['id'], json_encode(['code' => null]));
-            }
-        }
     }
 }

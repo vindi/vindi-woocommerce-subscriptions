@@ -20,4 +20,10 @@ Funcionalidade: Comprar um produto com cartão de crédito
     Então Eu vejo "R$25,00"
     E Eu preencho dados do cartão de crédito
     E Eu clico em Finalizar compra
-    E Eu crio um dump
+    E Eu espero "10" segundos
+    Então Eu vejo "Pedido recebido"
+    Então Eu vejo "R$25,00"
+    Então Eu vejo "Cartão de Crédito"
+    Então Eu vejo "Polo × 1"
+    Então Eu vejo "R$20,00"
+    Então Eu confirmo a compra no gateway da Vindi
