@@ -11,6 +11,13 @@ Funcionalidade: Comprar um produto com cartão de crédito
     E Eu clico no texto "Comprar"
     E Eu clico no título "Ver seu Carrinho"
     E Eu clico no texto que contenha "Fechar compra"
-    E Eu registro uma compra
     Então Eu vejo "MODO DE TESTES"
-
+    E Eu zero o code
+    E Eu preencho dados do cliente
+    E Eu espero "3" segundos
+    Então Eu vejo "Seu Pedido"
+    Então Eu vejo "Polo"
+    Então Eu vejo "R$25,00"
+    E Eu preencho dados do cartão de crédito
+    E Eu clico em Finalizar compra
+    E Eu crio um dump

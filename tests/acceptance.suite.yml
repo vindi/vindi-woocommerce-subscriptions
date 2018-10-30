@@ -9,9 +9,10 @@ actor: AcceptanceTester
 modules:
   enabled:
   - WPDb
+#  - WPBrowser
+  - WPWebDriver
   - WPLoader
   - \Helper\Acceptance
-  - WPWebDriver
   - WPCLI
   config:
     WPDb:
@@ -25,6 +26,11 @@ modules:
       url: '%WP_URL%'
       urlReplacement: false #replace the hardcoded dump URL with the one above
       tablePrefix: '%TABLE_PREFIX%'
+    WPBrowser:
+      url: '%WP_URL%'
+      adminUsername: '%ADMIN_USERNAME%'
+      adminPassword: '%ADMIN_PASSWORD%'
+      adminPath: '%WP_ADMIN_PATH%'
     WPWebDriver:
       url: '%WP_URL%'
       browser: 'chrome'
