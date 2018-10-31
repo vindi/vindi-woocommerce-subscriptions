@@ -8,14 +8,14 @@ Funcionalidade: Ativação
   Cenário: Vejo o plugin na tela de administração do plugin
     Dado Eu estou logado como administrador
     Quando Eu vou para página de administração do plugin
-    Então Eu deveria ver o plugin "Vindi WooCommerce"
+    Então Eu deveria ver o plugin "Vindi WooCommerce Subscriptions"
 
 
   Cenário: Ativo o  plugin
     Dado Eu estou logado como administrador
     Quando Eu vou para página de administração do plugin
-    E Eu ativo o plugin "Vindi Woocommerce"
-    Então Eu deveria ver o plugin "Vindi Woocommerce" ativado
+    E Eu ativo o plugin "Vindi Woocommerce Subscriptions"
+    Então Eu deveria ver o plugin "Vindi Woocommerce Subscriptions" ativado
     E Eu crio um dump
 
 
@@ -23,6 +23,6 @@ Funcionalidade: Ativação
     Dado Eu estou logado como administrador
     E O plugin "Vindi Woocommerce" está ativado
     Quando Eu vou para página de administração do plugin
-    E Eu desativo o plugin "Vindi Woocommerce"
-    Então Eu deveria ver o plugin "Vindi Woocommerce" desativado
+    E Eu desativo o plugin "Vindi Woocommerce Subscriptions"
+    Então Eu deveria ver o plugin "Vindi Woocommerce Subscriptions" desativado
 

@@ -57,20 +57,8 @@ trait Activation
      */
     public function thePluginIsActivated($pluginName)
     {
-        $activePlugins = $this->grabOptionFromDatabase('active_plugins');
-        $activePlugins = empty($activePlugins) ? [] : $activePlugins;
-        $isFullSlug = preg_match('/^.*\\.php$/', $pluginName);
-        $pluginFullSlug = [$pluginName];
-
-        if (!$isFullSlug) {
-            $pluginSlug = (new Word)->buildPluginSlug($pluginName);
-            $pluginFullSlug = ["{$pluginSlug}/{$pluginSlug}.php", "{$pluginSlug}/plugin.php"];
-        }
-
-        if (empty($activePlugins) || !count(array_intersect($pluginFullSlug, $activePlugins))) {
-            $activePlugins = array_merge($activePlugins, $pluginFullSlug);
-            $this->haveOptionInDatabase('active_plugins', $activePlugins);
-        }
+        $pluginSlug = (new Word)->buildPluginSlug($pluginName);
+        $this->haveOptionInDatabase('active_plugins', array_merge($this->grabOptionFromDatabase('active_plugins'), ["{$pluginSlug}/{$pluginSlug}.php"]));
     }
 
     /**
