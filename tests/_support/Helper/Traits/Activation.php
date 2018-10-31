@@ -7,7 +7,6 @@ use Helper\Support\Word;
 
 trait Activation
 {
-
     /**
      * @Given /^Eu estou logado como administrador$/
      */
