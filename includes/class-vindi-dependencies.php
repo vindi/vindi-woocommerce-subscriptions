@@ -102,7 +102,7 @@ class Vindi_Dependencies
     **/
     public static function verify_version_of_plugin($plugin)
     {
-        $plugin_data = get_plugin_data(ABSPATH . "wp-content/plugins/" . $plugin['path']);
+        $plugin_data = get_plugin_data(plugin_dir_path(__DIR__) . "../" . $plugin['path']);
         $version_match = $plugin['plugin']['version'];
         $version_compare = version_compare(
                 $plugin_data['Version'],
