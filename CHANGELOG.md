@@ -1,5 +1,10 @@
 # Notas das versões
 
+## [5.3.3 - 30/11/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.3)
+
+### Corrigido
+- Corrige instalação no ambiente Wordpress.com
+
 ## [5.3.2 - 08/10/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.2)
 
 ### Corrigido
