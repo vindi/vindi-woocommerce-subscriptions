@@ -16,7 +16,7 @@
     }
   ],
   "require-dev": {
-    "lucatume/wp-browser": "^2.1",
+    "lucatume/wp-browser": "^2.2",
     "codeception/specify": "^1.0",
     "codeception/verify": "^1.0"
   },
