@@ -20,7 +20,7 @@ Funcionalidade: Comprar um produto com cartão de crédito
     Então Eu vejo "R$25,00"
     E Eu preencho dados do cartão de crédito
     E Eu clico em Finalizar compra
-    E Eu espero "10" segundos
+    E Eu espero "15" segundos
     Então Eu vejo "Pedido recebido"
     Então Eu vejo "R$25,00"
     Então Eu vejo "Cartão de Crédito"
