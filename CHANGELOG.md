@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [5.4.0 - 15/01/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.4.0)
+
+### Adicionado
+- Adiciona compatibilidade com frete único
+
+
 ## [5.3.3 - 30/11/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.3)
 
 ### Corrigido
