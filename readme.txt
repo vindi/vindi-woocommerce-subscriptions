@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 4.9.8
 WC requires at least: 3.0.0
 WC tested up to: 3.4.5
-Stable Tag: 5.3.0
+Stable Tag: 5.4.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -62,6 +62,21 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+
+= 5.4.0 - 15/01/2019 =
+- Adiciona compatibilidade com frete único
+
+= 5.3.3 - 30/11/2018 =
+- Corrige instalação no ambiente Wordpress.com
+
+= 5.3.2 - 08/10/2018 =
+- Corrige cache dos métodos de pagamento
+- Corrige data do próximo pagamento para as assinaturas
+- Corrige comportamento dos hooks do WooCommerce Subscriptions para assinaturas Vindi (por [@cristian-rossi](https://github.com/cristian-rossi): [#102](https://github.com/vindi/vindi-woocommerce-subscriptions/pull/102))
+
+= 5.3.1 - 05/10/2018 =
+- Corrige falha na verificação do certificado SSL
+
 = 5.3.0 - 01/10/2018 =
 - Ajusta performance do checkout
 

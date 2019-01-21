@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+  selenium:
+    image: selenium/standalone-chrome
+    container_name: selenium
+    ports:
+    - "4444"
+    volumes:
+    - /dev/shm:/dev/shm
+  mariadb:
+    image: vindi/mysql-woocommerce-ci
+    container_name: wordpress_db
+    ports:
+    - "3306"
+  web:
+    image: vindi/apache-woocommerce-ci
+    container_name: vindi.local
+    depends_on:
+    - mariadb
+    ports:
+    - "443:443"
+    links:
+    - mariadb:mysql
+networks:
+  default:
+    external:
+      name: webproxy
+

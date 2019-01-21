@@ -358,16 +358,21 @@ class Vindi_Payment
     /**
      * @param array $item
      **/
-  private function return_cycle_from_product_type($item)
+    private function return_cycle_from_product_type($item)
     {
-        if ($item['type'] == 'shipping' || $item['type'] == 'tax')
-            return null;
-        
-        if(!$this->is_subscription_type($item->get_product())) {
+        if (!$this->is_subscription_type($item->get_product())
+            || $this->is_one_time_shipping($item->get_product())) {
             return 1;
         }
-
         return null;
+    }
+
+    /**
+     * @param WC_Product $item
+     */
+    private function is_one_time_shipping($item)
+    {
+        return reset(get_post_meta($item->id)['_subscription_one_time_shipping']) == 'yes';
     }
 
     /**

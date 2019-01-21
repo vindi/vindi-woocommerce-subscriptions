@@ -1,5 +1,31 @@
 # Notas das versões
 
+## [5.4.0 - 15/01/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.4.0)
+
+### Adicionado
+- Adiciona compatibilidade com frete único
+
+
+## [5.3.3 - 30/11/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.3)
+
+### Corrigido
+- Corrige instalação no ambiente Wordpress.com
+
+
+## [5.3.2 - 08/10/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.2)
+
+### Corrigido
+- Corrige cache dos métodos de pagamento
+- Corrige data do próximo pagamento para as assinaturas
+- Corrige comportamento dos hooks do WooCommerce Subscriptions para assinaturas Vindi (por [@cristian-rossi](https://github.com/cristian-rossi): [#102](https://github.com/vindi/vindi-woocommerce-subscriptions/pull/102))
+
+
+## [5.3.1 - 05/10/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.1)
+
+### Corrigido
+- Corrige falha na verificação do certificado SSL
+
+
 ## [5.3.0 - 01/10/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.0)
 
 ### Corrigido

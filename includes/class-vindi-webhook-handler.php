@@ -111,10 +111,10 @@ class Vindi_Webhook_Handler
      **/
     private function bill_created($data)
     {
-        if(empty($data->bill->subscription)) {
+        if (empty($data->bill->subscription)) {
             return;
         }
-        
+
         $renew_infos = [
             'wc_subscription_id'     => $data->bill->subscription->code,
             'vindi_subscription_id'  => $data->bill->subscription->id,
@@ -122,9 +122,9 @@ class Vindi_Webhook_Handler
             'bill_id'                => $data->bill->id
         ];
 
-        if(!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id'], $renew_infos['cycle'])) {
+        if (!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id']
+            , $renew_infos['cycle'])) {
             $this->subscription_renew($renew_infos);
-            $this->update_next_payment($data);
         }
     }
 
@@ -139,12 +139,13 @@ class Vindi_Webhook_Handler
         } else {
             $vindi_subscription_id = $data->bill->subscription->id;
             $cycle                 = $data->bill->period->cycle;
-            
             $order          = $this->find_order_by_subscription_and_cycle($vindi_subscription_id, $cycle);
         }
 
         $new_status = $this->container->get_return_status();
-        $order->update_status($new_status, __('O Pagamento foi realizado com sucesso pela Vindi.', 'woocommerce-vindi'));
+        $order->update_status($new_status, __('O Pagamento foi realizado com sucesso pela Vindi.',
+            'woocommerce-vindi'));
+	    $this->update_next_payment($data);
     }
 
     /**
@@ -190,7 +191,8 @@ class Vindi_Webhook_Handler
         if($order->get_status() == 'pending'){
             $order->update_status('failed', 'Pagamento rejeitado!');
         }else{
-            throw new Exception('Erro ao trocar status da fatura para "failed" pois a fatura #' . $data->charge->bill->id . ' não está mais pendente!');
+            throw new Exception('Erro ao trocar status da fatura para "failed" pois a fatura #' .
+                $data->charge->bill->id . ' não está mais pendente!');
         }
     }
 
@@ -201,7 +203,7 @@ class Vindi_Webhook_Handler
     private function subscription_canceled($data)
     {
         $subscription = $this->find_subscription_by_id($data->subscription->code);
-        
+
         if ($this->container->get_synchronism_status()
             && ($subscription->has_status('cancelled')
             || $subscription->has_status('pending-cancel')
@@ -364,16 +366,27 @@ class Vindi_Webhook_Handler
         return new WP_Query($args);
 	}
 
-    /**
-     * Update next payment schedule of subscription
-     * @param $next_payment string
-     * @param $subscription_id int wc subscription id
-     **/
-    private function update_next_payment($data)
-    {
-        $subscription = $this->find_subscription_by_id($data->bill->subscription->code);
-        $next_payment = date('Y-m-d H:i:s', strtotime($data->bill->period->end_at . ' + 3 days'));
+	/**
+	 * Update next payment schedule of subscription
+	 *
+	 * @param $data object
+	 **/
+	private function update_next_payment($data) {
 
-        $subscription->update_dates(array('next_payment' => $next_payment));
-    }
+		// let's find the subscription in the API
+		// we need this step because the actual next billing date does not come from the /bill webhook
+		$vindi_subscription = $this->container->api->get_subscription($data->bill->subscription->id);
+
+		if ($vindi_subscription && isset($vindi_subscription['next_billing_at'])) {
+
+			// format next payment date
+			$next_payment = date('Y-m-d H:i:s', strtotime($vindi_subscription['next_billing_at']));
+
+			// find our wc_subscription
+			$subscription = $this->find_subscription_by_id($data->bill->subscription->code);
+
+			// update the date to show the user when will be his next payment
+			$subscription->update_dates(array('next_payment' => $next_payment));
+		}
+	}
 }

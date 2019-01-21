@@ -175,7 +175,7 @@ class Vindi_CreditCard_Gateway extends Vindi_Base_Gateway
         for ($i = date('Y') ; $i <= date('Y') + 15 ; $i++)
             $years[] = $i;
 
-        if (!($is_trial = $this->container->get_is_active_sandbox()))
+        if ($is_trial = $this->container->get_is_active_sandbox())
             $is_trial = $this->container->api->is_merchant_status_trial_or_sandbox();
 
         $this->container->get_template('creditcard-checkout.html.php', compact(
