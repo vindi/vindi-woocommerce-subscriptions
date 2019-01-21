@@ -360,8 +360,12 @@ class Vindi_Payment
      **/
     private function return_cycle_from_product_type($item)
     {
-        if (!$this->is_subscription_type($item->get_product())
-            || $this->is_one_time_shipping($item->get_product())) {
+        if ($item['type'] == 'shipping' || $item['type'] == 'tax') {
+            if ($this->container->get_shipping_and_tax_config())
+                return 1;
+        }
+        elseif (!$this->is_subscription_type(wc_get_product($item['product_id']))
+            || $this->is_one_time_shipping(wc_get_product($item['product_id']))) {
             return 1;
         }
         return null;
