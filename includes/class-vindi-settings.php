@@ -151,6 +151,13 @@ class Vindi_Settings extends WC_Settings_API
                 'description'      => __('Envia as alterações de status nas assinaturas do WooCommerce para Vindi.', VINDI_IDENTIFIER),
                 'default'          => 'no',
             ),
+            'shipping_and_tax_config'  => array(
+                'title'            => __('Cobrança única', VINDI_IDENTIFIER),
+                'type'             => 'checkbox',
+                'label'      => __('Ativar cobrança única para fretes e taxas', VINDI_IDENTIFIER),
+                'description'      => __('Fretes e Taxas serão cobrados somente no primeiro ciclo de uma assinatura', VINDI_IDENTIFIER),
+                'default'          => 'no',
+            ),
 			'testing'              => array(
 				'title'            => __('Testes', 'vindi-woocommerce'),
 				'type'             => 'title',
@@ -230,6 +237,15 @@ class Vindi_Settings extends WC_Settings_API
     public function get_synchronism_status()
     {
         return 'yes' === $this->settings['vindi_synchronism'];
+    }
+
+    /**
+     * Get Vindi Shipping and Tax config
+     * @return string
+     **/
+    public function get_shipping_and_tax_config()
+    {
+        return 'yes' === $this->settings['shipping_and_tax_config'];
     }
 
     /**
