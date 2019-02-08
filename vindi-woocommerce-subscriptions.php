@@ -327,33 +327,52 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             $cart       = $this->settings->woocommerce->cart;
 			$cart_items = $cart->get_cart();
 
-			$product = wc_get_product($product_id);
-
 			if (empty($cart_items))
 				return $valid;
 
+            $product = wc_get_product($product_id);
+
             if ($product->is_type('subscription')) {
 
-                $product_vindi_subscription_plan_meta = get_post_meta($product->post->ID, 'vindi_subscription_plan');
-                $product_vindi_subscription_plan_id   = (int) end($product_vindi_subscription_plan_meta);
+                $product_plan_id = (int) end(
+                    get_post_meta($product->post->ID, 'vindi_subscription_plan'));
 
-                foreach($cart_items as $item)
-                {
+                foreach ($cart_items as $item) {
                     if ('subscription' === $item['data']->product_type) {
-
-                        $item_vindi_subscription_plan_meta = get_post_meta($item['data']->post->ID, 'vindi_subscription_plan');
-                        $item_vindi_subscription_plan_id   = (int) end($item_vindi_subscription_plan_meta);
-
-                        if($product_vindi_subscription_plan_id != $item_vindi_subscription_plan_id) {
-                            wc_add_notice(__('Você só pode adicionar produtos que façam parte do mesmo plano!', VINDI_IDENTIFIER), 'error');
-                            return false;
+                        $item_plan_id = (int) end(
+                            get_post_meta($item['data']->post->ID, 'vindi_subscription_plan'));
+       
+                        if ($product_plan_id != $item_plan_id) {
+                            return $this->can_remove_older_cart_item($cart, $item);
                         }
                     }
                 }
             }
-
 			return $valid;
 		}
+
+        /**
+         * @param WC_Cart $cart
+         * @param WC_Cart $cart_items
+         *
+         * @return bool
+         **/
+        public function can_remove_older_cart_item($cart, $item)
+        {   
+            $remove_message = '';
+            $status = 'error';
+
+            if ($this->settings->remove_cart_subscriptions) {
+                $cart->remove_cart_item($item['key']);
+                $status = 'success';
+                $remove_message = '. Removemos sua assinatura antiga do carrinho automaticamente';
+            }
+            wc_add_notice(__
+                ('Você só pode adicionar assinaturas que façam parte do mesmo plano' . 
+                    $remove_message . ' !', VINDI_IDENTIFIER), $status);
+            
+            return 'success' == $status;
+        }
 
         /**
          * @param array    $actions
