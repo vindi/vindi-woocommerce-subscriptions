@@ -111,6 +111,13 @@ class Vindi_Settings extends WC_Settings_API
 				'description'      => sprintf(__('Envia informações de RG e Inscrição Estadual para Emissão de NFe\'s com nossos parceiros. %s', VINDI_IDENTIFIER), $nfe_know_more),
 				'default'          => 'no',
 			),
+            'remove_cart_itens_config'  => array(
+                'title'            => __('Atualização automática do Carrinho', VINDI_IDENTIFIER),
+                'type'             => 'checkbox',
+                'label'      => __('Remover automáticamente assinaturas com planos diferentes no carrinho', VINDI_IDENTIFIER),
+                'description'      => __('Assinaturas com planos diferentes serão removidos na adição de novas assinaturas', VINDI_IDENTIFIER),
+                'default'          => 'no',
+            ),
             'discounts_to_cycles' => array(
                 'title'       => __('Número de ciclos dos cupons de desconto', VINDI_IDENTIFIER),
                 'type'        => 'select',
@@ -246,6 +253,15 @@ class Vindi_Settings extends WC_Settings_API
     public function get_shipping_and_tax_config()
     {
         return 'yes' === $this->settings['shipping_and_tax_config'];
+    }
+
+    /**
+     * Get Config to Remove Lastest Subscriptions on Cart
+     * @return bool
+     **/
+    public function remove_cart_itens_config()
+    {
+        return 'yes' === $this->settings['remove_cart_itens_config'];
     }
 
     /**
