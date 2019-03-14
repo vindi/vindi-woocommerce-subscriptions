@@ -95,6 +95,13 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             $this->webhook_handler             = new Vindi_Webhook_Handler($this->settings);
             $this->subscription_status_handler = new Vindi_Subscription_Status_Handler($this->settings);
 
+//            $this->get_template('admin-settings.html.php', ['settings'=> new Vindi_Settings]);
+            add_menu_page('Vindi Woocommerce', 'Vindi', 'manage_options', 'vindi_plugin', [$this, 'plan_page'] );
+            add_submenu_page('vindi_plugin', 'Planos', 'Configurações', 'manage_options', 'vindi_plugin',[$this, 'plan_page'] );
+            add_submenu_page('vindi_plugin', 'Planos', 'Planos', 'manage_options', 'vindi_plugin2',[$this, 'books_ref_page_callback'] );
+
+
+
             add_action('http_api_curl', [ &$this, 'add_support_to_tlsv1_2' ]);
 
             add_action('woocommerce_api_' . self::WC_API_CALLBACK, array(
@@ -146,6 +153,19 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 , 10);
             }
 		}
+		public function plan_page(){
+            return require plugin_dir_path(__FILE__) . 'templates/admin-settings.html.php';
+        }
+
+        function books_ref_page_callback() {
+            ?>
+            <div class="wrap">
+                <h1><?php _e( 'Books Shortcode Reference', 'textdomain' ); ?></h1>
+                <p><?php _e( 'Helpful stuff here', 'textdomain' ); ?></p>
+            </div>
+            <?php
+        }
+
 
         /**
          * Update user informations from My Account form
