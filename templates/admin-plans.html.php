@@ -1,5 +1,5 @@
 <div class="wrap">
-    <h1>Vindi Plugin</h1>
+    <h1>Planos</h1>
     <?php settings_errors(); ?>
 
     <form method="post" action="" class="inline-block">

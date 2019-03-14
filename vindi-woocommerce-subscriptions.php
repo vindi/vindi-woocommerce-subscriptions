@@ -95,9 +95,16 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             $this->webhook_handler             = new Vindi_Webhook_Handler($this->settings);
             $this->subscription_status_handler = new Vindi_Subscription_Status_Handler($this->settings);
 
-            add_menu_page('Vindi Woocommerce', 'Vindi', 'manage_options', 'vindi_plugin', [$this, 'settings_page'], 'dashicons-admin-tools', 31 );
+            /* Begin */
+            /* Vindi Menu */
 
-            add_action( 'admin_menu', [$this, 'plan_page']);
+            // Menu
+            add_menu_page('Vindi Woocommerce', 'Vindi', 'manage_options', 'vindi_settings', [$this, 'vindi_settings_page'], 'dashicons-admin-tools', 31 );
+
+            // Options
+            add_action( 'admin_menu', [$this, 'vindi_pages']);
+
+            /* End */
 
             add_action('http_api_curl', [ &$this, 'add_support_to_tlsv1_2' ]);
 
@@ -150,20 +157,29 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 , 10);
             }
 		}
-		public function settings_page(){
+
+        /**
+        * Load Vindi menus
+        */
+        public function vindi_pages(){
+            add_submenu_page('vindi_settings', 'Config', 'Configurações', 'manage_options', 'vindi_settings');
+            add_submenu_page('vindi_settings', 'Planos', 'Planos', 'manage_options', 'vindi_plans',[$this, 'vindi_plans_page'] );
+        }
+
+        /**
+        * Load settings page template
+        */
+		public function vindi_settings_page(){
             $settings = new Vindi_Settings;
             require plugin_dir_path(__FILE__) . 'templates/admin-settings.html.php';
         }
 
-        public function plan_page(){
-            add_submenu_page('vindi_plugin', 'Config', 'Configurações', 'manage_options', 'vindi_plugin');
-            add_submenu_page('vindi_plugin', 'Planos', 'Planos', 'manage_options', 'vindi_plugin2',[$this, 'books_ref_page_callback'] );
+        /**
+        * Load plans page template
+        */
+        public function vindi_plans_page() {
+            require plugin_dir_path(__FILE__) . 'templates/admin-plans.html.php';
         }
-
-        public function books_ref_page_callback() {
-            require plugin_dir_path(__FILE__) . 'templates/admin-plan-page.html.php';
-        }
-
 
         /**
          * Update user informations from My Account form
