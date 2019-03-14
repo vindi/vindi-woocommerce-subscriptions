@@ -16,9 +16,9 @@
 </table>
 <?php
 
-$merchant = false;
+$merchant = $settings->api->get_merchant();
 $api_key = $settings->get_api_key();
-if (!empty($api_key)) {
+if (!empty($api_key) && !$merchant) {
     $merchant = $settings->api->get_merchant(true);
 }
 
