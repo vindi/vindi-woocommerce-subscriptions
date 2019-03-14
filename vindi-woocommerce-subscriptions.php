@@ -170,7 +170,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         * Load settings page template
         */
 		public function vindi_settings_page(){
-            $settings = new Vindi_Settings;
+            $settings = $this->settings;
             require plugin_dir_path(__FILE__) . 'templates/admin-settings.html.php';
         }
 

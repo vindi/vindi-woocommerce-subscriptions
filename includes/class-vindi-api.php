@@ -377,7 +377,7 @@ class Vindi_API
     /**
      * @param $body (plan_id, customer_id, payment_method_code, product_items[{product_id}])
      *
-     * @return array
+     * @return bool
      */
     public function create_subscription($body)
     {
