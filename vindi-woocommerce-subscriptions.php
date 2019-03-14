@@ -178,6 +178,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         * Load plans page template
         */
         public function vindi_plans_page() {
+            $api = $this->settings->api;
             require plugin_dir_path(__FILE__) . 'templates/admin-plans.html.php';
         }
 
