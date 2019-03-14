@@ -554,7 +554,7 @@ class Vindi_API
             $page++;
         } while (count($response['plans']) >= $per_page);
 
-        if (false == empty($plans)) {
+        if (!empty($plans)) {
             foreach ($plans as $plan) {
                 $list['names'][$plan['id']] = $plan['name'];
                 $list['infos'][$plan['id']] = array(
@@ -585,6 +585,8 @@ class Vindi_API
         $this->current_plan = $response['plan'];
         return $this->current_plan;
     }
+
+
 
     /**
      * @param $body
