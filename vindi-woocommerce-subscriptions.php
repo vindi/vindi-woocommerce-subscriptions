@@ -155,17 +155,21 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
                     array(&$this, 'save_ajax_subscription_meta')
                     , 10);
 
-                add_action('admin_post_create_plan', [$this, 'create_plan']);
+                add_action('admin_post_update_or_create_plan', [$this, 'update_or_create_plan']);
+
+                add_action('admin_post_update_plan', [$this, 'update_plan']);
             }
         }
 
-        public function create_plan()
+        public function update_or_create_plan()
         {
-            if (!WP_ADMIN || !wp_verify_nonce($_POST['vindi_plan'], 'vindi_plan_create')) {
+            if (!WP_ADMIN || !wp_verify_nonce($_POST['vindi_plan_nonce'], 'vindi_plan')) {
                 echo 'deu errado';
             }
 
             $name = sanitize_text_field($_POST['name']);
+            $id = sanitize_text_field($_POST['id']);
+            $button = sanitize_text_field($_POST['button']);
 
             $body = [
                 'name' => $name,
@@ -175,10 +179,12 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
                 'billing_trigger_day' => 0,
                 'installments' => 1
             ];
-            $plan = $this->settings->api->create_plan($body);
-            $handler = fopen(plugin_dir_path(__FILE__) . 'teste.txt', "w+");
-            fwrite($handler, $plan['id']);
-            fclose($handler);
+            if ('Editar' === $button) {
+                $this->settings->api->update_plan($id, $body);
+            } else {
+                $this->settings->api->create_plan($body);
+            }
+
             wp_redirect(admin_url('admin.php?page=vindi_plans_list'));
         }
 
@@ -189,7 +195,7 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
         {
             add_submenu_page('vindi_settings', 'Config', 'Configurações', 'manage_options', 'vindi_settings');
             add_submenu_page('vindi_settings', 'Planos Listar', 'Todos os planos', 'manage_options', 'vindi_plans_list', [$this, 'vindi_plans_page_list']);
-            add_submenu_page('vindi_settings', 'Planos Criar', 'Adicionar novo plano', 'manage_options', 'vindi_plans_create', [$this, 'vindi_plans_page_create']);
+            add_submenu_page('vindi_settings', 'Planos Criar', 'Adicionar novo plano', 'manage_options', 'vindi_plans_create', [$this, 'vindi_plan_page_update_or_create']);
         }
 
         /**
@@ -203,16 +209,17 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
 
         public function vindi_plans_page_list()
         {
-            $api = $this->settings->api;
+            $plans = $this->settings->api->get_plans()['names'];
             return require plugin_dir_path(__FILE__) . 'templates/admin-plan-list.html.php';
         }
 
         /**
          * Load plans page template
          */
-        public function vindi_plans_page_create()
+        public function vindi_plan_page_update_or_create()
         {
-            return require plugin_dir_path(__FILE__) . 'templates/admin-plan-create.html.php';
+            $api = $this->settings->api;
+            return require plugin_dir_path(__FILE__) . 'templates/admin-plan-update-or-create.html.php';
         }
 
         /**

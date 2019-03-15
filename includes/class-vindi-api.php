@@ -587,7 +587,6 @@ class Vindi_API
     }
 
 
-
     /**
      * @param $body
      * @return bool|mixed
@@ -595,6 +594,16 @@ class Vindi_API
     public function create_plan($body)
     {
         if ($response = $this->request('plans', 'POST', $body)) {
+            return $response['plan'];
+        }
+
+        return false;
+    }
+
+
+    public function update_plan($id, $body)
+    {
+        if ($response = $this->request("plans/$id", 'PUT', $body)) {
             return $response['plan'];
         }
 
