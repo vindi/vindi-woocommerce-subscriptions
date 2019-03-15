@@ -98,7 +98,7 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
             /* Vindi Menu */
 
             // Menu
-            add_menu_page('Vindi Woocommerce', 'Vindi', 'manage_options', 'vindi_settings', [$this, 'vindi_settings_page'], 'dashicons-admin-tools', 31);
+            add_menu_page('Vindi Woocommerce', 'Vindi', 'manage_options', 'vindi_settings', [$this, 'vindi_general_page'], 'dashicons-admin-tools', 31);
 
             // Options
             add_action('admin_menu', [$this, 'vindi_pages']);
@@ -193,9 +193,12 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
          */
         public function vindi_pages()
         {
-            add_submenu_page('vindi_settings', 'Config', 'Configurações', 'manage_options', 'vindi_settings');
-            add_submenu_page('vindi_settings', 'Planos Listar', 'Todos os planos', 'manage_options', 'vindi_plans_list', [$this, 'vindi_plans_page_list']);
-            add_submenu_page('vindi_settings', 'Planos Criar', 'Adicionar novo plano', 'manage_options', 'vindi_plans_create', [$this, 'vindi_plan_page_update_or_create']);
+            // Temporary
+            add_submenu_page('vindi_settings', 'General', 'Geral', 'manage_options', 'vindi_settings');
+
+            // add_submenu_page('vindi_settings', 'Config', 'Configurações', 'manage_options', 'vindi_settings');
+            add_submenu_page('vindi_settings', 'Plans', 'Planos', 'manage_options', 'vindi_plans_list', [$this, 'vindi_plans_page_list']);
+            add_submenu_page(null, 'Planos Criar', 'Adicionar novo plano', 'manage_options', 'vindi_plans_create', [$this, 'vindi_plan_page_update_or_create']);
         }
 
         /**
@@ -207,6 +210,17 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
             require plugin_dir_path(__FILE__) . 'templates/admin-settings.html.php';
         }
 
+        /**
+         * Load general page template
+         */
+        public function vindi_general_page()
+        {
+            return require plugin_dir_path(__FILE__) . 'templates/admin-general.html.php';
+        }
+
+        /**
+         * Load plans index page template
+         */
         public function vindi_plans_page_list()
         {
             $plans = $this->settings->api->get_plans()['names'];
@@ -214,7 +228,7 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
         }
 
         /**
-         * Load plans page template
+         * Load plans new/edit page template
          */
         public function vindi_plan_page_update_or_create()
         {
