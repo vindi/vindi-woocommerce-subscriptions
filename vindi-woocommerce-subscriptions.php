@@ -159,7 +159,14 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
 
                 add_action('admin_post_update_plan', [$this, 'update_plan']);
             }
+            add_action( 'admin_enqueue_scripts', [$this,'enqueue'] );
         }
+
+        function enqueue(){
+            wp_enqueue_style('vindi_plans_list', plugins_url('/assets/css/bootstrap.min.css', __FILE__));
+            wp_enqueue_script('vindi_plans_list', plugins_url('/assets/css/bootstrap.min.js', __FILE__));
+        }
+
 
         public function update_or_create_plan()
         {
@@ -177,7 +184,8 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
                 'interval_count' => 1,
                 'billing_trigger_type' => 'beginning_of_period',
                 'billing_trigger_day' => 0,
-                'installments' => 1
+                'billing_cycles' =>1,
+                'installments' => 1,
             ];
             if ('Editar' === $button) {
                 $this->settings->api->update_plan($id, $body);
@@ -207,7 +215,7 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
         public function vindi_settings_page()
         {
             $settings = $this->settings;
-            require plugin_dir_path(__FILE__) . 'templates/admin-settings.html.php';
+            return require plugin_dir_path(__FILE__) . 'templates/admin-settings.html.php';
         }
 
         /**
@@ -223,7 +231,7 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
          */
         public function vindi_plans_page_list()
         {
-            $plans = $this->settings->api->get_plans()['names'];
+            $plans = $this->settings->api->get_plans('');
             return require plugin_dir_path(__FILE__) . 'templates/admin-plan-list.html.php';
         }
 

@@ -535,9 +535,10 @@ class Vindi_API
     }
 
     /**
+     * @param string $active
      * @return array
      */
-    public function get_plans()
+    public function get_plans($active = 'query=status:active&')
     {
         $list = array(
             'names' => array(),
@@ -549,7 +550,7 @@ class Vindi_API
         $per_page = 50;
 
         do {
-            $response = $this->request('plans?query=status:active&per_page=' . $per_page . '&page=' . $page, 'GET');
+            $response = $this->request("plans?{$active}per_page=$per_page&page=$page", 'GET');
             $plans = array_merge($plans, $response['plans']);
             $page++;
         } while (count($response['plans']) >= $per_page);
@@ -564,6 +565,8 @@ class Vindi_API
                     'billing_trigger_type' => $plan['billing_trigger_type'],
                     'billing_trigger_day' => $plan['billing_trigger_day'],
                     'billing_cycles' => $plan['billing_cycles'],
+                    'installments' => $plan['installments'],
+                    'status' => $plan['status'],
                 );
             }
         }
