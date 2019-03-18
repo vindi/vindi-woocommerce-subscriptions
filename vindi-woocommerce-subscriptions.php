@@ -3,7 +3,7 @@
  * Plugin Name: Vindi Woocommerce
  * Plugin URI:
  * Description: Adiciona o gateway de pagamentos da Vindi para o WooCommerce.
- * Version: 5.5.0-alpha
+ * Version: 5.5.0-alpha.1
  * Author: Vindi
  * Author URI: https://www.vindi.com.br
  * Requires at least: 4.4
@@ -38,7 +38,7 @@ if (!class_exists('Vindi_WooCommerce_Subscriptions')) {
         /**
          * @var string
          */
-        const VERSION = '5.5.0-alpha';
+        const VERSION = '5.5.0-alpha.1';
 
         /**
          * @var string
