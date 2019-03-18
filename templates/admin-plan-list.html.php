@@ -1,9 +1,19 @@
 <div class="wrap">
-    <h1>Listar Planos</h1>
+    <div class="row mb-2">
+        <div class="col-md-9">
+            <h1>Lista de Planos</h1>
+        </div>
+        <div class="col-md-3 d-flex justify-content-end">
+            <a class="btn btn-link" href="admin.php?page=vindi_plans_create">
+                Novo plano
+            </a>
+        </div>
+    </div>
+
     <?php settings_errors();
 
-
     ?>
+
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
