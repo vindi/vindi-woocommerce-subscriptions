@@ -19,7 +19,7 @@
     $merchant = false;
     $api_key  = $settings->get_api_key();
     if(!empty($api_key))
-        $merchant = $settings->api->get_merchant();
+        $merchant = $settings->api->get_merchant(true);
 
 ?>
 <div class="below-h2 <?php echo $merchant !== false ? 'updated' : 'error'; ?>">

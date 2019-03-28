@@ -1,5 +1,23 @@
 # Notas das versões
 
+## [5.4.2 - 13/03/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.4.3)
+
+### Ajustado
+- Ajusta validação dos dados da empresa durante o checkout
+
+
+## [5.4.1 - 21/01/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.4.1)
+
+### Adicionado
+- Adiciona opção para cobranças únicas de fretes e taxas
+
+
+## [5.4.0 - 15/01/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.4.0)
+
+### Adicionado
+- Adiciona compatibilidade com entrega única
+
+
 ## [5.3.3 - 30/11/2018](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.3.3)
 
 ### Corrigido
