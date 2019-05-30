@@ -113,6 +113,10 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 &$this, 'user_related_orders_actions'
             ), 100, 2);
 
+            add_filter('woocommerce_subscription_period_interval_strings', array(
+                &$this, 'set_supported_intervals')
+            );
+
             add_action('woocommerce_customer_save_address', array(
                 &$this, 'sync_vindi_user_information'
             ), 1, 2 );
@@ -136,6 +140,14 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 , 10);
             }
 		}
+
+        public function set_supported_intervals($current_intervals)
+        {
+            foreach (range(7, 60) as $new_interval) {
+                array_push($current_intervals, $new_interval);
+            }
+            return $current_intervals;
+        }
 
         /**
          * Update user informations from My Account form
