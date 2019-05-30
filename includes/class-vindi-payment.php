@@ -68,7 +68,11 @@ class Vindi_Payment
 
         foreach($items as $item) {
             $product    = $this->order->get_product_from_item($item);
-            $vindi_plan = get_post_meta($product->id, 'vindi_subscription_plan', true);
+
+            if( isset($item['variation_id']) && $item['variation_id'] != 0)
+                $vindi_plan = get_post_meta($item['variation_id'], 'vindi_subscription_plan', true);
+            else
+                $vindi_plan = get_post_meta($product->id, 'vindi_subscription_plan', true);
 
             if ($this->is_subscription_type($product) AND !empty($vindi_plan))
                 return $vindi_plan;
