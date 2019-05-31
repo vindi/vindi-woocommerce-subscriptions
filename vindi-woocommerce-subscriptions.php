@@ -192,6 +192,8 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
             $plans         = $this->settings->api->get_plans();
             $selected_plan = get_post_meta($post->ID, 'vindi_subscription_plan', true);
+            $wc_product = wc_get_product($post->ID);
+            $product_type = $wc_product->get_type();
 
             $plans['names'] = array(__('-- Selecione --', VINDI_IDENTIFIER)) + $plans['names'];
 
@@ -199,7 +201,8 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 'admin-simple-product-subscription-fields.html.php',
                 compact(
                     'plans',
-                    'selected_plan'
+                    'selected_plan',
+                    'product_type'
                 )
             );
         }
@@ -214,7 +217,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             $plans         = $this->settings->api->get_plans();
             $selected_plan = get_post_meta($variation->ID, 'vindi_subscription_plan', true);
 
-            $plans['names'] = array(__('-- Selecione  --', VINDI_IDENTIFIER)) + $plans['names'];
+            $plans['names'] = array(__('-- Plano da Vindi Padrão  --', VINDI_IDENTIFIER)) + $plans['names'];
 
             $this->settings->get_template(
                 'admin-variable-product-subscription-fields.html.php',
@@ -289,9 +292,6 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
                 }
 
-                delete_post_meta($post_id, 'vindi_subscription_plan');
-                delete_post_meta($post_id, 'vindi_subscription_period_interval');
-                delete_post_meta($post_id, 'vindi_subscription_period');
             }
         }
 
