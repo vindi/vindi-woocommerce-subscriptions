@@ -3,7 +3,7 @@
 
 <?php
     woocommerce_wp_select(array(
-        'id'                 => 'vindi_subscription_plan[' . $loop . ']',
+        'id'                 => 'vindi_variable_subscription_plan[' . $loop . ']',
         'label'              => __('Plano da Vindi', VINDI_IDENTIFIER),
         'options'            => $plans['names'],
         'description'        => __('Selecione o plano da Vindi que deseja relacionar a esse produto', VINDI_IDENTIFIER),
