@@ -6,6 +6,8 @@
     ._subscription_period_interval_field,
     ._subscription_period_field,
     ._subscription_length_field,
+    .wc_input_subscription_period,
+    .wc_input_subscription_period_interval,
     .wc_input_subscription_intial_price,
     .wc_input_subscription_trial_length,
     .wc_input_subscription_trial_period,
