@@ -134,6 +134,10 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                     array(&$this, 'variable_subscription_custom_fields')
                 , 10, 3);
 
+                add_action('woocommerce_process_product_meta',
+                    array(&$this, 'save_subscription_meta')
+                , 20);
+
                 add_action('save_post',
                     array(&$this, 'save_subscription_meta')
                 , 20);
