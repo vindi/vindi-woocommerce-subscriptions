@@ -69,7 +69,7 @@ class Vindi_Payment
         foreach($items as $item) {
             $product    = $this->order->get_product_from_item($item);
 
-            if ( isset($item['variation_id']) && $item['variation_id'] != 0) {
+            if (isset($item['variation_id']) && $item['variation_id'] != 0) {
                 $vindi_plan = get_post_meta($item['variation_id'], 'vindi_variable_subscription_plan', true);
                 if (empty($vindi_plan) || !is_numeric($vindi_plan) || is_null($vindi_plan) || $vindi_plan == 0){
                     $vindi_plan = get_post_meta($product->id, 'vindi_subscription_plan', true);

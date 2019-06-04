@@ -20,8 +20,8 @@
 <?php
 
     if (preg_match('/variable-subscription/', $product_type)) {
-        $label = __('Plano da Vindi Padrão', VINDI_IDENTIFIER);
-        $description = __('Selecione o plano da Vindi padrão que deseja relacionar a esse produto caso não especifique na variação', VINDI_IDENTIFIER);
+        $label = __('Plano padrão da Vindi', VINDI_IDENTIFIER);
+        $description = __('Selecione o plano padrão da Vindi que deseja relacionar a esse produto caso não especifique na variação', VINDI_IDENTIFIER);
     } else {
         $label = __('Plano da Vindi', VINDI_IDENTIFIER);
         $description = __('Selecione o plano da Vindi que deseja relacionar a esse produto', VINDI_IDENTIFIER);
