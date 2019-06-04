@@ -283,12 +283,12 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 update_post_meta($variation_id, '_subscription_period', 'year');
                 update_post_meta($variation_id, 'vindi_subscription_period_interval', $child_years_interval);
                 update_post_meta($variation_id, 'vindi_subscription_period', 'year');
-            } else if ($child_subscription_period_interval % 7 == 0 && $subscription_period == 'day') {
+            } else if ($child_subscription_period_interval % 7 == 0 && $child_subscription_period == 'day') {
                 $child_weeks_interval = (int) $child_subscription_period_interval / 7;
-                update_post_meta($child, '_subscription_period_interval', $child_weeks_interval);
-                update_post_meta($child, '_subscription_period', 'week');
-                update_post_meta($child_key, 'vindi_subscription_period_interval', $child_weeks_interval);
-                update_post_meta($child_key, 'vindi_subscription_period', 'week');
+                update_post_meta($variation_id, '_subscription_period_interval', $child_weeks_interval);
+                update_post_meta($variation_id, '_subscription_period', 'week');
+                update_post_meta($variation_id, 'vindi_subscription_period_interval', $child_weeks_interval);
+                update_post_meta($variation_id, 'vindi_subscription_period', 'week');
             } else {
                 update_post_meta($variation_id, '_subscription_period_interval', $child_subscription_period_interval);
                 update_post_meta($variation_id, '_subscription_period', $child_subscription_period);
