@@ -19,7 +19,7 @@
 
 <?php
 
-    if(preg_match('/variable-subscription/', $product_type)) {
+    if (preg_match('/variable-subscription/', $product_type)) {
         $label = __('Plano da Vindi Padrão', VINDI_IDENTIFIER);
         $description = __('Selecione o plano da Vindi padrão que deseja relacionar a esse produto caso não especifique na variação', VINDI_IDENTIFIER);
     } else {

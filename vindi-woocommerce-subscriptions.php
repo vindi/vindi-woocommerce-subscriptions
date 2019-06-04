@@ -213,7 +213,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             $plans         = $this->settings->api->get_plans();
             $selected_plan = get_post_meta($variation->ID, 'vindi_variable_subscription_plan', true);
 
-            $plans['names'] = array(__('-- Plano da Vindi Padrão  --', VINDI_IDENTIFIER)) + $plans['names'];
+            $plans['names'] = array(__('-- Plano padrão da Vindi --', VINDI_IDENTIFIER)) + $plans['names'];
 
             $this->settings->get_template(
                 'admin-variable-product-subscription-fields.html.php',
@@ -277,7 +277,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
             $child_subscription_length          = wc_clean($_POST['variable_subscription_length'][$i]);
 
             update_post_meta($variation_id, '_subscription_length', $child_subscription_length);
-            if($this->is_yearly_plan($child_subscription_period_interval, $child_subscription_period)) {
+            if ($this->is_yearly_plan($child_subscription_period_interval, $child_subscription_period)) {
                 $child_years_interval = (int) $child_subscription_period_interval / 12;
                 update_post_meta($variation_id, '_subscription_period_interval', $child_years_interval);
                 update_post_meta($variation_id, '_subscription_period', 'year');
