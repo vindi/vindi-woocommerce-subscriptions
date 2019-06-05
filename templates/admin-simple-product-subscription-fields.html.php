@@ -15,15 +15,23 @@
         display: none !important;
     }
 </style>
-
 <div class="options_group vindi-subscription_pricing show_if_subscription show_if_variable-subscription">
 
 <?php
+
+    if (preg_match('/variable-subscription/', $product_type)) {
+        $label = __('Plano padrão da Vindi', VINDI_IDENTIFIER);
+        $description = __('Selecione o plano padrão da Vindi que deseja relacionar a esse produto caso não especifique na variação', VINDI_IDENTIFIER);
+    } else {
+        $label = __('Plano da Vindi', VINDI_IDENTIFIER);
+        $description = __('Selecione o plano da Vindi que deseja relacionar a esse produto', VINDI_IDENTIFIER);
+    }
+
     woocommerce_wp_select(array(
         'id'                 => 'vindi_subscription_plan',
-        'label'              => __('Plano da Vindi', VINDI_IDENTIFIER),
+        'label'              => $label,
         'options'            => $plans['names'],
-        'description'        => __('Selecione o plano da Vindi que deseja relacionar a esse produto', VINDI_IDENTIFIER),
+        'description'        => $description,
         'desc_tip'           => true,
         'value'              => $selected_plan,
         'custom_attributes'  => array(

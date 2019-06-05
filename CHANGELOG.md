@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [5.5.0 - 04/06/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.0)
+
+### Adicionado
+- Adiciona plano da Vindi para assinaturas do tipo variável
+
+
 ## [5.4.2 - 13/03/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.4.3)
 
 ### Ajustado
