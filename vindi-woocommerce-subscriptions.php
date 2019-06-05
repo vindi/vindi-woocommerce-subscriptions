@@ -146,8 +146,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                     array(&$this, 'save_subscription_variation_meta')
                 , 20, 2);
             } else {
-                if ($this->settings->get_hide_item_meta_data_status())
-                    add_filter( 'woocommerce_order_item_get_formatted_meta_data', array( &$this, 'hide_item_meta_data'), 10, 1 );
+                add_filter( 'woocommerce_order_item_get_formatted_meta_data', array( &$this, 'hide_item_meta_data'), 10, 1 );
             }
 		}
 

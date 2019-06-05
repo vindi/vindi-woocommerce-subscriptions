@@ -158,13 +158,6 @@ class Vindi_Settings extends WC_Settings_API
                 'description'      => __('Fretes e Taxas serão cobrados somente no primeiro ciclo de uma assinatura', VINDI_IDENTIFIER),
                 'default'          => 'no',
             ),
-            'hide_item_meta_data'  => array(
-                'title'            => __('Metadados no Frontend', VINDI_IDENTIFIER),
-                'type'             => 'checkbox',
-                'label'      => __('Ocultar metadados no Frontend', VINDI_IDENTIFIER),
-                'description'      => __('Ocultar metadados (type, vindi_id e price) na lista de itens do frontend.', VINDI_IDENTIFIER),
-                'default'          => 'no',
-            ),
 			'testing'              => array(
 				'title'            => __('Testes', 'vindi-woocommerce'),
 				'type'             => 'title',
@@ -253,15 +246,6 @@ class Vindi_Settings extends WC_Settings_API
     public function get_shipping_and_tax_config()
     {
         return 'yes' === $this->settings['shipping_and_tax_config'];
-    }
-
-    /**
-     * Get Vindi Synchronism status
-     * @return string
-     **/
-    public function get_hide_item_meta_data_status()
-    {
-        return 'yes' === $this->settings['hide_item_meta_data'];
     }
 
     /**
