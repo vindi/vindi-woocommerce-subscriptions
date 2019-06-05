@@ -145,6 +145,9 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 add_action('woocommerce_save_product_variation',
                     array(&$this, 'save_subscription_variation_meta')
                 , 20, 2);
+            } else {
+                if ($this->settings->get_hide_item_meta_data_status())
+                    add_filter( 'woocommerce_order_item_get_formatted_meta_data', array( &$this, 'hide_item_meta_data'), 10, 1 );
             }
 		}
 
@@ -468,6 +471,23 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 return;
 
             curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+        }
+
+        /**
+         * @param array $formatted_meta
+         **/
+        function hide_item_meta_data($formatted_meta){
+            $temp_metas = [];
+            foreach($formatted_meta as $key => $meta) {
+                if ( isset( $meta->key ) && ! in_array( $meta->key, [
+                        'type',
+                        'vindi_id',
+                        'price'
+                    ] ) ) {
+                    $temp_metas[ $key ] = $meta;
+                }
+            }
+            return $temp_metas;
         }
 	}
 }
