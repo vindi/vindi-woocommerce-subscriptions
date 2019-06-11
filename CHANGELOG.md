@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [5.5.1 - 04/06/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.1)
+
+### Ajustado
+- Oculta metadados (type, vindi_id e price) do frontend
+
+
 ## [5.5.0 - 04/06/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.0)
 
 ### Adicionado

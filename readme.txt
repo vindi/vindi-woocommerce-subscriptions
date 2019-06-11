@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.2.1
 WC requires at least: 3.0.0
 WC tested up to: 3.6.4
-Stable Tag: 5.5.0
+Stable Tag: 5.5.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -62,6 +62,9 @@ Caso necessite de informações sobre a plataforma ou API por favor siga atravé
 - [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 == Changelog ==
+
+= 5.5.1 - 11/06/2019 =
+- Oculta metadados (type, vindi_id e price) do frontend
 
 = 5.5.0 - 04/06/2019 =
 - Adiciona plano da Vindi para assinaturas do tipo variável
