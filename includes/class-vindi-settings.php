@@ -376,4 +376,15 @@ class Vindi_Settings extends WC_Settings_API
 
         return $api_key;
     }
+
+    /**
+     * @param WC_Subscription $wc_subscription
+     **/
+    public function get_vindi_subscription_id($wc_subscription)
+    {
+        $subscription_id = method_exists($wc_subscription, 'get_id')
+        ? $wc_subscription->get_id()
+        : $wc_subscription->id;
+        return end(get_post_meta($subscription_id, 'vindi_wc_subscription_id'));
+    }
 }

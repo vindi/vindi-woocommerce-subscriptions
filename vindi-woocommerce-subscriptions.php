@@ -76,6 +76,11 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 		 */
 		private $subscription_status_handler = null;
 
+        /**
+         * @var Vindi_WCS_Early_Renewal
+         */
+        private $wcs_early_renewal = null;
+
 		public function __construct()
 		{
 			$this->includes(array(
@@ -89,11 +94,13 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
     			'class-vindi-webhook-handler.php',
     			'class-vindi-subscription-status-handler.php',
                 'class-vindi-wcs-disable-renewal.php',
+                'class-vindi-wcs-early-renewal.php'
             ));
 
 			$this->settings                    = new Vindi_Settings();
             $this->webhook_handler             = new Vindi_Webhook_Handler($this->settings);
             $this->subscription_status_handler = new Vindi_Subscription_Status_Handler($this->settings);
+            $this->wcs_early_renewal           = new Vindi_WCS_Early_Renewal($this->settings);
 
             add_action('http_api_curl', [ &$this, 'add_support_to_tlsv1_2' ]);
 

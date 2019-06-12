@@ -50,7 +50,7 @@ class Vindi_Subscription_Status_Handler
      **/
     public function suspend_status($wc_subscription)
     {
-        $subscription_id = $this->get_vindi_subscription_id($wc_subscription);
+        $subscription_id = $this->container->get_vindi_subscription_id($wc_subscription);
         if ($this->container->get_synchronism_status()) {
             $this->container->api->suspend_subscription($subscription_id);
         }
@@ -61,7 +61,7 @@ class Vindi_Subscription_Status_Handler
      **/
     public function cancelled_status($wc_subscription)
     {
-        $subscription_id = $this->get_vindi_subscription_id($wc_subscription);
+        $subscription_id = $this->container->get_vindi_subscription_id($wc_subscription);
         if ($this->container->api->is_subscription_active($subscription_id)) {
             $this->container->api->suspend_subscription($subscription_id, true); 
         }
@@ -74,21 +74,11 @@ class Vindi_Subscription_Status_Handler
     {
         if ('pending' == $old_status)
             return;
-        $subscription_id = $this->get_vindi_subscription_id($wc_subscription);
+        $subscription_id = $this->container->get_vindi_subscription_id($wc_subscription);
         if ($this->container->get_synchronism_status()
             && !$this->container->api->is_subscription_active($subscription_id)) {
             $this->container->api->activate_subscription($subscription_id);
         }
     }
 
-    /**
-     * @param WC_Subscription $wc_subscription
-     **/
-    public function get_vindi_subscription_id($wc_subscription)
-    {
-        $subscription_id = method_exists($wc_subscription, 'get_id')
-        ? $wc_subscription->get_id()
-        : $wc_subscription->id;
-        return end(get_post_meta($subscription_id, 'vindi_wc_subscription_id'));
-    }
 }

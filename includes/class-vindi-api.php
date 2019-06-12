@@ -244,6 +244,22 @@ class Vindi_API
         return false;
     }
 
+    /**
+     * @param int   $subscription_id
+     *
+     * @return array|bool|mixed
+     */
+    public function renew_subscription($subscription_id)
+    {
+        if ($renew_response = $this->request('subscriptions/' . $subscription_id . '/renew', 'POST')){
+            $period_id = $renew_response['period']['id'];
+            if ($response = $this->request('periods/' . $period_id . '/bill', 'POST'))
+                return $response;
+        }
+
+        return false;
+    }
+
 
 	/**
 	 * @param int   $subscription_id
