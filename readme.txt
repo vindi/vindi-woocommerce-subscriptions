@@ -1,5 +1,5 @@
 === Vindi WooCommerce ===
-Contributors: erico.pedroso, tales.galvao.vindi, wnarde, lyoncesar, laertejr, rtakauti
+Contributors: erico.pedroso, wnarde, lyoncesar, laertejr
 Website Link: https://www.vindi.com.br
 Tags: vindi, subscriptions, pagamento-recorrente, cobranca-recorrente, cobrança-recorrente, recurring, site-de-assinatura, assinaturas, faturamento-recorrente, recorrencia, assinatura, woocommerce-subscriptions, vindi-woocommerce
 Requires at least: 4.4
@@ -13,53 +13,17 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Venda de assinaturas de produtos e serviços pelo plugin de cobrança recorrente para o WooCommerce.
 
 == Description ==
-O **Vindi WooCommerce** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://app.vindi.com.br/prospects/new), para começar a cobrar seus clientes.
+O **Vindi WooCommerce Subscriptions** oferece uma solução completa para pagamentos únicos e assinaturas com cartão de crédito e boleto utilizando o [Woocommerce Subscriptions](https://www.woothemes.com/products/woocommerce-subscriptions/). Basta ter [uma conta habilitada na Vindi](https://www.vindi.com.br/cadastro/) para começar a cobrar seus clientes.
 
-**Observações**
-- Ainda não são suportados Upgrades ou Downgrades de assinaturas.
-
-A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil. Com centenas de clientes usando soluções como pagamento online, soluções de notas fiscais integradas, emissão de boletos por email e PDF, integrações com ERPs e diversos relatórios, a Vindi possibilita um sistema online completo para negócios de venda recorrente. Além disso, empresas podem usar o gateway de pagamento integrado ao billing recorrente ou para faturas avulsas.
-
-= Requisitos =
-
-- PHP versão 5.6.x ou superior.
-- Um site com o WordPress instalado.
-- Plugin [WooCommerce](https://wordpress.org/plugins/woocommerce/ "Plugin WooCommerce") instalado e habilitado.
-- Plugin [WooCommerce Extra Checkout](https://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/ "WooCommerce Extra Checkout") Fields for Brazil instalado e habilitado.
-- Plugin [WooCommerce Subscriptions instalado](https://www.woothemes.com/products/woocommerce-subscriptions/ "WooCommerce Subscriptions") instalado e habilitado.
-- Certificado Digital.
-- Conta ativa na [Vindi](https://www.vindi.com.br "Vindi").
+A [Vindi](http://www.vindi.com.br/) é líder em cobrança recorrente no Brasil. Com milhares de clientes usando soluções como pagamento online, soluções de notas fiscais integradas, emissão de boletos por email e PDF, integrações com ERPs e diversos relatórios, a Vindi possibilita um sistema online completo para negócios de venda recorrente. Além disso, empresas podem usar o gateway de pagamento integrado ao billing recorrente ou para faturas avulsas.
 
 == Installation ==
 
-1. Envie os arquivos do plugin para a pasta wp-content/plugins, ou utilize o instalador de plugins do WordPress.
-1. Ative o plugin.
-
-= Configuração =
-1. Ative os Webhooks abaixo na Vindi em Configurações -> Webhooks:
-    - Assinatura cancelada
-    - Assinatura efetuada
-    - Cobrança rejeitada
-    - Fatura emitida
-    - Fatura paga
-1. Copie a Chave API que está localizada na Vindi em Configurações -> Chaves de acesso API.
-1. De volta no WooCommerce Cole a Chave API na página administrativa do plugin WooCommerce -> Configurações -> Vindi:
-1. Após salvar a Chave API o Woocommerce Subscriptions vai preencher o campo com sua URL de retorno + um token de segurança, copie essa URL e cole na Vindi em Configurações -> Webhooks -> URL
-1. De volta no WooCommerce -> Configurações -> Finalizar Compra -> Cartão de crédito / Boleto Bancário.
-1. Em WooCommerce -> Campos do Checkout, ative Tipo de Pessoa Física e Jurídica, RG e Inscrição estadual.
-1. Em WooCOmmerce -> Configurações -> Assinaturas, marque as opções "Aceitar pagamento manual" e "Desabilitar renovação automatica"
-1. Em WooCommerce -> Configurações -> Produtos -> Inventário, coloque um zero na opção "Manter estoque (minutos)".
-
-Para mais detalhes sobre a instalação de plugins no WordPress leia o tutorial [WordPress - Gerenciando Plugins](http://codex.wordpress.org/pt-br:Gerenciando_Plugins#Instalando_Plugins).
+Para verificar os requisitos e efetuar a instalação do plugin, [siga as instruções na documentação oficial](https://atendimento.vindi.com.br/hc/pt-br/articles/227335608).
 
 == Frequently Asked Questions ==
 
-Para suporte ou dúvidas relacionadas ao Plugin você pode seguir pelos canais:
-- [Github](https://github.com/vindi/vindi-woocommerce/issues)
-- [Fórum do Plugin](https://wordpress.org/plugins/vindi-woocommerce-subscriptions/) (apenas em inglês)
-
-Caso necessite de informações sobre a plataforma ou API por favor siga através do canal
-- [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)[Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
+Para dúvidas e suporte técnico, entre em contato com a equipe Vindi através da nossa [central de atendimento](http://atendimento.vindi.com.br/hc/pt-br).
 
 == Changelog ==
 
