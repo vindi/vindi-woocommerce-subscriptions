@@ -23,7 +23,7 @@ Para verificar os requisitos e efetuar a instalação do plugin, [siga as instru
 
 == Frequently Asked Questions ==
 
-Para dúvidas e suporte técnico, entre em contato com a equipe Vindi através da nossa [central de atendimento](http://atendimento.vindi.com.br/hc/pt-br).
+Para dúvidas e suporte técnico, entre em contato com a equipe Vindi através da nossa [central de atendimento](https://atendimento.vindi.com.br/hc/pt-br).
 
 == Changelog ==
 
