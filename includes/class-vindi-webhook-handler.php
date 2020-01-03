@@ -378,15 +378,23 @@ class Vindi_Webhook_Handler
 		$vindi_subscription = $this->container->api->get_subscription($data->bill->subscription->id);
 
 		if ($vindi_subscription && isset($vindi_subscription['next_billing_at'])) {
+            
+            if ($vindi_subscription['next_billing_at'] > $vindi_subscription['end_at']) {
+            return false;
+            }
 
 			// format next payment date
-			$next_payment = date('Y-m-d H:i:s', strtotime($vindi_subscription['next_billing_at']));
+            $next_payment = date('Y-m-d H:i:s', strtotime($vindi_subscription['next_billing_at']));
+            
+            // format end date
+            $end_date = date('Y-m-d H:i:s', strtotime($vindi_subscription['end_at']));
 
 			// find our wc_subscription
 			$subscription = $this->find_subscription_by_id($data->bill->subscription->code);
 
-			// update the date to show the user when will be his next payment
-			$subscription->update_dates(array('next_payment' => $next_payment));
-		}
-	}
+			// update the subscription dates
+            $subscription->update_dates(array('next_payment' => $next_payment));
+            $subscription->update_dates(array('end_date'     => $end_date));
+        }
+    }
 }
