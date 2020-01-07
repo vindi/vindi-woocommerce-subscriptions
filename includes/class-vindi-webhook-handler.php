@@ -371,8 +371,8 @@ class Vindi_Webhook_Handler
 	 *
 	 * @param $data object
 	 **/
-	private function update_next_payment($data) {
-
+    private function update_next_payment($data)
+    {
 		// let's find the subscription in the API
 		// we need this step because the actual next billing date does not come from the /bill webhook
         $vindi_subscription = $this->container->api->get_subscription($data->bill->subscription->id);
@@ -381,28 +381,29 @@ class Vindi_Webhook_Handler
 
         $end_at = $vindi_subscription['end_at'];
 
-		if ($vindi_subscription && isset($next_billing_at)) {
+        if ($vindi_subscription && isset($next_billing_at)) {
 
             if ($next_billing_at > $end_at) {
-            return false;
+                return false;
             }
 
 			// format next payment date
-            $next_payment = date_formatter($next_billing_at);
+        $next_payment = date_formatter($next_billing_at);
 
             // format end date
-            $end_date = date_formatter($end_at);
+        $end_date = date_formatter($end_at);
 
 			// find our wc_subscription
-			$subscription = $this->find_subscription_by_id($data->bill->subscription->code);
+		$subscription = $this->find_subscription_by_id($data->bill->subscription->code);
 
 			// update the subscription dates
-            $subscription->update_dates(array('next_payment' => $next_payment));
-            $subscription->update_dates(array('end_date'     => $end_date));
+        $subscription->update_dates(array('next_payment' => $next_payment));
+        $subscription->update_dates(array('end_date'     => $end_date));
         }
     }
 
-	private function date_formatter($date) {
+    private function date_formatter($date)
+    {
         $date = date('Y-m-d H:i:s', strtotime($date));
 
         return $date;
