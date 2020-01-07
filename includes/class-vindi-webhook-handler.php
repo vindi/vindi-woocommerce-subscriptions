@@ -387,18 +387,18 @@ class Vindi_Webhook_Handler
                 return false;
             }
 
-			// format next payment date
-        $next_payment = date_formatter($next_billing_at);
+            // format next payment date
+            $next_payment = date_formatter($next_billing_at);
 
             // format end date
-        $end_date = date_formatter($end_at);
+            $end_date = date_formatter($end_at);
 
-			// find our wc_subscription
-		$subscription = $this->find_subscription_by_id($data->bill->subscription->code);
+            // find our wc_subscription
+		    $subscription = $this->find_subscription_by_id($data->bill->subscription->code);
 
-			// update the subscription dates
-        $subscription->update_dates(array('next_payment' => $next_payment));
-        $subscription->update_dates(array('end_date'     => $end_date));
+            // update the subscription dates
+            $subscription->update_dates(array('next_payment' => $next_payment));
+            $subscription->update_dates(array('end_date'     => $end_date));
         }
     }
 
