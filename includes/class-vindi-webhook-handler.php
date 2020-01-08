@@ -383,6 +383,11 @@ class Vindi_Webhook_Handler
 
             $end_at = $vindi_subscription['end_at'];
 
+            // na api, quando o plano é de cobrança única,
+            // o next_billing_at é 1 segundo maior que o end_at
+            // quando isso acontecer, o next_payment do wc deve ser null
+            // (a issue #134 tem mais informações do problema)
+
             if ($next_billing_at > $end_at) {
                 return false;
             }
