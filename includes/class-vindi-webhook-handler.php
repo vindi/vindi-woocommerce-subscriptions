@@ -394,7 +394,7 @@ class Vindi_Webhook_Handler
             $end_date = format_date($end_at);
 
             // find our wc_subscription
-		    $subscription = $this->find_subscription_by_id($data->bill->subscription->code);
+		      $subscription = $this->find_subscription_by_id($data->bill->subscription->code);
 
             // update the subscription dates
             $subscription->update_dates(array('next_payment' => $next_payment));
