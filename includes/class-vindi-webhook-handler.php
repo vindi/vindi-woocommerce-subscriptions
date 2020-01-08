@@ -388,10 +388,10 @@ class Vindi_Webhook_Handler
             }
 
             // format next payment date
-            $next_payment = date_formatter($next_billing_at);
+            $next_payment = format_date($next_billing_at);
 
             // format end date
-            $end_date = date_formatter($end_at);
+            $end_date = format_date($end_at);
 
             // find our wc_subscription
 		    $subscription = $this->find_subscription_by_id($data->bill->subscription->code);
@@ -402,7 +402,7 @@ class Vindi_Webhook_Handler
         }
     }
 
-    private function date_formatter($date)
+    private function format_date($date)
     {
         $date = date('Y-m-d H:i:s', strtotime($date));
 
