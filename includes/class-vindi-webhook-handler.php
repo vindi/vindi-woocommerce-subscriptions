@@ -371,22 +371,44 @@ class Vindi_Webhook_Handler
 	 *
 	 * @param $data object
 	 **/
-	private function update_next_payment($data) {
-
+    private function update_next_payment($data)
+    {
 		// let's find the subscription in the API
 		// we need this step because the actual next billing date does not come from the /bill webhook
-		$vindi_subscription = $this->container->api->get_subscription($data->bill->subscription->id);
+        $vindi_subscription = $this->container->api->get_subscription($data->bill->subscription->id);
 
-		if ($vindi_subscription && isset($vindi_subscription['next_billing_at'])) {
+        if ($vindi_subscription && isset($vindi_subscription['next_billing_at'])) {
 
-			// format next payment date
-			$next_payment = date('Y-m-d H:i:s', strtotime($vindi_subscription['next_billing_at']));
+            $next_billing_at = $vindi_subscription['next_billing_at'];
 
-			// find our wc_subscription
-			$subscription = $this->find_subscription_by_id($data->bill->subscription->code);
+            $end_at = $vindi_subscription['end_at'];
 
-			// update the date to show the user when will be his next payment
-			$subscription->update_dates(array('next_payment' => $next_payment));
-		}
-	}
+            // na api, quando o plano é de cobrança única,
+            // o next_billing_at é 1 segundo maior que o end_at
+            // quando isso acontecer, o next_payment do wc deve ser null
+            // (a issue #134 tem mais informações do problema)
+
+            if ($next_billing_at > $end_at) {
+                return false;
+            }
+
+            // format next payment date
+            $next_payment = format_date($next_billing_at);
+
+            // format end date
+            $end_date = format_date($end_at);
+
+            // find our wc_subscription
+		      $subscription = $this->find_subscription_by_id($data->bill->subscription->code);
+
+            // update the subscription dates
+            $subscription->update_dates(array('next_payment' => $next_payment));
+            $subscription->update_dates(array('end_date'     => $end_date));
+        }
+    }
+
+    private function format_date($date)
+    {
+        return date('Y-m-d H:i:s', strtotime($date));
+    }
 }
