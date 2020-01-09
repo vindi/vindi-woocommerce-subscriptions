@@ -1,5 +1,10 @@
 # Notas das versões
 
+## [5.5.2 - 09/01/2020](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.2)
+
+### Corrigido
+- Corrige exibição de datas no plugin
+
 ## [5.5.1 - 04/06/2019](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.1)
 
 ### Ajustado
