@@ -22,22 +22,35 @@
     if (preg_match('/variable-subscription/', $product_type)) {
         $label = __('Plano padrão da Vindi', VINDI_IDENTIFIER);
         $description = __('Selecione o plano padrão da Vindi que deseja relacionar a esse produto caso não especifique na variação', VINDI_IDENTIFIER);
-    } else {
+
+        woocommerce_wp_select(array(
+            'id'                 => 'vindi_subscription_plan',
+            'label'              => $label,
+            'options'            => $plans['names'],
+            'description'        => $description,
+            'desc_tip'           => true,
+            'value'              => $selected_plan,
+            'custom_attributes'  => array(
+                'data-plan-info' => json_encode($plans['infos'])
+            )
+        ));
+    } else if (preg_match('/simple-subscription/', $product_type))  {
         $label = __('Plano da Vindi', VINDI_IDENTIFIER);
         $description = __('Selecione o plano da Vindi que deseja relacionar a esse produto', VINDI_IDENTIFIER);
+
+        woocommerce_wp_select(array(
+            'id'                 => 'vindi_subscription_plan',
+            'label'              => $label,
+            'options'            => $plans['names'],
+            'description'        => $description,
+            'desc_tip'           => true,
+            'value'              => $selected_plan,
+            'custom_attributes'  => array(
+                'data-plan-info' => json_encode($plans['infos'])
+            )
+        ));
     }
 
-    woocommerce_wp_select(array(
-        'id'                 => 'vindi_subscription_plan',
-        'label'              => $label,
-        'options'            => $plans['names'],
-        'description'        => $description,
-        'desc_tip'           => true,
-        'value'              => $selected_plan,
-        'custom_attributes'  => array(
-            'data-plan-info' => json_encode($plans['infos'])
-        )
-    ));
 ?>
 </div>
 <div class="show_if_subscription clear"></div>
