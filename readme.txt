@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.2.1
 WC requires at least: 3.0.0
 WC tested up to: 3.6.4
-Stable Tag: 5.5.2
+Stable Tag: 5.5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -26,6 +26,9 @@ Para verificar os requisitos e efetuar a instalação do plugin, [siga as instru
 Para dúvidas e suporte técnico, entre em contato com a equipe Vindi através da nossa [central de atendimento](https://atendimento.vindi.com.br/hc/pt-br).
 
 == Changelog ==
+
+= 5.5.3 - 22/01/2020 =
+- Corrige exibição de plano apenas para produtos de assinatura
 
 = 5.5.2 - 09/01/2020 =
 - Corrige exibição de datas no plugin

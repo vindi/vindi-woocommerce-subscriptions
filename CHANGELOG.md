@@ -1,5 +1,10 @@
 # Notas das versões
 
+## [5.5.3 - 22/01/2020](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.3)
+
+### Corrigido
+- Corrige exibição de plano apenas para produtos de assinatura
+
 ## [5.5.2 - 09/01/2020](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.2)
 
 ### Corrigido
