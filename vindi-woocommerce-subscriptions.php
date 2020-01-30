@@ -126,13 +126,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                     &$this, 'add_admin_scripts'
                 ));
 
-                add_action('woocommerce_product_options_general_product_data',
-                    array(&$this, 'simple_subscription_custom_fields')
-                );
-
-                add_action('woocommerce_product_after_variable_attributes',
-                    array(&$this, 'variable_subscription_custom_fields')
-                , 10, 3);
+                $this->set_vindi_subscription_fields();
 
                 add_action('woocommerce_process_product_meta',
                     array(&$this, 'save_subscription_meta')
@@ -150,6 +144,24 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                     array( &$this, 'hide_item_meta_data'), 10, 1 );
             }
 		}
+
+        /**
+         * Enable/Disable Vindi subscription fields according to WCS
+         */
+        public function set_vindi_subscription_fields()
+        {
+            if ($this->settings->dependency->wc_subscriptions_are_activated()) {
+                add_action('woocommerce_product_options_general_product_data',
+                    array(&$this, 'simple_subscription_custom_fields'));
+                add_action('woocommerce_product_after_variable_attributes',
+                    array(&$this, 'variable_subscription_custom_fields'), 10, 3); 
+            } else {
+                remove_action('woocommerce_product_options_general_product_data',
+                    array(&$this, 'simple_subscription_custom_fields'));
+                remove_action('woocommerce_product_after_variable_attributes',
+                    array(&$this, 'variable_subscription_custom_fields'), 10, 3);  
+            }
+        } 
 
         /**
          * Set supported intervals number for subscription plans
