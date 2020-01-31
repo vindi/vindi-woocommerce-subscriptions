@@ -141,13 +141,7 @@ class Vindi_Dependencies
             ],
         ];
 
-        if(self::plugin_are_active($wc_subscriptions)){
-            if(self::verify_version_of_plugin($wc_subscriptions)){
-                return true;
-            }
-        }
-
-        return false;
+        return self::plugin_are_active($wc_subscriptions) || class_exists('WC_Subscriptions');
     }
 
     /**
