@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [5.5.4 - 31/01/2020](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.4)
+
+### Ajustado
+- Ajusta verificação de status do plugin WooCommerce Subscriptions para garantir compatibilidade com novas versões
+
+
 ## [5.5.3 - 30/01/2020](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.3)
 
 ### Corrigido
