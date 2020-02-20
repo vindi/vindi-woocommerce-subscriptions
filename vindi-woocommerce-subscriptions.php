@@ -154,14 +154,14 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 add_action('woocommerce_product_options_general_product_data',
                     array(&$this, 'simple_subscription_custom_fields'));
                 add_action('woocommerce_product_after_variable_attributes',
-                    array(&$this, 'variable_subscription_custom_fields'), 10, 3); 
+                    array(&$this, 'variable_subscription_custom_fields'), 10, 3);
             } else {
                 remove_action('woocommerce_product_options_general_product_data',
                     array(&$this, 'simple_subscription_custom_fields'));
                 remove_action('woocommerce_product_after_variable_attributes',
-                    array(&$this, 'variable_subscription_custom_fields'), 10, 3);  
+                    array(&$this, 'variable_subscription_custom_fields'), 10, 3);
             }
-        } 
+        }
 
         /**
          * Set supported intervals number for subscription plans
@@ -179,9 +179,9 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
          */
         public function sync_vindi_user_information($user_id, $address_type)
         {
-            if (wc_notice_count( 'error' ) > 0 
-                || empty( $_POST['_wcsnonce'] ) 
-                || ! wp_verify_nonce( $_POST['_wcsnonce'], 'wcs_edit_address' ) 
+            if (wc_notice_count( 'error' ) > 0
+                || empty( $_POST['_wcsnonce'] )
+                || ! wp_verify_nonce( $_POST['_wcsnonce'], 'wcs_edit_address' )
                 || 'billing' !== $address_type) {
                 return;
             }
@@ -434,6 +434,27 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
          **/
         public function user_related_orders_actions($actions, $order)
         {
+
+            //ensure order really needs to be paid
+            //other plugins may unset 'pay' (wc-subscriptions does that) or filter needs_payment for various reasons
+            if ( isset( $actions['pay'] ) and $order->needs_payment() ) {
+
+                $boleto_url = $order->get_meta( 'vindi_wc_invoice_download_url' );
+
+                if ( $boleto_url ) {
+                    $actions['vindi_boleto'] = array(
+                        'url'  => $boleto_url,
+                        'name' => __( 'Baixar boleto', VINDI_IDENTIFIER )
+                    );
+
+                    add_action( 'wp_footer', function () { ?>
+                        <script>
+                            jQuery('.vindi_boleto').attr('target', '_blank');
+                        </script>
+                    <?php } );
+                }
+            }
+
             //remove from second array to allow action
             $filtred_actions = $this->filter_actions($actions, array(
                 'pay',
