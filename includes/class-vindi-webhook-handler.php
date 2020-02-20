@@ -98,6 +98,9 @@ class Vindi_Webhook_Handler
         add_post_meta($order->id, 'vindi_wc_cycle', $renew_infos['cycle']);
         add_post_meta($order->id, 'vindi_wc_bill_id', $renew_infos['bill_id']);
         add_post_meta($order->id, 'vindi_wc_subscription_id', $renew_infos['vindi_subscription_id']);
+        if(!empty($renew_infos['print_url'])) {
+            add_post_meta( $order->id, 'vindi_wc_invoice_download_url', $renew_infos['print_url'] );
+        }
 
         $this->container->logger->log('Novo Período criado: Pedido #'.$order->id);
 
@@ -119,7 +122,8 @@ class Vindi_Webhook_Handler
             'wc_subscription_id'     => $data->bill->subscription->code,
             'vindi_subscription_id'  => $data->bill->subscription->id,
             'cycle'                  => $data->bill->period->cycle,
-            'bill_id'                => $data->bill->id
+            'bill_id'                => $data->bill->id,
+            'print_url'              => $data->bill->charges[0]->print_url
         ];
 
         if (!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id']
