@@ -436,22 +436,36 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
         {
 
             //ensure order really needs to be paid
-            //other plugins may unset 'pay' (wc-subscriptions does that) or filter needs_payment for various reasons
-            if ( isset( $actions['pay'] ) and $order->needs_payment() ) {
-
-                $boleto_url = $order->get_meta( 'vindi_wc_invoice_download_url' );
-
-                if ( $boleto_url ) {
-                    $actions['vindi_boleto'] = array(
-                        'url'  => $boleto_url,
-                        'name' => __( 'Baixar boleto', VINDI_IDENTIFIER )
+            if (isset($actions['pay']) && $order->needs_payment()) {
+                if ($bill_id = $order->get_meta('vindi_wc_bill_id')) {
+                    $bankslip_url = get_post_meta(
+                        $order->get_id(),
+                        'vindi_wc_invoice_download_url',
+                        true
                     );
 
-                    add_action( 'wp_footer', function () { ?>
-                        <script>
-                            jQuery('.vindi_boleto').attr('target', '_blank');
-                        </script>
-                    <?php } );
+                    if (empty($bankslip_url)) {
+                        $bankslip_url = $this->settings->api->get_bank_slip_download($bill_id);
+
+                        update_post_meta(
+                            $order->get_id(),
+                            'vindi_wc_invoice_download_url',
+                            $bankslip_url
+                        );
+                    }
+
+                    if ($bankslip_url) {
+                        $actions['vindi_bankslip'] = array(
+                            'url'  => $bankslip_url,
+                            'name' => __( 'Baixar boleto', VINDI_IDENTIFIER )
+                        );
+
+                        add_action( 'wp_footer', function () { ?>
+                            <script>
+                                jQuery('.vindi_bankslip').attr('target', '_blank');
+                            </script>
+                        <?php } );
+                    }
                 }
             }
 

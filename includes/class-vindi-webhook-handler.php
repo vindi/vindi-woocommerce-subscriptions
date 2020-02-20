@@ -98,7 +98,7 @@ class Vindi_Webhook_Handler
         add_post_meta($order->id, 'vindi_wc_cycle', $renew_infos['cycle']);
         add_post_meta($order->id, 'vindi_wc_bill_id', $renew_infos['bill_id']);
         add_post_meta($order->id, 'vindi_wc_subscription_id', $renew_infos['vindi_subscription_id']);
-        if(!empty($renew_infos['print_url'])) {
+        if (!empty($renew_infos['print_url'])) {
             add_post_meta( $order->id, 'vindi_wc_invoice_download_url', $renew_infos['print_url'] );
         }
 
