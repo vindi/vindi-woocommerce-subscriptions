@@ -434,7 +434,6 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
          **/
         public function user_related_orders_actions($actions, $order)
         {
-
             //ensure order really needs to be paid
             if (isset($actions['pay']) && $order->needs_payment()) {
                 if ($bill_id = $order->get_meta('vindi_wc_bill_id')) {
