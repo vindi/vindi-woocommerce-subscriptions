@@ -1,0 +1,20 @@
+# Documentação sobre Semaphore 2.0 com Docker:
+# https://docs.semaphoreci.com/article/78-working-with-docker-images
+version: v1.0
+name: WooComerce
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Setup
+    task:
+      jobs:
+        - name: Setup
+          commands:
+            - docker network create webproxy
+            - docker-compose up -d && sleep 20
+            - docker cp wordpress_db:/docker-entrypoint-initdb.d/wordpress.sql dump.sql
+            - docker cp dump.sql vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/tests/_data/
+            - docker cp .env vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/
+            - docker exec -it vindi.local composer test
