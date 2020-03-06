@@ -1,0 +1,32 @@
+version: v1.0
+name: vindi-woocommerce-subscriptions
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Setup
+    task:
+      jobs:
+        - name: Setup
+          commands:
+            - checkout
+            - cache restore
+            - docker network create webproxy && docker-compose up -d --build
+            - docker exec -it wordpress_db mysql -u root -p'123'
+            - create database wordpress;
+            - exit
+            - mysql -u root -p'123' wordpress < /docker-entrypoint-initdb.d/test_db_dump.sql
+            - cache store
+  - name: Test
+    task:
+    	prologue:
+        commands:
+          - checkout
+          - cache restore
+      jobs:
+        - name: Test
+          commands:
+            - docker exec -it wordpress_web composer test
+      secrets:
+        - name: vindi_sandbox_api_key
