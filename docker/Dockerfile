@@ -5,6 +5,8 @@ MAINTAINER Vindi<comunidade@vindi.com.br>
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV WORDPRESS_PATH /var/www/html
 ENV WORDPRESS_VERSION wordpress-5.3.2-pt_BR
+ENV PLUGIN_DIR $WORDPRESS_PATH/wp-content/plugins/vindi-woocommerce-subscriptions
+ENV GIT_BRANCH master
 EXPOSE 80
 
 # Install config dependecies
@@ -26,7 +28,12 @@ RUN wget https://br.wordpress.org/$WORDPRESS_VERSION.tar.gz -P $WORDPRESS_PATH
 RUN tar -xvf $WORDPRESS_PATH/$WORDPRESS_VERSION.tar.gz --strip 1 && rm $WORDPRESS_PATH/$WORDPRESS_VERSION.tar.gz
 RUN chown -R www-data:www-data $WORDPRESS_PATH
 
+# Install plugin
+RUN git clone -b $GIT_BRANCH https://github.com/vindi/vindi-woocommerce-subscriptions.git $PLUGIN_DIR
+
 # Set test database config
-COPY ./test_db_dump.sql $WORDPRESS_PATH/wp-content/plugins/vindi-woocommerce-subscriptions/tests/_data/
+COPY ./test_db_dump.sql $PLUGIN_DIR/tests/_data/
+
+WORKDIR $PLUGIN_DIR
 
 CMD ["apache2-foreground"]

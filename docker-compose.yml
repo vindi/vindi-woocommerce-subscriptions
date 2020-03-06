@@ -17,6 +17,9 @@ services:
     volumes:
       - ./docker/test_db_dump.sql:/docker-entrypoint-initdb.d/test_db_dump.sql
   web:
+    environment:
+      GIT_BRANCH: #{SEMAPHORE_GIT_BRANCH}
+      VINDI_APY_KEY: #{VINDI_APY_KEY}
     build:
       context: ./docker
     container_name: wordpress_web
