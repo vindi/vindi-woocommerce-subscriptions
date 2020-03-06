@@ -1,0 +1,40 @@
+FROM php:7.2-apache
+MAINTAINER Vindi<comunidade@vindi.com.br>
+
+# Variables
+ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV WORDPRESS_PATH /var/www/html
+ENV WORDPRESS_VERSION wordpress-5.3.2-pt_BR
+ENV PLUGIN_DIR $WORDPRESS_PATH/wp-content/plugins/vindi-woocommerce-subscriptions
+ENV GIT_BRANCH master
+EXPOSE 80
+
+# Install config dependecies
+RUN apt-get update && apt-get install -y apt-utils libfreetype6-dev libjpeg62-turbo-dev libxml2-dev wget zip unzip git && apt-get autoremove -y && apt-get clean
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && docker-php-ext-install gd zip mbstring dom soap mysqli pdo_mysql
+RUN echo "127.0.0.1  vindi.wordpress" >> /etc/hosts
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+# Install Wordpress CLI
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
+
+# Install Codeception
+RUN curl -O https://codeception.com/codecept.phar && chmod +x codecept.phar && mv codecept.phar /usr/local/bin/codecept
+
+# Install Wordpress
+RUN wget https://br.wordpress.org/$WORDPRESS_VERSION.tar.gz -P $WORDPRESS_PATH
+RUN tar -xvf $WORDPRESS_PATH/$WORDPRESS_VERSION.tar.gz --strip 1 && rm $WORDPRESS_PATH/$WORDPRESS_VERSION.tar.gz
+COPY ./wp_config.php $WORDPRESS_PATH
+RUN chown -R www-data:www-data $WORDPRESS_PATH
+
+# Install plugin
+RUN git clone -b $GIT_BRANCH https://github.com/vindi/vindi-woocommerce-subscriptions.git $PLUGIN_DIR && wp plugin update --all --allow-root && wp plugin activate vindi-woocommerce-subscriptions --allow-root && cd $PLUGIN_DIR && composer install
+
+# Set test database config
+COPY ./test_db_dump.sql $PLUGIN_DIR/tests/_data/
+
+WORKDIR $PLUGIN_DIR
+
+CMD ["apache2-foreground"]
