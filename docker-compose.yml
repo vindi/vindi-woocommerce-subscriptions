@@ -16,8 +16,6 @@ services:
       MYSQL_ROOT_PASSWORD: 123
     volumes:
       - ./docker/test_db_dump.sql:/docker-entrypoint-initdb.d/test_db_dump.sql
-    command: mysql -u root -p'123' -e"create database wordpress";
-    command: mysql -u root -p'123' wordpress < /docker-entrypoint-initdb.d/test_db_dump.sql
   web:
     build:
       context: ./docker
