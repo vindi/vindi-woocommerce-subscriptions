@@ -24,3 +24,9 @@ blocks:
         - name: Test
           commands:
             - docker exec -it wordpress_web composer test
+      secrets:
+        - name: vindi_sandbox_api_key
+      prologue:
+        commands:
+          - checkout
+          - cache restore
