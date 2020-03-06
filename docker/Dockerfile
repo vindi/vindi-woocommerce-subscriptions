@@ -29,7 +29,7 @@ RUN tar -xvf $WORDPRESS_PATH/$WORDPRESS_VERSION.tar.gz --strip 1 && rm $WORDPRES
 RUN chown -R www-data:www-data $WORDPRESS_PATH
 
 # Install plugin
-RUN git clone -b $GIT_BRANCH https://github.com/vindi/vindi-woocommerce-subscriptions.git $PLUGIN_DIR
+RUN git clone -b $GIT_BRANCH https://github.com/vindi/vindi-woocommerce-subscriptions.git $PLUGIN_DIR && wp plugin update --all --allow-root && wp plugin activate vindi-woocommerce-subscriptions --allow-root && cd $PLUGIN_DIR && composer install
 
 # Set test database config
 COPY ./test_db_dump.sql $PLUGIN_DIR/tests/_data/

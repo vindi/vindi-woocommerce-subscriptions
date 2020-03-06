@@ -16,50 +16,50 @@ modules:
   - WPCLI
   config:
     WPDb:
-      dsn: 'mysql:host=%DB_HOST%;dbname=%DB_NAME%'
-      user: '%DB_USER%'
-      password: '%DB_PASSWORD%'
-      dump: 'tests/_data/dump.sql'
+      dsn: 'mysql:host=wordpress_db;dbname=wordpress'
+      user: 'root'
+      password: '123'
+      dump: 'tests/_data/test_db_dump.sql'
       populate: true #import the dump before the tests
       cleanup: false #import the dump between tests
       waitlock: 1
-      url: '%WP_URL%'
+      url: 'http://vindi.wordpress'
       urlReplacement: false #replace the hardcoded dump URL with the one above
-      tablePrefix: '%TABLE_PREFIX%'
+      tablePrefix: 'wp_'
     WPBrowser:
-      url: '%WP_URL%'
-      adminUsername: '%ADMIN_USERNAME%'
-      adminPassword: '%ADMIN_PASSWORD%'
-      adminPath: '%WP_ADMIN_PATH%'
+      url: 'http://vindi.wordpress'
+      adminUsername: 'admin'
+      adminPassword: 'password'
+      adminPath: /wp-admin
     WPWebDriver:
-      url: '%WP_URL%'
+      url: 'http://vindi.wordpress'
       browser: 'chrome'
       host: 'selenium'
       port: 4444
       restart: true
       wait: 0
-      adminUsername: '%ADMIN_USERNAME%'
-      adminPassword: '%ADMIN_PASSWORD%'
+      adminUsername: 'admin'
+      adminPassword: 'password'
       adminUrl: /wp-admin
-      adminPath: '%WP_ADMIN_PATH%'
+      adminPath: /wp-admin
     WPCLI:
-      path: '%WP_ROOT_FOLDER%'
+      path: '%WORDPRESS_PATH%'
       throw: true
     WPLoader:
       multisite: false
-      wpRootFolder: '%WP_ROOT_FOLDER%'
-      dbName: '%DB_NAME%'
-      dbHost: '%DB_HOST%'
-      dbUser: '%DB_USER%'
-      dbPassword: '%DB_PASSWORD%'
+      wpRootFolder: '%WORDPRESS_PATH%'
+      dbName: 'wordpress'
+      dbHost: 'wordpress_db'
+      dbUser: 'root'
+      dbPassword: '123'
       isolatedInstall: false
       wpDebug: true
       dbCharset: "utf8"
       dbCollate: ""
-      tablePrefix: '%TABLE_PREFIX%'
-      domain: '%WP_URL%'
-      adminEmail: '%ADMIN_EMAIL%'
-      title: "Test Vindi"
+      tablePrefix: 'wp_'
+      domain: 'http://vindi.wordpress'
+      adminEmail: 'comunidade@vindi.com.br'
+      title: "Vindi Wordpress"
       phpBinary: "php"
       language: ""
       configFile: ""

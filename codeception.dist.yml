@@ -17,7 +17,7 @@ extensions:
   - Codeception\Command\GenerateWPCanonical
   - Codeception\Command\GenerateWPXMLRPC
 params:
-  - VINDI_API_KEY
+  - env
 coverage:
   enabled: true
   show_uncovered: false
