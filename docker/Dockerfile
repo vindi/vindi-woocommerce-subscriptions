@@ -9,7 +9,7 @@ EXPOSE 80
 
 # Install config dependecies
 RUN apt-get update && apt-get install -y apt-utils libfreetype6-dev libjpeg62-turbo-dev libxml2-dev wget zip unzip git && apt-get autoremove -y && apt-get clean
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && docker-php-ext-install gd zip mbstring dom soap pdo_mysql
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && docker-php-ext-install gd zip mbstring dom soap mysqli pdo_mysql
 RUN echo "127.0.0.1  vindi.wordpress" >> /etc/hosts
 
 # Install composer
