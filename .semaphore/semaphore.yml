@@ -20,13 +20,14 @@ blocks:
             - cache store
   - name: Test
     task:
-    	prologue:
+      jobs: []
+    prologue:
+      commands:
+        - checkout
+        - cache restore
+    jobs:
+      - name: Test
         commands:
-          - checkout
-          - cache restore
-      jobs:
-        - name: Test
-          commands:
-            - docker exec -it wordpress_web composer test
-      secrets:
-        - name: vindi_sandbox_api_key
+          - docker exec -it wordpress_web composer test
+    secrets:
+      - name: vindi_sandbox_api_key
