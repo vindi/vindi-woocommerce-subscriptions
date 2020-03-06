@@ -18,9 +18,20 @@ blocks:
             - exit
             - mysql -u root -p'123' wordpress < /docker-entrypoint-initdb.d/test_db_dump.sql
             - cache store
+      secrets:
+        - name: vindi_sandbox_api_key
   - name: Test
     task:
-      jobs: []
+      jobs:
+        - name: Test
+          commands:
+            - docker exec -it vindi.local composer test
+      secrets:
+        - name: vindi_sandbox_api_key
+      prologue:
+        commands:
+          - checkout
+          - cache restore
     prologue:
       commands:
         - checkout
