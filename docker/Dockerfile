@@ -26,6 +26,7 @@ RUN curl -O https://codeception.com/codecept.phar && chmod +x codecept.phar && m
 # Install Wordpress
 RUN wget https://br.wordpress.org/$WORDPRESS_VERSION.tar.gz -P $WORDPRESS_PATH
 RUN tar -xvf $WORDPRESS_PATH/$WORDPRESS_VERSION.tar.gz --strip 1 && rm $WORDPRESS_PATH/$WORDPRESS_VERSION.tar.gz
+COPY ./wp_config.php $WORDPRESS_PATH
 RUN chown -R www-data:www-data $WORDPRESS_PATH
 
 # Install plugin
