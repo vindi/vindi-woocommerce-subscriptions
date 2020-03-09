@@ -16,7 +16,9 @@ blocks:
             - docker exec -it wordpress_db mysql -u root -p'123'
             - create database wordpress;
             - exit
-            - mysql -u root -p'123' wordpress < /docker-entrypoint-initdb.d/test_db_dump.sql
+            - mysql -u root -p'123' wordpress < /docker-entrypoint-initdb.d/test_db_dump.sql && exit
+            - docker exec wordpress_web wp plugin update --all --allow-root && wp plugin activate vindi-woocommerce-subscriptions --allow-root
+            - docker exec wordpress_web cd $PLUGIN_DIR && composer install
             - cache store
   - name: Test
     task:

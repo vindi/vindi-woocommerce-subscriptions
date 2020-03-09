@@ -30,7 +30,7 @@ COPY ./wp-config.php $WORDPRESS_PATH
 RUN chown -R www-data:www-data $WORDPRESS_PATH
 
 # Install plugin
-RUN git clone -b $GIT_BRANCH https://github.com/vindi/vindi-woocommerce-subscriptions.git $PLUGIN_DIR && wp plugin update --all --allow-root && wp plugin activate vindi-woocommerce-subscriptions --allow-root && cd $PLUGIN_DIR && composer install
+RUN git clone -b $GIT_BRANCH https://github.com/vindi/vindi-woocommerce-subscriptions.git $PLUGIN_DIR
 
 # Set test database config
 COPY ./test_db_dump.sql $PLUGIN_DIR/tests/_data/
