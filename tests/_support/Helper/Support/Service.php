@@ -19,7 +19,7 @@ class Service
             CURLOPT_SSL_VERIFYPEER => CURL_SSLVERSION_TLSv1_2,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-            CURLOPT_USERPWD => $_ENV['API_KEY'] . ':',
+            CURLOPT_USERPWD => $_ENV['VINDI_API_KEY'] . ':',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CONNECTTIMEOUT => 0,
             CURLOPT_TIMEOUT => 60 * 10,
