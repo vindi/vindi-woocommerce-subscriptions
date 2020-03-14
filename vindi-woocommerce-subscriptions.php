@@ -405,14 +405,14 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 			if (empty($cart_items))
 				return $valid;
 
-            if ($product->is_type('subscription')) {
+            if ($product->is_type('subscription') || $product->is_type('variable-subscription') ) {
 
                 $product_vindi_subscription_plan_meta = get_post_meta($product->post->ID, 'vindi_subscription_plan');
                 $product_vindi_subscription_plan_id   = (int) end($product_vindi_subscription_plan_meta);
 
                 foreach($cart_items as $item)
                 {
-                    if ('subscription' === $item['data']->product_type) {
+                    if ('subscription' || 'variable-subscription' === $item['data']->product_type) {
 
                         $item_vindi_subscription_plan_meta = get_post_meta($item['data']->post->ID, 'vindi_subscription_plan');
                         $item_vindi_subscription_plan_id   = (int) end($item_vindi_subscription_plan_meta);
