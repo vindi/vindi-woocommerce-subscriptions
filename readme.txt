@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.3.2
 WC requires at least: 3.0.0
 WC tested up to: 3.8.1
-Stable Tag: 5.5.4
+Stable Tag: 5.5.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -26,6 +26,8 @@ Para verificar os requisitos e efetuar a instalação do plugin, [siga as instru
 Para dúvidas e suporte técnico, entre em contato com a equipe Vindi através da nossa [central de atendimento](https://atendimento.vindi.com.br/hc/pt-br).
 
 == Changelog ==
+= 5.5.5 - 16/03/2020 =
+- Adiciona botão para visualização/download do boleto na área de pedidos e assinaturas (por [@cristian-rossi](https://github.com/cristian-rossi): [#142](https://github.com/vindi/vindi-woocommerce-subscriptions/pull/142))
 
 = 5.5.4 - 31/01/2020 =
 - Ajusta verificação de status do plugin WooCommerce Subscriptions para garantir compatibilidade com novas versões

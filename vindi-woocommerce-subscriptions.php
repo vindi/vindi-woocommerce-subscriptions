@@ -3,7 +3,7 @@
  * Plugin Name: Vindi Woocommerce
  * Plugin URI:
  * Description: Adiciona o gateway de pagamentos da Vindi para o WooCommerce.
- * Version: 5.5.4
+ * Version: 5.5.5
  * Author: Vindi
  * Author URI: https://www.vindi.com.br
  * Requires at least: 4.4
@@ -39,7 +39,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 	    /**
 		 * @var string
 		 */
-        const VERSION = '5.5.4';
+        const VERSION = '5.5.5';
 
         /**
 		 * @var string
@@ -154,14 +154,14 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
                 add_action('woocommerce_product_options_general_product_data',
                     array(&$this, 'simple_subscription_custom_fields'));
                 add_action('woocommerce_product_after_variable_attributes',
-                    array(&$this, 'variable_subscription_custom_fields'), 10, 3); 
+                    array(&$this, 'variable_subscription_custom_fields'), 10, 3);
             } else {
                 remove_action('woocommerce_product_options_general_product_data',
                     array(&$this, 'simple_subscription_custom_fields'));
                 remove_action('woocommerce_product_after_variable_attributes',
-                    array(&$this, 'variable_subscription_custom_fields'), 10, 3);  
+                    array(&$this, 'variable_subscription_custom_fields'), 10, 3);
             }
-        } 
+        }
 
         /**
          * Set supported intervals number for subscription plans
@@ -179,9 +179,9 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
          */
         public function sync_vindi_user_information($user_id, $address_type)
         {
-            if (wc_notice_count( 'error' ) > 0 
-                || empty( $_POST['_wcsnonce'] ) 
-                || ! wp_verify_nonce( $_POST['_wcsnonce'], 'wcs_edit_address' ) 
+            if (wc_notice_count( 'error' ) > 0
+                || empty( $_POST['_wcsnonce'] )
+                || ! wp_verify_nonce( $_POST['_wcsnonce'], 'wcs_edit_address' )
                 || 'billing' !== $address_type) {
                 return;
             }
@@ -434,6 +434,40 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
          **/
         public function user_related_orders_actions($actions, $order)
         {
+            //ensure order really needs to be paid
+            if (isset($actions['pay']) && $order->needs_payment()) {
+                if ($bill_id = $order->get_meta('vindi_wc_bill_id')) {
+                    $bankslip_url = get_post_meta(
+                        $order->get_id(),
+                        'vindi_wc_invoice_download_url',
+                        true
+                    );
+
+                    if (empty($bankslip_url)) {
+                        $bankslip_url = $this->settings->api->get_bank_slip_download($bill_id);
+
+                        update_post_meta(
+                            $order->get_id(),
+                            'vindi_wc_invoice_download_url',
+                            $bankslip_url
+                        );
+                    }
+
+                    if ($bankslip_url) {
+                        $actions['vindi_bankslip'] = array(
+                            'url'  => $bankslip_url,
+                            'name' => __( 'Baixar boleto', VINDI_IDENTIFIER )
+                        );
+
+                        add_action( 'wp_footer', function () { ?>
+                            <script>
+                                jQuery('.vindi_bankslip').attr('target', '_blank');
+                            </script>
+                        <?php } );
+                    }
+                }
+            }
+
             //remove from second array to allow action
             $filtred_actions = $this->filter_actions($actions, array(
                 'pay',
