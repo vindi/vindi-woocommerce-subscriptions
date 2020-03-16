@@ -10,6 +10,7 @@ blocks:
       jobs:
         - name: Setup
           commands:
+            - checkout
             - docker network create webproxy && sudo sh -c "echo '127.0.0.1  vindi.local' >> /etc/hosts"
             - ls
             - pwd
