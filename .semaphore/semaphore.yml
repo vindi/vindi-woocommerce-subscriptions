@@ -17,7 +17,7 @@ blocks:
             - cache store
         - name: Services
           commands:
-            - checkout
+            - cache restore
             - docker-compose up -d && sleep 20
             - 'docker cp wordpress_db:/docker-entrypoint-initdb.d/wordpress.sql dump.sql'
             - 'docker cp dump.sql vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/tests/_data/'
