@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [5.5.5 - 16/03/2020](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.5)
+
+### Adicionado
+- Adiciona botão para visualização/download do boleto na área de pedidos e assinaturas (por [@cristian-rossi](https://github.com/cristian-rossi): [#142](https://github.com/vindi/vindi-woocommerce-subscriptions/pull/142))
+
+
 ## [5.5.4 - 31/01/2020](https://github.com/vindi/vindi-woocommerce-subscriptions/releases/tag/5.5.4)
 
 ### Ajustado
