@@ -13,6 +13,7 @@ blocks:
             - checkout
             - docker network create webproxy && sudo sh -c "echo '127.0.0.1  vindi.local' >> /etc/hosts"
             - docker-compose up -d && sleep 20
+            - cache restore
             - 'docker cp wordpress_db:/docker-entrypoint-initdb.d/wordpress.sql dump.sql'
             - 'docker cp dump.sql vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/tests/_data/'
             - 'docker cp .env vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/'
