@@ -5,10 +5,10 @@ agent:
     type: e1-standard-2
     os_image: ubuntu1804
 blocks:
-  - name: Setup
+  - name: Setup & Test
     task:
       jobs:
-        - name: Structure
+        - name: Setup & Test
           commands:
             - checkout
             - docker network create webproxy && sudo sh -c "echo '127.0.0.1  vindi.local' >> /etc/hosts"
@@ -17,17 +17,6 @@ blocks:
             - 'docker cp wordpress_db:/docker-entrypoint-initdb.d/wordpress.sql dump.sql'
             - 'docker cp dump.sql vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/tests/_data/'
             - 'docker cp .env vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/'
-            - cache store
-        - name: Services
-          commands:
-            - checkout
             - echo "API_KEY=digite aqui a chave API" >> ./.env
             - chromedriver --url-base=/wd/hub &
-            - cache store
-  - name: Test
-    task:
-      jobs:
-        - name: Test
-          commands:
-            - cache restore
             - docker exec -it vindi.local composer test
