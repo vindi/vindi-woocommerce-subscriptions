@@ -16,7 +16,7 @@ blocks:
             - cache restore
             - 'docker cp wordpress_db:/docker-entrypoint-initdb.d/wordpress.sql dump.sql'
             - 'docker cp dump.sql vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/tests/_data/'
-            - 'docker cp .env vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/'
             - echo "API_KEY=digite aqui a chave API" >> ./.env
+            - 'docker cp .env vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/'
             - chromedriver --url-base=/wd/hub &
             - docker exec -it vindi.local composer test
