@@ -20,5 +20,5 @@ blocks:
             - 'docker cp .env vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/'
             - chromedriver --url-base=/wd/hub &
             - docker exec vindi.local composer update
-            - docker exec wp plugin update --all --allow-root && wp plugin activate vindi-woocommerce-subscriptions --allow-root
-            - docker exec composer test
+            - docker exec vindi.local wp plugin update --all --allow-root && wp plugin activate vindi-woocommerce-subscriptions --allow-root
+            - docker exec vindi.local composer test
