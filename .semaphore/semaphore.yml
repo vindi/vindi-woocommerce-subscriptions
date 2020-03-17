@@ -19,6 +19,7 @@ blocks:
             - echo "API_KEY=h-y-CWXZ6FNPhp0FZtaO6MxccbsaF9nkIpjnxRdUtnI" >> ./.env
             - 'docker cp .env vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/'
             - chromedriver --url-base=/wd/hub &
-            - docker exec -it vindi.local wp plugin update --all --allow-root
+            - docker exec -it vindi.local composer update
+            - wp plugin update --all --allow-root
             - wp plugin activate vindi-woocommerce-subscriptions --allow-root
             - composer test
