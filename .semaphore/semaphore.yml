@@ -13,12 +13,12 @@ blocks:
             - checkout
             - docker network create webproxy && sudo sh -c "echo '127.0.0.1  vindi.local' >> /etc/hosts"
             - docker-compose up -d && sleep 20
-            - cache restore
             - 'docker cp wordpress_db:/docker-entrypoint-initdb.d/wordpress.sql dump.sql'
             - 'docker cp dump.sql vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/tests/_data/'
             - echo "API_KEY=h-y-CWXZ6FNPhp0FZtaO6MxccbsaF9nkIpjnxRdUtnI" >> ./.env
             - 'docker cp .env vindi.local:/var/www/html/wp-content/plugins/vindi-woocommerce-subscriptions/'
             - chromedriver --url-base=/wd/hub &
             - docker exec vindi.local composer update
-            - docker exec vindi.local wp plugin update --all --allow-root && wp plugin activate vindi-woocommerce-subscriptions --allow-root
+            - docker exec vindi.local "wp plugin update --all --allow-root"
+            - docker exec vindi.local "wp plugin activate vindi-woocommerce-subscriptions --allow-root"
             - docker exec vindi.local composer test
