@@ -402,7 +402,7 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 
         function is_cart_item_subscription($cart_item)
         {
-            $subscriptions_types = array('subscription' , 'variable-subscription');
+            $subscriptions_types = array('subscription', 'variable-subscription');
             return in_array($cart_item['data']->product_type, $subscriptions_types);
         }
 
@@ -416,15 +416,13 @@ if (! class_exists('Vindi_WooCommerce_Subscriptions'))
 			if (empty($cart_items))
 				return $valid;
 
-            if ($this->is_new_product_subscription($product)) {
-                
+            if ($this->is_new_product_subscription($product)) {               
                 $product_vindi_subscription_plan_meta = get_post_meta($product->post->ID, 'vindi_subscription_plan');
                 $product_vindi_subscription_plan_id   = (int) end($product_vindi_subscription_plan_meta);
 
                 foreach($cart_items as $item)
                 {
                     if ($this->is_cart_item_subscription($item)) {
-
                         $item_vindi_subscription_plan_meta = get_post_meta($item['data']->post->ID, 'vindi_subscription_plan');
                         $item_vindi_subscription_plan_id   = (int) end($item_vindi_subscription_plan_meta);
 
