@@ -487,7 +487,7 @@ class Vindi_Payment
         $item          = $this->container->api->find_or_create_product("Cupom de desconto", 'wc-discount');
         $discount_item = array(
             'type'     => 'discount',
-            'vindi_id' => ceil($item['id']),
+            'vindi_id' => $item['id'],
             'price'    => (float) $total_discount * -1,
             'qty'      => 1
         );
@@ -499,7 +499,7 @@ class Vindi_Payment
     {
         $item = array(
             'product_id'        => $order_item['vindi_id'],
-            'quantity'          => $order_item['qty'],
+            'quantity'          => ceil($order_item['qty']),
             'pricing_schema'    => array(
                 'price'             => $order_item['price'],
                 'schema_type'       => 'per_unit'
