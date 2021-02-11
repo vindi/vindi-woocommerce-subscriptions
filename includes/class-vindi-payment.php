@@ -499,7 +499,7 @@ class Vindi_Payment
     {
         $item = array(
             'product_id'        => $order_item['vindi_id'],
-            'quantity'          => $order_item['qty'],
+            'quantity'          => ceil($order_item['qty']),
             'pricing_schema'    => array(
                 'price'             => $order_item['price'],
                 'schema_type'       => 'per_unit'
