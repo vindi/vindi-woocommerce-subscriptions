@@ -1,4 +1,4 @@
-# Vindi WooCommerce
+# Vindi WooCommerce 1
 
 [![Licença do Software][badge-license]](LICENSE)
 [![Última Versão no WordPress][badge-version]][link-version]
