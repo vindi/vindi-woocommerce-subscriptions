@@ -1,3 +1,8 @@
+# :warning: Deprecated
+
+Esse plugin foi descontinuado e não recebe mais atualizações.
+Para utilizar a versão atualizada, acesse https://github.com/vindi/vindi-woocommerce
+
 # Vindi WooCommerce
 
 [![Licença do Software][badge-license]](LICENSE)
