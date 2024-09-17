@@ -129,6 +129,7 @@ class Vindi_Webhook_Handler
         if (!$this->subscription_has_order_in_cycle($renew_infos['vindi_subscription_id']
             , $renew_infos['cycle'])) {
             $this->subscription_renew($renew_infos);
+            $this->update_next_payment($data);
         }
     }
 
