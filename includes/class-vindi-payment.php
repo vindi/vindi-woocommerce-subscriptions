@@ -94,6 +94,10 @@ class Vindi_Payment
         $currentUser = wp_get_current_user();
         $email       = $this->order->get_billing_email();
 
+        if(isset($_GET['pay_for_order'])){
+            $currentUser = get_user_by('ID', $this->order->get_user_id());
+        }
+        
         $address = array(
             'street'             => $this->order->get_billing_address_1(),
             'number'             => $this->order->get_meta( '_billing_number' ),
